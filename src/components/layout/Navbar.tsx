@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Menu, X, ArrowRight } from "lucide-react";
+import { Menu, X } from "lucide-react";
+import { Button } from "@/components/ui/Button";
 
 const navLinks = [
   { href: "#expertise", label: "Expertise" },
@@ -28,7 +29,10 @@ export function Navbar() {
       }`}
     >
       <div className="container-site">
-        <div className="flex items-center justify-between" style={{ lineHeight: "70px" }}>
+        <div
+          className="flex items-center justify-between"
+          style={{ lineHeight: "70px" }}
+        >
           <a
             href="#"
             onClick={(e) => {
@@ -53,13 +57,14 @@ export function Navbar() {
           </div>
 
           <div className="flex items-center gap-3">
-            <a
+            <Button
               href="#reserver"
-              className="hidden md:inline-flex items-center px-[calc(1.333em+2px)] py-[calc(.667em+2px)] rounded-pill bg-white text-text-dark text-[15px] font-medium hover:bg-background hover:text-white transition-colors duration-300"
+              variant="accent"
+              size="default"
+              className="hidden md:inline-flex leading-normal"
             >
               Réserver
-              <ArrowRight className="ml-[17px] w-4 h-4" />
-            </a>
+            </Button>
             <button
               onClick={() => setOpen(!open)}
               className="md:hidden p-2 text-white/70 hover:text-white transition-colors"
@@ -84,13 +89,15 @@ export function Navbar() {
                 {link.label}
               </a>
             ))}
-            <a
+            <Button
               href="#reserver"
+              variant="accent"
+              size="sm"
+              className="mt-2 w-full justify-center"
               onClick={() => setOpen(false)}
-              className="block px-4 py-3 mt-2 rounded-pill bg-white text-text-dark font-medium text-center"
             >
               Réserver
-            </a>
+            </Button>
           </div>
         </div>
       )}
