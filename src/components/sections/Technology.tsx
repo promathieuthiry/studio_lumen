@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { HotspotOverlay } from "@/components/ui/HotspotOverlay";
 import { FadeIn } from "@/components/ui/FadeIn";
 import { Card } from "@/components/ui/GlassCard";
@@ -20,8 +19,6 @@ type TechnologyProps = {
 };
 
 export function Technology({ equipment }: TechnologyProps) {
-  const [imageLoaded, setImageLoaded] = useState(false);
-
   if (!equipment?.length) return null;
 
   return (
@@ -58,10 +55,9 @@ export function Technology({ equipment }: TechnologyProps) {
                 src="/Int%C3%A9rieur%20camion.webp"
                 alt="Intérieur du studio mobile Studio Lumen"
                 className="w-full h-full object-cover"
-                onLoad={() => setImageLoaded(true)}
               />
               <div className="absolute inset-0 bg-overlay" />
-              {imageLoaded && <HotspotOverlay equipment={equipment} />}
+              <HotspotOverlay equipment={equipment} />
             </div>
           </div>
         </FadeIn>
