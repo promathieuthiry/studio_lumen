@@ -17,7 +17,7 @@ export function Hero({ headline, subtitle, ctaText, ctaUrl }: HeroProps) {
     target: ref,
     offset: ["start start", "end start"],
   });
-  const opacity = useTransform(scrollYProgress, [0.4, 0.9], [1, 0]);
+  const opacity = useTransform(scrollYProgress, [0.4, 0.75], [1, 0]);
 
   const words = headline.split(" ");
 
