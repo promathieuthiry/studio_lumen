@@ -59,28 +59,9 @@ While building, the following skills will activate automatically to enforce qual
 
 ---
 
-## Phase 4 — Visual Check
+## Phase 4 — Review
 
-Before code review, visually inspect the result in the browser:
-
-1. Ensure the dev server is running (`npm run dev`) — start it if needed
-2. Use `mcp__claude-in-chrome__tabs_create_mcp` to open the relevant page (e.g. `http://localhost:3000`)
-3. Use `mcp__claude-in-chrome__read_page` to capture a screenshot of the full page
-4. Evaluate the visual result against the design decisions from Phase 2:
-   - Does the layout match the intended direction?
-   - Are colors, typography, and spacing consistent with the design system?
-   - Does the page look polished at desktop width?
-5. Use `mcp__claude-in-chrome__resize_window` to test at mobile (375px) and tablet (768px) widths, taking screenshots at each breakpoint
-6. Check for visual bugs: overflow, misalignment, clipped text, broken images, z-index issues
-7. If issues are found, fix them and re-check before proceeding
-
-Present the screenshots to the user with a summary of what looks good and what was fixed.
-
----
-
-## Phase 5 — Review
-
-Once the implementation is complete and visually verified, run `/pr-review-toolkit:review-pr` to perform a comprehensive code review covering:
+Once the implementation is complete, run `/pr-review-toolkit:review-pr` to perform a comprehensive code review covering:
 - Code quality and style adherence
 - Accessibility and UX best practices
 - Performance patterns
