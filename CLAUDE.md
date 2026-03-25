@@ -4,7 +4,7 @@ Auto-generated from all feature plans. Last updated: 2026-03-23
 
 ## Active Technologies
 
-- TypeScript 5.x (strict mode) on Node.js 20 LTS + Next.js 14+ (App Router), Sanity v3, Tailwind CSS 3.x, Framer Motion 11+, `next-sanity`, `@sanity/image-url`, `@cloudflare/stream-react`, `@portabletext/react`, Lucide React (001-studio-lumen-website)
+- TypeScript 5.x (strict mode) on Node.js 20 LTS + Next.js 14+ (App Router), Sanity v3, Tailwind CSS 3.x, Framer Motion 11+, `next-sanity`, `@sanity/image-url`, `@portabletext/react`, Lucide React (001-studio-lumen-website)
 
 ## Project Structure
 
@@ -37,7 +37,7 @@ npx sanity typegen generate                          # Generate TypeScript types
 
 ## Recent Changes
 
-- 001-studio-lumen-website: Added full tech stack (Next.js 14+, Sanity v3, Tailwind CSS, Framer Motion, Cloudflare Stream)
+- 001-studio-lumen-website: Added full tech stack (Next.js 14+, Sanity v3, Tailwind CSS, Framer Motion, YouTube unlisted embeds via youtube-nocookie.com)
 
 <!-- MANUAL ADDITIONS START -->
 
