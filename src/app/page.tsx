@@ -166,7 +166,6 @@ export default async function HomePage() {
             subtitle={settings?.heroSubtitle || ""}
             ctaText={settings?.ctaText || "Réserver"}
             ctaUrl={settings?.ctaUrl || "#reserver"}
-            founderPhoto={settings?.founderPhoto}
           />
           <ValueProposition
             valuePropositions={settings?.valuePropositions || []}

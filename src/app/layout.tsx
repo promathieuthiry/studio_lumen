@@ -1,14 +1,25 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, DM_Sans, Cardo } from "next/font/google";
+import localFont from "next/font/local";
+import { DM_Sans, Cardo } from "next/font/google";
 import "@/styles/globals.css";
 import { ConsentProvider } from "@/components/consent/ConsentProvider";
 import { ConsentBanner } from "@/components/consent/ConsentBanner";
 import { SanityLive } from "@/sanity/live";
 
-const spaceGrotesk = Space_Grotesk({
-  subsets: ["latin"],
+const clashDisplay = localFont({
+  src: [
+    {
+      path: "../../public/fonts/ClashDisplay-Semibold.woff2",
+      weight: "600",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/ClashDisplay-Bold.woff2",
+      weight: "700",
+      style: "normal",
+    },
+  ],
   variable: "--font-display",
-  weight: ["600", "700"],
   display: "swap",
 });
 
@@ -45,7 +56,7 @@ export default function RootLayout({
   return (
     <html
       lang="fr"
-      className={`${spaceGrotesk.variable} ${dmSans.variable} ${cardo.variable}`}
+      className={`${clashDisplay.variable} ${dmSans.variable} ${cardo.variable}`}
     >
       <body>
         <ConsentProvider>
