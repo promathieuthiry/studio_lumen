@@ -1,4 +1,5 @@
 import { FadeIn } from "@/components/ui/FadeIn";
+import { Button } from "@/components/ui/Button";
 import Link from "next/link";
 
 type CtaBannerProps = {
@@ -8,29 +9,30 @@ type CtaBannerProps = {
 
 export function CtaBanner({ ctaText, ctaUrl }: CtaBannerProps) {
   return (
-    <section className="py-20 sm:py-28">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <section className="section-padding">
+      <div className="container-site">
         <FadeIn>
-          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-background-light to-background border border-white/10 p-8 sm:p-12 lg:p-16 text-center">
-            <div className="absolute inset-0 bg-accent/5" />
+          <div className="relative overflow-hidden rounded-[25px] border border-border-lighter p-10 sm:p-16 lg:p-20 text-center">
+            {/* Decorative blur blob */}
+            <div
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-accent/5"
+              style={{ filter: "blur(100px)" }}
+            />
             <div className="relative z-10">
-              <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+              <h2 className="font-sans text-[30px] sm:text-[35px] font-semibold text-white mb-5 leading-[1.18]">
                 Prêt à créer du contenu qui marque ?
               </h2>
-              <p className="text-white/60 max-w-xl mx-auto mb-8">
+              <p className="text-text-body text-[16px] leading-[26px] max-w-xl mx-auto mb-10">
                 Réservez un appel découverte gratuit et discutons de votre
                 projet.
               </p>
-              <a
-                href={ctaUrl}
-                className="inline-flex px-8 py-3.5 rounded-full bg-accent text-background font-semibold text-lg hover:bg-accent-hover transition-colors"
-              >
+              <Button href={ctaUrl} variant="primary">
                 {ctaText}
-              </a>
-              <div className="mt-6">
+              </Button>
+              <div className="mt-8">
                 <Link
                   href="/a-propos"
-                  className="text-sm text-white/50 hover:text-accent transition-colors"
+                  className="text-[14px] text-text-muted hover:text-white transition-colors duration-300"
                 >
                   Qui est derrière Studio Lumen ?
                 </Link>

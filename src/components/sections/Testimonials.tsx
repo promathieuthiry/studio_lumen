@@ -1,5 +1,6 @@
-import { GlassCard } from "@/components/ui/GlassCard";
+import { Card } from "@/components/ui/GlassCard";
 import { FadeIn } from "@/components/ui/FadeIn";
+import { SectionLabel } from "@/components/ui/SectionLabel";
 import { urlFor, type SanityImageSource } from "@/sanity/image";
 import { Quote } from "lucide-react";
 
@@ -18,10 +19,13 @@ export function Testimonials({ testimonials }: TestimonialsProps) {
   if (!testimonials?.length) return null;
 
   return (
-    <section className="py-20 sm:py-28">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <section className="section-padding">
+      <div className="container-site">
         <FadeIn>
-          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-12 text-center">
+          <SectionLabel className="block text-center mb-4">
+            Témoignages
+          </SectionLabel>
+          <h2 className="font-sans text-[30px] sm:text-[35px] font-semibold text-white mb-14 text-center leading-[1.18]">
             Ce que disent nos clients
           </h2>
         </FadeIn>
@@ -29,12 +33,12 @@ export function Testimonials({ testimonials }: TestimonialsProps) {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {testimonials.map((t, i) => (
             <FadeIn key={t._id} delay={i * 0.1}>
-              <GlassCard className="p-6 sm:p-8 h-full flex flex-col">
-                <Quote className="w-6 h-6 text-accent/40 mb-4" />
-                <p className="text-sm text-white/70 italic flex-1 mb-6">
+              <Card className="p-8 sm:p-10 h-full flex flex-col">
+                <Quote className="w-6 h-6 text-accent/30 mb-5" strokeWidth={1.5} />
+                <p className="font-serif italic text-text-muted text-[18px] leading-[30px] flex-1 mb-6">
                   &ldquo;{t.quote}&rdquo;
                 </p>
-                <div className="flex items-center gap-3 pt-4 border-t border-white/5">
+                <div className="flex items-center gap-3 pt-5 border-t border-border-lighter">
                   {t.avatar ? (
                     /* eslint-disable-next-line @next/next/no-img-element */
                     <img
@@ -44,16 +48,16 @@ export function Testimonials({ testimonials }: TestimonialsProps) {
                     />
                   ) : null}
                   <div>
-                    <p className="text-sm font-medium text-white">
+                    <p className="font-sans text-[15px] font-medium text-white">
                       {t.clientName}
                     </p>
-                    <p className="text-xs text-white/50">
+                    <p className="text-[13px] text-text-body">
                       {t.role ? `${t.role}, ` : ""}
                       {t.company}
                     </p>
                   </div>
                 </div>
-              </GlassCard>
+              </Card>
             </FadeIn>
           ))}
         </div>

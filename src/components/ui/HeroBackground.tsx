@@ -14,12 +14,21 @@ export function HeroBackground({ children }: { children: React.ReactNode }) {
   const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
 
   return (
-    <div ref={ref} className="relative min-h-screen overflow-hidden">
+    <div ref={ref} className="relative min-h-screen overflow-hidden bg-background">
+      {/* Decorative blur blobs */}
+      <div
+        className="absolute top-[20%] left-[10%] w-[400px] h-[400px] rounded-full bg-accent/10"
+        style={{ filter: "blur(100px)" }}
+      />
+      <div
+        className="absolute bottom-[10%] right-[15%] w-[300px] h-[300px] rounded-full bg-white/5"
+        style={{ filter: "blur(100px)" }}
+      />
+
       <motion.div
         style={{ y, opacity }}
-        className="absolute inset-0 bg-gradient-to-b from-background-light/50 to-background"
+        className="absolute inset-0"
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
       <div className="relative z-10">{children}</div>
     </div>
   );

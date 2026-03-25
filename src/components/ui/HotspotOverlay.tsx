@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { GlassCard } from "@/components/ui/GlassCard";
+import { Card } from "@/components/ui/GlassCard";
 
 type Equipment = {
   _id: string;
@@ -71,15 +71,19 @@ export function HotspotOverlay({ equipment }: HotspotOverlayProps) {
                   marginRight: item.hotspotX > 60 ? "0.75rem" : 0,
                 }}
               >
-                <GlassCard className="p-4">
-                  <h4 className="text-sm font-semibold text-white mb-1">
+                <Card className="p-4">
+                  <h4 className="font-sans text-[14px] font-medium text-white mb-1">
                     {item.name}
                   </h4>
-                  <p className="text-xs text-white/60">{item.description}</p>
+                  <p className="text-text-body text-[13px] leading-[20px]">
+                    {item.description}
+                  </p>
                   {item.specs && (
-                    <p className="text-xs text-accent/70 mt-2">{item.specs}</p>
+                    <p className="text-accent text-[12px] mt-2 opacity-70">
+                      {item.specs}
+                    </p>
                   )}
-                </GlassCard>
+                </Card>
               </motion.div>
             )}
           </AnimatePresence>

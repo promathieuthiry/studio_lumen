@@ -1,16 +1,49 @@
-import { clsx } from "clsx";
+import { cn } from "@/lib/utils";
 
-export function GlassCard({
+type CardVariant = "light" | "dark";
+
+export function Card({
   children,
   className,
+  variant = "dark",
 }: {
   children: React.ReactNode;
   className?: string;
+  variant?: CardVariant;
 }) {
   return (
     <div
-      className={clsx(
-        "bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-lg shadow-black/20 ring-1 ring-white/5",
+      className={cn(
+        "rounded-lg",
+        variant === "dark" &&
+          "bg-background border border-border-lighter",
+        variant === "light" &&
+          "bg-background-light",
+        className
+      )}
+    >
+      {children}
+    </div>
+  );
+}
+
+export function FeaturedCard({
+  children,
+  className,
+  variant = "dark",
+}: {
+  children: React.ReactNode;
+  className?: string;
+  variant?: CardVariant;
+}) {
+  return (
+    <div
+      className={cn(
+        "rounded-[25px]",
+        variant === "dark" &&
+          "bg-background border border-border-lighter",
+        variant === "light" &&
+          "bg-background-light",
         className
       )}
     >

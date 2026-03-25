@@ -1,5 +1,6 @@
-import { GlassCard } from "@/components/ui/GlassCard";
+import { Card } from "@/components/ui/GlassCard";
 import { FadeIn } from "@/components/ui/FadeIn";
+import { SectionLabel } from "@/components/ui/SectionLabel";
 import * as LucideIcons from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -23,13 +24,16 @@ export function Services({ services }: ServicesProps) {
   if (!services?.length) return null;
 
   return (
-    <section id="expertise" className="py-20 sm:py-28">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <section id="expertise" className="section-padding">
+      <div className="container-site">
         <FadeIn>
-          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4 text-center">
+          <SectionLabel className="block text-center mb-4">
+            Services
+          </SectionLabel>
+          <h2 className="font-sans text-[30px] sm:text-[35px] font-semibold text-white mb-4 text-center leading-[1.18]">
             Notre expertise
           </h2>
-          <p className="text-white/60 text-center max-w-2xl mx-auto mb-12">
+          <p className="text-text-body text-[16px] leading-[26px] text-center max-w-2xl mx-auto mb-14">
             Des prestations sur mesure pour tous vos besoins en production vidéo
             mobile.
           </p>
@@ -40,20 +44,20 @@ export function Services({ services }: ServicesProps) {
             const Icon = getIcon(service.icon);
             return (
               <FadeIn key={service._id} delay={i * 0.1}>
-                <GlassCard className="p-6 sm:p-8 h-full flex flex-col">
-                  <Icon className="w-8 h-8 text-accent mb-4" />
-                  <h3 className="text-lg font-semibold text-white mb-2">
+                <Card className="p-8 sm:p-10 h-full flex flex-col">
+                  <Icon className="w-7 h-7 text-accent mb-5" strokeWidth={1.5} />
+                  <h3 className="font-sans text-[20px] font-medium text-white mb-3 leading-[28px]">
                     {service.title}
                   </h3>
-                  <p className="text-sm text-white/60 mb-4 flex-1">
+                  <p className="text-text-body text-[16px] leading-[26px] mb-5 flex-1">
                     {service.description}
                   </p>
                   {service.deliverables && service.deliverables.length > 0 && (
-                    <ul className="space-y-1.5 mb-4">
+                    <ul className="space-y-2 mb-5">
                       {service.deliverables.map((d) => (
                         <li
                           key={d}
-                          className="text-xs text-white/50 flex items-start gap-2"
+                          className="text-[14px] text-text-muted flex items-start gap-2"
                         >
                           <span className="text-accent mt-0.5">•</span>
                           {d}
@@ -61,17 +65,17 @@ export function Services({ services }: ServicesProps) {
                       ))}
                     </ul>
                   )}
-                  <div className="flex items-center justify-between pt-4 border-t border-white/5">
-                    <span className="text-xs text-accent font-medium">
+                  <div className="flex items-center justify-between pt-5 border-t border-border-lighter">
+                    <span className="label-caps text-accent">
                       Sur devis
                     </span>
                     {service.turnaround && (
-                      <span className="text-xs text-white/40">
+                      <span className="text-[13px] text-text-body">
                         {service.turnaround}
                       </span>
                     )}
                   </div>
-                </GlassCard>
+                </Card>
               </FadeIn>
             );
           })}

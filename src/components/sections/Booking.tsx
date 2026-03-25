@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { ConsentGate } from "@/components/consent/ConsentGate";
 import { FadeIn } from "@/components/ui/FadeIn";
+import { Button } from "@/components/ui/Button";
+import { SectionLabel } from "@/components/ui/SectionLabel";
 
 const CALENDLY_URL =
   process.env.NEXT_PUBLIC_CALENDLY_URL || "https://calendly.com/studiolumen";
@@ -11,13 +13,16 @@ export function Booking() {
   const [showEmbed, setShowEmbed] = useState(false);
 
   return (
-    <section id="reserver" className="py-20 sm:py-28">
-      <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+    <section id="reserver" className="section-padding">
+      <div className="container-site max-w-3xl">
         <FadeIn>
-          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4 text-center">
+          <SectionLabel className="block text-center mb-4">
+            Réservation
+          </SectionLabel>
+          <h2 className="font-sans text-[30px] sm:text-[35px] font-semibold text-white mb-4 text-center leading-[1.18]">
             Réservez votre appel découverte
           </h2>
-          <p className="text-white/60 text-center mb-8">
+          <p className="text-text-body text-[16px] leading-[26px] text-center mb-10">
             30 minutes pour discuter de votre projet, sans engagement.
           </p>
         </FadeIn>
@@ -26,25 +31,20 @@ export function Booking() {
           fallback={
             <FadeIn>
               <div className="text-center">
-                <p className="text-sm text-white/50 mb-4">
+                <p className="text-[14px] text-text-muted mb-6">
                   Le widget de réservation nécessite votre consentement pour
                   charger.
                 </p>
-                <a
-                  href={CALENDLY_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex px-8 py-3.5 rounded-full bg-accent text-background font-semibold hover:bg-accent-hover transition-colors"
-                >
+                <Button href={CALENDLY_URL} variant="primary">
                   Réserver sur Calendly
-                </a>
+                </Button>
               </div>
             </FadeIn>
           }
         >
           {showEmbed ? (
             <div
-              className="bg-white rounded-xl overflow-hidden"
+              className="bg-white rounded-lg overflow-hidden"
               style={{ minHeight: 630 }}
             >
               <iframe
@@ -58,13 +58,13 @@ export function Booking() {
           ) : (
             <FadeIn>
               <div className="text-center">
-                <button
+                <Button
                   onClick={() => setShowEmbed(true)}
-                  className="inline-flex px-8 py-3.5 rounded-full bg-accent text-background font-semibold text-lg hover:bg-accent-hover transition-colors"
+                  variant="primary"
                 >
                   Choisir un créneau
-                </button>
-                <p className="text-xs text-white/40 mt-3">
+                </Button>
+                <p className="text-[13px] text-text-body mt-4">
                   Propulsé par Calendly
                 </p>
               </div>

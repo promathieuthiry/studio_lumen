@@ -5,6 +5,7 @@ import { Stream } from "@cloudflare/stream-react";
 import { PortfolioCarousel } from "@/components/ui/PortfolioCarousel";
 import { VideoModal } from "@/components/ui/VideoModal";
 import { FadeIn } from "@/components/ui/FadeIn";
+import { SectionLabel } from "@/components/ui/SectionLabel";
 import type { SanityImageSource } from "@/sanity/image";
 
 type Project = {
@@ -26,13 +27,16 @@ export function Portfolio({ projects }: PortfolioProps) {
   if (!projects?.length) return null;
 
   return (
-    <section id="portfolio" className="py-20 sm:py-28">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <section id="portfolio" className="section-padding">
+      <div className="container-site">
         <FadeIn>
-          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4 text-center">
+          <SectionLabel className="block text-center mb-4">
+            Portfolio
+          </SectionLabel>
+          <h2 className="font-sans text-[30px] sm:text-[35px] font-semibold text-white mb-4 text-center leading-[1.18]">
             Nos réalisations
           </h2>
-          <p className="text-white/60 text-center max-w-2xl mx-auto mb-12">
+          <p className="text-text-body text-[16px] leading-[26px] text-center max-w-2xl mx-auto mb-14">
             Découvrez nos dernières productions vidéo.
           </p>
         </FadeIn>
@@ -47,7 +51,7 @@ export function Portfolio({ projects }: PortfolioProps) {
           onClose={() => setSelectedProject(null)}
         >
           {selectedProject && (
-            <div className="aspect-video rounded-xl overflow-hidden bg-black">
+            <div className="aspect-video rounded-lg overflow-hidden bg-black">
               <Stream
                 controls
                 autoplay

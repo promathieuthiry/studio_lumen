@@ -8,7 +8,7 @@ export function CookieSettingsButton() {
   return (
     <button
       onClick={() => setShowBanner(true)}
-      className="text-sm text-white/60 hover:text-accent transition-colors"
+      className="text-[15px] text-text-muted hover:text-white transition-colors duration-300"
     >
       Gérer les cookies
     </button>

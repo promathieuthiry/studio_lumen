@@ -57,7 +57,8 @@ export function PortfolioCarousel({
 
   return (
     <div>
-      <div className="flex gap-2 mb-8 overflow-x-auto scrollbar-hide px-4 sm:px-0 sm:justify-center">
+      {/* Category filters — pill buttons */}
+      <div className="flex gap-3 mb-10 overflow-x-auto scrollbar-hide px-4 sm:px-0 sm:justify-center">
         {categories.map((cat) => {
           const count =
             cat.value === "all"
@@ -68,10 +69,10 @@ export function PortfolioCarousel({
             <button
               key={cat.value}
               onClick={() => setActiveCategory(cat.value)}
-              className={`flex-shrink-0 px-4 py-2 rounded-full text-sm transition-colors ${
+              className={`flex-shrink-0 px-5 py-2.5 rounded-pill text-[14px] font-medium transition-colors duration-300 ${
                 activeCategory === cat.value
-                  ? "bg-accent text-background font-semibold"
-                  : "text-white/60 hover:text-white hover:bg-white/5"
+                  ? "bg-white text-text-dark"
+                  : "text-text-muted hover:text-white border border-border-lighter"
               }`}
             >
               {cat.label}
@@ -107,16 +108,16 @@ export function PortfolioCarousel({
                 className="flex-shrink-0 w-72 sm:w-80 group"
                 aria-label={`Voir le projet : ${project.title}`}
               >
-                <div className="relative aspect-video rounded-xl overflow-hidden mb-3">
+                <div className="relative aspect-video rounded-lg overflow-hidden mb-3">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={urlFor(project.thumbnail).width(640).height(360).url()}
                     alt={project.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   />
-                  <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors" />
+                  <div className="absolute inset-0 bg-overlay group-hover:bg-transparent transition-colors duration-300" />
                 </div>
-                <p className="text-sm text-white/80 text-left group-hover:text-white transition-colors">
+                <p className="text-[15px] text-text-muted text-left group-hover:text-white transition-colors duration-300">
                   {project.title}
                 </p>
               </motion.button>

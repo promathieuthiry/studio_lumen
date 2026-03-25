@@ -34,15 +34,15 @@ export default async function MentionsLegalesPage() {
   return (
     <>
       <Navbar />
-      <main className="pt-24 pb-20">
-        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-          <h1 className="text-3xl sm:text-4xl font-bold text-white mb-8">
+      <main className="pt-28 section-padding">
+        <div className="container-site max-w-3xl">
+          <h1 className="font-display text-[35px] sm:text-[48px] font-semibold text-white mb-10 leading-[1]">
             {page?.title || "Mentions légales"}
           </h1>
           {page?.body ? (
             <PortableTextRenderer value={page.body} />
           ) : (
-            <p className="text-white/60">Contenu bientôt disponible.</p>
+            <p className="text-text-muted">Contenu bientôt disponible.</p>
           )}
         </div>
       </main>

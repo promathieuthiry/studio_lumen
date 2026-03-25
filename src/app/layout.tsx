@@ -1,13 +1,30 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Space_Grotesk, DM_Sans, Cardo } from "next/font/google";
 import "@/styles/globals.css";
 import { ConsentProvider } from "@/components/consent/ConsentProvider";
 import { ConsentBanner } from "@/components/consent/ConsentBanner";
 import { SanityLive } from "@/sanity/live";
 
-const inter = Inter({
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-display",
+  weight: ["600", "700"],
+  display: "swap",
+});
+
+const dmSans = DM_Sans({
   subsets: ["latin"],
   variable: "--font-sans",
+  weight: ["400", "500", "600"],
+  display: "swap",
+});
+
+const cardo = Cardo({
+  subsets: ["latin"],
+  variable: "--font-serif",
+  weight: ["400"],
+  style: ["normal", "italic"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -26,7 +43,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="fr" className={inter.variable}>
+    <html
+      lang="fr"
+      className={`${spaceGrotesk.variable} ${dmSans.variable} ${cardo.variable}`}
+    >
       <body>
         <ConsentProvider>
           {children}

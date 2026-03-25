@@ -1,7 +1,6 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
-  darkMode: "class",
   content: [
     "./src/app/**/*.{ts,tsx}",
     "./src/components/**/*.{ts,tsx}",
@@ -10,52 +9,37 @@ const config: Config = {
     extend: {
       colors: {
         background: {
-          DEFAULT: "#0F0F1A",
-          light: "#1A1A2E",
+          DEFAULT: "#030303",
+          light: "#F8F8F8",
+          warm: "#F1EFEB",
+        },
+        text: {
+          DEFAULT: "#FFFFFF",
+          muted: "#C2C2C2",
+          dark: "#030303",
+          body: "#7A7A7A",
         },
         accent: {
-          DEFAULT: "#B8E040",
-          hover: "#C8EC60",
+          DEFAULT: "#61CE70",
         },
-        border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
-        foreground: "hsl(var(--foreground))",
-        primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
+        "accent-blue": "#6EC1E4",
+        border: {
+          light: "#FFFFFF26",
+          lighter: "#FFFFFF1A",
+          warm: "#F8F8F81A",
         },
-        secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
-        },
-        destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
-        },
-        muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
-        },
-        popover: {
-          DEFAULT: "hsl(var(--popover))",
-          foreground: "hsl(var(--popover-foreground))",
-        },
-        card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
-        },
+        overlay: "#03030326",
       },
       fontFamily: {
-        sans: ["var(--font-sans)", "system-ui", "sans-serif"],
+        display: ["var(--font-display)", "system-ui", "sans-serif"],
+        sans: ["var(--font-sans)", "Roboto", "system-ui", "sans-serif"],
+        serif: ["var(--font-serif)", "Roboto Slab", "serif"],
       },
-      backdropBlur: {
-        xs: "2px",
+      maxWidth: {
+        container: "1770px",
       },
       borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+        pill: "9999px",
       },
     },
   },

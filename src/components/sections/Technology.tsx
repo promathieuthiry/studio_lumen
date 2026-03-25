@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { HotspotOverlay } from "@/components/ui/HotspotOverlay";
 import { FadeIn } from "@/components/ui/FadeIn";
-import { GlassCard } from "@/components/ui/GlassCard";
+import { Card } from "@/components/ui/GlassCard";
+import { SectionLabel } from "@/components/ui/SectionLabel";
 
 type Equipment = {
   _id: string;
@@ -24,13 +25,16 @@ export function Technology({ equipment }: TechnologyProps) {
   if (!equipment?.length) return null;
 
   return (
-    <section id="technologie" className="py-20 sm:py-28">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <section id="technologie" className="section-padding">
+      <div className="container-site">
         <FadeIn>
-          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4 text-center">
+          <SectionLabel className="block text-center mb-4">
+            Équipement
+          </SectionLabel>
+          <h2 className="font-sans text-[30px] sm:text-[35px] font-semibold text-white mb-4 text-center leading-[1.18]">
             Notre studio mobile
           </h2>
-          <p className="text-white/60 text-center max-w-2xl mx-auto mb-12">
+          <p className="text-text-body text-[16px] leading-[26px] text-center max-w-2xl mx-auto mb-14">
             Explorez l&apos;équipement professionnel embarqué dans notre
             véhicule.
           </p>
@@ -38,7 +42,7 @@ export function Technology({ equipment }: TechnologyProps) {
 
         {/* Desktop: interactive hotspot overlay */}
         <FadeIn>
-          <div className="hidden sm:block relative aspect-[16/9] rounded-2xl overflow-hidden bg-background-light">
+          <div className="hidden sm:block relative aspect-[16/9] rounded-lg overflow-hidden">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/images/truck-interior.jpg"
@@ -46,6 +50,7 @@ export function Technology({ equipment }: TechnologyProps) {
               className="w-full h-full object-cover"
               onLoad={() => setImageLoaded(true)}
             />
+            <div className="absolute inset-0 bg-overlay" />
             {imageLoaded && <HotspotOverlay equipment={equipment} />}
           </div>
         </FadeIn>
@@ -54,15 +59,19 @@ export function Technology({ equipment }: TechnologyProps) {
         <div className="sm:hidden space-y-4">
           {equipment.map((item, i) => (
             <FadeIn key={item._id} delay={i * 0.05}>
-              <GlassCard className="p-5">
-                <h4 className="text-sm font-semibold text-white mb-1">
+              <Card className="p-6">
+                <h4 className="font-sans text-[16px] font-medium text-white mb-2">
                   {item.name}
                 </h4>
-                <p className="text-xs text-white/60">{item.description}</p>
+                <p className="text-text-body text-[14px] leading-[22px]">
+                  {item.description}
+                </p>
                 {item.specs && (
-                  <p className="text-xs text-accent/70 mt-2">{item.specs}</p>
+                  <p className="text-accent text-[13px] mt-2 opacity-70">
+                    {item.specs}
+                  </p>
                 )}
-              </GlassCard>
+              </Card>
             </FadeIn>
           ))}
         </div>

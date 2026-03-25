@@ -9,27 +9,32 @@ export function Footer({
   socialLinks?: Array<{ platform: string; url: string }>;
 }) {
   return (
-    <footer className="border-t border-white/5 bg-background-light">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+    <footer className="bg-background border-t border-border-warm">
+      <div className="container-site py-16 md:py-20">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-8">
+          {/* Column 1: Brand */}
           <div>
-            <h3 className="text-xl font-bold text-white mb-2">Studio Lumen</h3>
-            <p className="text-white/60 text-sm">
-              Merci de votre visite. Prêt à donner vie à vos idées ?
+            <h3 className="font-display text-xl font-semibold text-white mb-3">
+              Studio Lumen
+            </h3>
+            <p className="text-text-body text-[16px] leading-[26px]">
+              Premier studio de production vidéo mobile en France. Contenu livré
+              en 48h.
             </p>
           </div>
 
+          {/* Column 2: Navigation + contact */}
           <div className="space-y-3">
             <Link
               href="/a-propos"
-              className="block text-sm text-white/60 hover:text-accent transition-colors"
+              className="block text-[15px] text-text-muted hover:text-white transition-colors duration-300"
             >
               Découvrir mon parcours
             </Link>
             {contactEmail && (
               <a
                 href={`mailto:${contactEmail}`}
-                className="block text-sm text-white/60 hover:text-accent transition-colors"
+                className="block text-[15px] text-text-muted hover:text-white transition-colors duration-300"
               >
                 {contactEmail}
               </a>
@@ -40,23 +45,24 @@ export function Footer({
                 href={link.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block text-sm text-white/60 hover:text-accent transition-colors"
+                className="block text-[15px] text-text-muted hover:text-white transition-colors duration-300"
               >
                 {link.platform}
               </a>
             ))}
           </div>
 
+          {/* Column 3: Legal */}
           <div className="space-y-3">
             <Link
               href="/mentions-legales"
-              className="block text-sm text-white/60 hover:text-accent transition-colors"
+              className="block text-[15px] text-text-muted hover:text-white transition-colors duration-300"
             >
               Mentions légales
             </Link>
             <Link
               href="/politique-de-confidentialite"
-              className="block text-sm text-white/60 hover:text-accent transition-colors"
+              className="block text-[15px] text-text-muted hover:text-white transition-colors duration-300"
             >
               Politique de confidentialité
             </Link>
@@ -64,8 +70,8 @@ export function Footer({
           </div>
         </div>
 
-        <div className="mt-12 pt-8 border-t border-white/5 text-center">
-          <p className="text-xs text-white/40">
+        <div className="mt-16 pt-8 border-t border-border-warm text-center">
+          <p className="text-[13px] text-text-body">
             &copy; {new Date().getFullYear()} Studio Lumen. Tous droits
             réservés.
           </p>
