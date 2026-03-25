@@ -42,16 +42,27 @@ export function Technology({ equipment }: TechnologyProps) {
 
         {/* Desktop: interactive hotspot overlay */}
         <FadeIn>
-          <div className="hidden sm:block relative aspect-[16/9] rounded-lg overflow-hidden">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/images/truck-interior.jpg"
-              alt="Intérieur du studio mobile Studio Lumen"
-              className="w-full h-full object-cover"
-              onLoad={() => setImageLoaded(true)}
-            />
-            <div className="absolute inset-0 bg-overlay" />
-            {imageLoaded && <HotspotOverlay equipment={equipment} />}
+          <div className="hidden sm:grid grid-cols-2 gap-4">
+            <div className="relative aspect-[4/3] rounded-lg overflow-hidden">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/Arri%C3%A8re%20Camion.webp"
+                alt="Vue arrière du studio mobile Studio Lumen"
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-overlay" />
+            </div>
+            <div className="relative aspect-[4/3] rounded-lg overflow-hidden">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/Int%C3%A9rieur%20camion.webp"
+                alt="Intérieur du studio mobile Studio Lumen"
+                className="w-full h-full object-cover"
+                onLoad={() => setImageLoaded(true)}
+              />
+              <div className="absolute inset-0 bg-overlay" />
+              {imageLoaded && <HotspotOverlay equipment={equipment} />}
+            </div>
           </div>
         </FadeIn>
 
