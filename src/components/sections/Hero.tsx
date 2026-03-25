@@ -1,4 +1,7 @@
-import { HeroBackground } from "@/components/ui/HeroBackground";
+"use client";
+
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { Button } from "@/components/ui/Button";
 import { urlFor, type SanityImageSource } from "@/sanity/image";
 import Link from "next/link";
@@ -9,7 +12,6 @@ type HeroProps = {
   ctaText: string;
   ctaUrl: string;
   founderPhoto?: SanityImageSource | null;
-  backgroundImage?: SanityImageSource | null;
 };
 
 export function Hero({
@@ -18,16 +20,21 @@ export function Hero({
   ctaText,
   ctaUrl,
   founderPhoto,
-  backgroundImage,
 }: HeroProps) {
-  const bgUrl = backgroundImage
-    ? urlFor(backgroundImage).width(1920).quality(80).auto("format").url()
-    : null;
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start start", "end start"],
+  });
+  // Hero content fades out as user scrolls past
+  const opacity = useTransform(scrollYProgress, [0.2, 0.7], [1, 0]);
 
   return (
-    <HeroBackground backgroundUrl={bgUrl}>
-      <div className="flex flex-col items-center justify-center min-h-screen px-4 text-center pt-16">
-        {/* Display headline — fluid vw sizing per CLAUDE.md */}
+    <div ref={ref} className="min-h-screen">
+      <motion.div
+        style={{ opacity }}
+        className="flex flex-col items-center justify-center min-h-screen px-4 text-center pt-16"
+      >
         <h1 className="font-display font-semibold text-white leading-[1] mb-6 text-[30px] sm:text-[48px] lg:text-[clamp(55px,5vw,20vw)]">
           {headline}
         </h1>
@@ -47,7 +54,7 @@ export function Hero({
             />
           </Link>
         ) : null}
-      </div>
-    </HeroBackground>
+      </motion.div>
+    </div>
   );
 }

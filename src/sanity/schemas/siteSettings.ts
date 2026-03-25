@@ -29,6 +29,22 @@ export const siteSettings = defineType({
       type: "image",
       options: { hotspot: true },
       description: "Full-screen background image for the hero section",
+      hidden: true,
+      deprecated: { reason: "Use heroBackgroundDark and heroBackgroundLit instead" },
+    }),
+    defineField({
+      name: "heroBackgroundDark",
+      title: "Hero Background — Lights Off",
+      type: "image",
+      options: { hotspot: true },
+      description: "Dark version of the hero background (lights off). Visible on page load.",
+    }),
+    defineField({
+      name: "heroBackgroundLit",
+      title: "Hero Background — Lights On",
+      type: "image",
+      options: { hotspot: true },
+      description: "Lit version of the hero background (lights on). Revealed as user scrolls.",
     }),
     defineField({
       name: "heroHeadline",

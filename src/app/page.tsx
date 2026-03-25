@@ -7,9 +7,10 @@ import {
   EQUIPMENT_QUERY,
   CLIENT_LOGOS_QUERY,
 } from "@/sanity/queries";
-import type { SanityImageSource } from "@/sanity/image";
+import { urlFor, type SanityImageSource } from "@/sanity/image";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+import { HeroBackground } from "@/components/ui/HeroBackground";
 import { Hero } from "@/components/sections/Hero";
 import { ValueProposition } from "@/components/sections/ValueProposition";
 import { Services } from "@/components/sections/Services";
@@ -22,7 +23,8 @@ import { Technology } from "@/components/sections/Technology";
 type SiteSettingsData = {
   heroHeadline: string;
   heroSubtitle: string;
-  heroBackground?: SanityImageSource | null;
+  heroBackgroundDark?: SanityImageSource | null;
+  heroBackgroundLit?: SanityImageSource | null;
   ctaText: string;
   ctaUrl: string;
   founderPhoto?: SanityImageSource | null;
@@ -146,27 +148,44 @@ export default async function HomePage() {
       />
       <Navbar />
       <main>
-        <Hero
-          headline={settings?.heroHeadline || "Studio Lumen"}
-          subtitle={settings?.heroSubtitle || ""}
-          ctaText={settings?.ctaText || "Réserver"}
-          ctaUrl={settings?.ctaUrl || "#reserver"}
-          founderPhoto={settings?.founderPhoto}
-          backgroundImage={settings?.heroBackground}
-        />
-        <ValueProposition
-          valuePropositions={settings?.valuePropositions || []}
-          clientLogos={clientLogos}
-        />
-        <Services services={services} />
-        <Portfolio projects={projects} />
-        <CtaBanner
-          ctaText={settings?.ctaText || "Réserver"}
-          ctaUrl={settings?.ctaUrl || "#reserver"}
-        />
-        <Technology equipment={equipment} />
-        <Testimonials testimonials={testimonials} />
-        <Booking />
+        {/* Hero + ValueProposition share a fixed background with scroll-driven lighting */}
+        <HeroBackground
+          backgroundDarkUrl={
+            settings?.heroBackgroundDark
+              ? urlFor(settings.heroBackgroundDark).width(1920).quality(80).auto("format").url()
+              : null
+          }
+          backgroundLitUrl={
+            settings?.heroBackgroundLit
+              ? urlFor(settings.heroBackgroundLit).width(1920).quality(80).auto("format").url()
+              : null
+          }
+        >
+          <Hero
+            headline={settings?.heroHeadline || "Studio Lumen"}
+            subtitle={settings?.heroSubtitle || ""}
+            ctaText={settings?.ctaText || "Réserver"}
+            ctaUrl={settings?.ctaUrl || "#reserver"}
+            founderPhoto={settings?.founderPhoto}
+          />
+          <ValueProposition
+            valuePropositions={settings?.valuePropositions || []}
+            clientLogos={clientLogos}
+          />
+        </HeroBackground>
+
+        {/* Remaining sections with opaque background to cover fixed images */}
+        <div className="relative z-10 bg-background">
+          <Services services={services} />
+          <Portfolio projects={projects} />
+          <CtaBanner
+            ctaText={settings?.ctaText || "Réserver"}
+            ctaUrl={settings?.ctaUrl || "#reserver"}
+          />
+          <Technology equipment={equipment} />
+          <Testimonials testimonials={testimonials} />
+          <Booking />
+        </div>
       </main>
       <Footer
         contactEmail={settings?.contactEmail}
