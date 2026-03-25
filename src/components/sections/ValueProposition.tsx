@@ -1,7 +1,6 @@
 import { FadeIn } from "@/components/ui/FadeIn";
 import { AnimatedCounter } from "@/components/ui/AnimatedCounter";
 import { SectionLabel } from "@/components/ui/SectionLabel";
-import { urlFor, type SanityImageSource } from "@/sanity/image";
 import * as LucideIcons from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -18,17 +17,10 @@ type ValuePropositionProps = {
     statValue?: number | null;
     statSuffix?: string | null;
   }>;
-  clientLogos: Array<{
-    _id: string;
-    name: string;
-    logo: SanityImageSource;
-    url?: string;
-  }>;
 };
 
 export function ValueProposition({
   valuePropositions,
-  clientLogos,
 }: ValuePropositionProps) {
   return (
     <section className="section-padding">
@@ -89,43 +81,6 @@ export function ValueProposition({
             );
           })}
         </div>
-
-        {/* Client logo marquee */}
-        {clientLogos?.length > 0 && (
-          <div className="mt-20 overflow-hidden">
-            <div className="flex items-center gap-16 animate-marquee">
-              {[...clientLogos, ...clientLogos].map((logo, idx) => (
-                <div
-                  key={`${logo._id}-${idx}`}
-                  className="flex-shrink-0 opacity-40 hover:opacity-70 transition-opacity duration-300"
-                  style={{ width: "auto" }}
-                >
-                  {logo.url ? (
-                    <a
-                      href={logo.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={urlFor(logo.logo).height(50).url()}
-                        alt={logo.name}
-                        className="h-[50px] w-auto"
-                      />
-                    </a>
-                  ) : (
-                    /* eslint-disable-next-line @next/next/no-img-element */
-                    <img
-                      src={urlFor(logo.logo).height(50).url()}
-                      alt={logo.name}
-                      className="h-[50px] w-auto"
-                    />
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
       </div>
     </section>
   );

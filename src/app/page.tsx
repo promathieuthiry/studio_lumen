@@ -19,6 +19,7 @@ import { CtaBanner } from "@/components/sections/CtaBanner";
 import { Booking } from "@/components/sections/Booking";
 import { Portfolio } from "@/components/sections/Portfolio";
 import { Technology } from "@/components/sections/Technology";
+import { ClientLogos } from "@/components/sections/ClientLogos";
 
 type SiteSettingsData = {
   heroHeadline: string;
@@ -169,12 +170,12 @@ export default async function HomePage() {
           />
           <ValueProposition
             valuePropositions={settings?.valuePropositions || []}
-            clientLogos={clientLogos}
           />
         </HeroBackground>
 
         {/* Remaining sections with opaque background to cover fixed images */}
         <div className="relative z-10 bg-background">
+          <ClientLogos clientLogos={clientLogos} />
           <Services services={services} />
           <Portfolio projects={projects} />
           <CtaBanner
