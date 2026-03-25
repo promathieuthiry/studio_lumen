@@ -40,9 +40,11 @@ export const project = defineType({
       type: "text",
     }),
     defineField({
-      name: "cloudflareVideoId",
-      title: "Cloudflare Stream Video ID",
+      name: "youtubeVideoId",
+      title: "YouTube Video ID",
       type: "string",
+      description:
+        "The video ID from the YouTube URL (e.g. dQw4w9WgXcQ from youtube.com/watch?v=dQw4w9WgXcQ)",
       validation: (r) => r.required(),
     }),
     defineField({

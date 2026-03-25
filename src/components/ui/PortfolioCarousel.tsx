@@ -14,7 +14,7 @@ type Project = {
   title: string;
   slug: { current: string };
   category: string;
-  cloudflareVideoId: string;
+  youtubeVideoId: string;
   thumbnail: SanityImageSource;
 };
 
@@ -32,6 +32,44 @@ const categories = [
   { value: "podcast", label: "Podcasts" },
   { value: "photo", label: "Photos" },
 ];
+
+function CarouselItem({
+  project,
+  index,
+  x,
+  onSelect,
+}: {
+  project: Project;
+  index: number;
+  x: ReturnType<typeof useMotionValue<number>>;
+  onSelect: (project: Project) => void;
+}) {
+  const itemX = useTransform(x, (latest) => latest + index * 320);
+  const rotateY = useTransform(itemX, [-600, 0, 600], [-15, 0, 15]);
+  const scale = useTransform(itemX, [-600, 0, 600], [0.9, 1, 0.9]);
+
+  return (
+    <motion.button
+      style={{ rotateY, scale }}
+      onClick={() => onSelect(project)}
+      className="flex-shrink-0 w-72 sm:w-80 group"
+      aria-label={`Voir le projet : ${project.title}`}
+    >
+      <div className="relative aspect-video rounded-lg overflow-hidden mb-3">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={urlFor(project.thumbnail).width(640).height(360).url()}
+          alt={project.title}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+        />
+        <div className="absolute inset-0 bg-overlay group-hover:bg-transparent transition-colors duration-300" />
+      </div>
+      <p className="text-[15px] text-text-muted text-left group-hover:text-white transition-colors duration-300">
+        {project.title}
+      </p>
+    </motion.button>
+  );
+}
 
 export function PortfolioCarousel({
   projects,
@@ -88,41 +126,15 @@ export function PortfolioCarousel({
           style={{ x }}
           className="flex gap-6 cursor-grab active:cursor-grabbing"
         >
-          {filtered.map((project, i) => {
-            const itemX = useTransform(x, (latest) => {
-              const offset = latest + i * 320;
-              return offset;
-            });
-            const rotateY = useTransform(itemX, [-600, 0, 600], [-15, 0, 15]);
-            const scale = useTransform(
-              itemX,
-              [-600, 0, 600],
-              [0.9, 1, 0.9]
-            );
-
-            return (
-              <motion.button
-                key={project._id}
-                style={{ rotateY, scale }}
-                onClick={() => onSelect(project)}
-                className="flex-shrink-0 w-72 sm:w-80 group"
-                aria-label={`Voir le projet : ${project.title}`}
-              >
-                <div className="relative aspect-video rounded-lg overflow-hidden mb-3">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={urlFor(project.thumbnail).width(640).height(360).url()}
-                    alt={project.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                  <div className="absolute inset-0 bg-overlay group-hover:bg-transparent transition-colors duration-300" />
-                </div>
-                <p className="text-[15px] text-text-muted text-left group-hover:text-white transition-colors duration-300">
-                  {project.title}
-                </p>
-              </motion.button>
-            );
-          })}
+          {filtered.map((project, i) => (
+            <CarouselItem
+              key={project._id}
+              project={project}
+              index={i}
+              x={x}
+              onSelect={onSelect}
+            />
+          ))}
         </motion.div>
       </div>
     </div>

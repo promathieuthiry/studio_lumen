@@ -57,7 +57,7 @@ type ProjectData = {
   title: string;
   slug: { current: string };
   category: string;
-  cloudflareVideoId: string;
+  youtubeVideoId: string;
   thumbnail: SanityImageSource;
 };
 

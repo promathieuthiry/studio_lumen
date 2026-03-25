@@ -162,7 +162,7 @@ export type Project = {
     | "podcast"
     | "photo";
   description?: string;
-  cloudflareVideoId: string;
+  youtubeVideoId: string;
   thumbnail: {
     asset?: SanityImageAssetReference;
     media?: unknown;
@@ -474,7 +474,7 @@ export type SERVICES_QUERY_RESULT = Array<{
 
 // Source: src/sanity/queries.ts
 // Variable: PROJECTS_QUERY
-// Query: *[_type == "project"] | order(order asc){    _id,    title,    slug,    category,    description,    cloudflareVideoId,    thumbnail,    featured,    order  }
+// Query: *[_type == "project"] | order(order asc){    _id,    title,    slug,    category,    description,    youtubeVideoId,    thumbnail,    featured,    order  }
 export type PROJECTS_QUERY_RESULT = Array<{
   _id: string;
   title: string;
@@ -487,7 +487,7 @@ export type PROJECTS_QUERY_RESULT = Array<{
     | "social-media"
     | "testimonial";
   description: string | null;
-  cloudflareVideoId: string;
+  youtubeVideoId: string;
   thumbnail: {
     asset?: SanityImageAssetReference;
     media?: unknown;
@@ -633,7 +633,7 @@ declare module "@sanity/client" {
   interface SanityQueries {
     '\n  *[_type == "siteSettings"][0]{\n    siteTitle,\n    description,\n    ogImage,\n    heroBackgroundDark,\n    heroBackgroundLit,\n    heroHeadline,\n    heroSubtitle,\n    valuePropositions[]{\n      title,\n      description,\n      icon,\n      statValue,\n      statSuffix\n    },\n    socialLinks[]{\n      platform,\n      url\n    },\n    ctaText,\n    ctaUrl,\n    founderPhoto,\n    founderBio,\n    contactEmail\n  }\n': SITE_SETTINGS_QUERY_RESULT;
     '\n  *[_type == "service"] | order(order asc){\n    _id,\n    title,\n    description,\n    icon,\n    deliverables,\n    turnaround,\n    order\n  }\n': SERVICES_QUERY_RESULT;
-    '\n  *[_type == "project"] | order(order asc){\n    _id,\n    title,\n    slug,\n    category,\n    description,\n    cloudflareVideoId,\n    thumbnail,\n    featured,\n    order\n  }\n': PROJECTS_QUERY_RESULT;
+    '\n  *[_type == "project"] | order(order asc){\n    _id,\n    title,\n    slug,\n    category,\n    description,\n    youtubeVideoId,\n    thumbnail,\n    featured,\n    order\n  }\n': PROJECTS_QUERY_RESULT;
     '\n  *[_type == "testimonial"] | order(order asc){\n    _id,\n    clientName,\n    company,\n    role,\n    quote,\n    avatar,\n    featured,\n    order\n  }\n': TESTIMONIALS_QUERY_RESULT;
     '\n  *[_type == "clientLogo"] | order(order asc){\n    _id,\n    name,\n    logo,\n    url,\n    order\n  }\n': CLIENT_LOGOS_QUERY_RESULT;
     '\n  *[_type == "equipment"] | order(order asc){\n    _id,\n    name,\n    description,\n    image,\n    specs,\n    hotspotX,\n    hotspotY,\n    order\n  }\n': EQUIPMENT_QUERY_RESULT;

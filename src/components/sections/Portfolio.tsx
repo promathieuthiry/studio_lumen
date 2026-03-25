@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { Stream } from "@cloudflare/stream-react";
 import { PortfolioCarousel } from "@/components/ui/PortfolioCarousel";
 import { VideoModal } from "@/components/ui/VideoModal";
 import { FadeIn } from "@/components/ui/FadeIn";
@@ -13,7 +12,7 @@ type Project = {
   title: string;
   slug: { current: string };
   category: string;
-  cloudflareVideoId: string;
+  youtubeVideoId: string;
   thumbnail: SanityImageSource;
 };
 
@@ -52,11 +51,12 @@ export function Portfolio({ projects }: PortfolioProps) {
         >
           {selectedProject && (
             <div className="aspect-video rounded-lg overflow-hidden bg-black">
-              <Stream
-                controls
-                autoplay
-                src={selectedProject.cloudflareVideoId}
+              <iframe
+                src={`https://www.youtube-nocookie.com/embed/${selectedProject.youtubeVideoId}?autoplay=1&rel=0`}
+                allow="autoplay; encrypted-media"
+                allowFullScreen
                 className="w-full h-full"
+                title={selectedProject.title}
               />
             </div>
           )}

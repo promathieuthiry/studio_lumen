@@ -47,7 +47,7 @@ export const PROJECTS_QUERY = defineQuery(`
     slug,
     category,
     description,
-    cloudflareVideoId,
+    youtubeVideoId,
     thumbnail,
     featured,
     order

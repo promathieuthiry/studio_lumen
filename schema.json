@@ -907,7 +907,7 @@
         },
         "optional": true
       },
-      "cloudflareVideoId": {
+      "youtubeVideoId": {
         "type": "objectAttribute",
         "value": {
           "type": "string"

@@ -1,34 +1,32 @@
 "use client";
 
 import { useState } from "react";
-import { Stream } from "@cloudflare/stream-react";
 import { Play } from "lucide-react";
 
 type VideoFacadeProps = {
   videoId: string;
-  customerCode: string;
   title?: string;
   className?: string;
 };
 
 export function VideoFacade({
   videoId,
-  customerCode,
   title,
   className,
 }: VideoFacadeProps) {
   const [playing, setPlaying] = useState(false);
 
-  const thumbnailUrl = `https://customer-${customerCode}.cloudflarestream.com/${videoId}/thumbnails/thumbnail.jpg?time=2s&height=720`;
+  const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
 
   if (playing) {
     return (
       <div className={className}>
-        <Stream
-          controls
-          autoplay
-          src={videoId}
+        <iframe
+          src={`https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0`}
+          allow="autoplay; encrypted-media"
+          allowFullScreen
           className="w-full h-full rounded-xl"
+          title={title || "Vidéo"}
         />
       </div>
     );
