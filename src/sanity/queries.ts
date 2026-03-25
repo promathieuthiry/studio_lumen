@@ -12,7 +12,9 @@ export const SITE_SETTINGS_QUERY = defineQuery(`
     valuePropositions[]{
       title,
       description,
-      icon
+      icon,
+      statValue,
+      statSuffix
     },
     socialLinks[]{
       platform,

@@ -84,6 +84,18 @@ export const siteSettings = defineType({
               type: "string",
               validation: (r) => r.required(),
             }),
+            defineField({
+              name: "statValue",
+              title: "Stat Number",
+              type: "number",
+              description: "Animated number displayed on the card (e.g. 3, 99.9, 150)",
+            }),
+            defineField({
+              name: "statSuffix",
+              title: "Stat Suffix",
+              type: "string",
+              description: "Unit or symbol after the number (e.g. GW, %, +)",
+            }),
           ],
         },
       ],
