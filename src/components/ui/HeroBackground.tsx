@@ -3,7 +3,12 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 
-export function HeroBackground({ children }: { children: React.ReactNode }) {
+type HeroBackgroundProps = {
+  children: React.ReactNode;
+  backgroundUrl?: string | null;
+};
+
+export function HeroBackground({ children, backgroundUrl }: HeroBackgroundProps) {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -15,6 +20,22 @@ export function HeroBackground({ children }: { children: React.ReactNode }) {
 
   return (
     <div ref={ref} className="relative min-h-screen overflow-hidden bg-background">
+      {/* Background image with parallax */}
+      {backgroundUrl && (
+        <motion.div
+          style={{ y, opacity }}
+          className="absolute inset-0"
+        >
+          <img
+            src={backgroundUrl}
+            alt=""
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+          {/* Dark overlay for text readability */}
+          <div className="absolute inset-0 bg-background/60" />
+        </motion.div>
+      )}
+
       {/* Decorative blur blobs */}
       <div
         className="absolute top-[20%] left-[10%] w-[400px] h-[400px] rounded-full bg-accent/10"
@@ -25,10 +46,12 @@ export function HeroBackground({ children }: { children: React.ReactNode }) {
         style={{ filter: "blur(100px)" }}
       />
 
-      <motion.div
-        style={{ y, opacity }}
-        className="absolute inset-0"
-      />
+      {!backgroundUrl && (
+        <motion.div
+          style={{ y, opacity }}
+          className="absolute inset-0"
+        />
+      )}
       <div className="relative z-10">{children}</div>
     </div>
   );

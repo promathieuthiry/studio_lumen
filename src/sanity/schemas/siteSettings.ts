@@ -24,6 +24,13 @@ export const siteSettings = defineType({
       validation: (r) => r.required(),
     }),
     defineField({
+      name: "heroBackground",
+      title: "Hero Background Image",
+      type: "image",
+      options: { hotspot: true },
+      description: "Full-screen background image for the hero section",
+    }),
+    defineField({
       name: "heroHeadline",
       title: "Hero Headline",
       type: "string",

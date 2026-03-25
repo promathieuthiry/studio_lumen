@@ -5,6 +5,7 @@ export const SITE_SETTINGS_QUERY = defineQuery(`
     siteTitle,
     description,
     ogImage,
+    heroBackground,
     heroHeadline,
     heroSubtitle,
     valuePropositions[]{

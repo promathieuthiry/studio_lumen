@@ -22,6 +22,7 @@ import { Technology } from "@/components/sections/Technology";
 type SiteSettingsData = {
   heroHeadline: string;
   heroSubtitle: string;
+  heroBackground?: SanityImageSource | null;
   ctaText: string;
   ctaUrl: string;
   founderPhoto?: SanityImageSource | null;
@@ -151,6 +152,7 @@ export default async function HomePage() {
           ctaText={settings?.ctaText || "Réserver"}
           ctaUrl={settings?.ctaUrl || "#reserver"}
           founderPhoto={settings?.founderPhoto}
+          backgroundImage={settings?.heroBackground}
         />
         <ValueProposition
           valuePropositions={settings?.valuePropositions || []}

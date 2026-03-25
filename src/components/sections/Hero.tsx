@@ -9,6 +9,7 @@ type HeroProps = {
   ctaText: string;
   ctaUrl: string;
   founderPhoto?: SanityImageSource | null;
+  backgroundImage?: SanityImageSource | null;
 };
 
 export function Hero({
@@ -17,9 +18,14 @@ export function Hero({
   ctaText,
   ctaUrl,
   founderPhoto,
+  backgroundImage,
 }: HeroProps) {
+  const bgUrl = backgroundImage
+    ? urlFor(backgroundImage).width(1920).quality(80).auto("format").url()
+    : null;
+
   return (
-    <HeroBackground>
+    <HeroBackground backgroundUrl={bgUrl}>
       <div className="flex flex-col items-center justify-center min-h-screen px-4 text-center pt-16">
         {/* Display headline — fluid vw sizing per CLAUDE.md */}
         <h1 className="font-display font-semibold text-white leading-[1] mb-6 text-[30px] sm:text-[48px] lg:text-[clamp(55px,5vw,20vw)]">
