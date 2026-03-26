@@ -18,6 +18,7 @@ export async function POST(req: NextRequest) {
     }
 
     revalidateTag(body._type, "max");
+    revalidateTag("sanity:fetch-sync-tags", "max");
     if (body.slug?.current) {
       revalidateTag(`${body._type}:${body.slug.current}`, "max");
     }
