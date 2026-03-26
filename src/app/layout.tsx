@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import { DM_Sans, Cardo } from "next/font/google";
+import { DM_Sans, Cardo, Poppins } from "next/font/google";
 import "@/styles/globals.css";
 import { ConsentProvider } from "@/components/consent/ConsentProvider";
 import { ConsentBanner } from "@/components/consent/ConsentBanner";
@@ -30,6 +30,13 @@ const dmSans = DM_Sans({
   display: "swap",
 });
 
+const poppins = Poppins({
+  subsets: ["latin"],
+  variable: "--font-poppins",
+  weight: ["600", "700"],
+  display: "swap",
+});
+
 const cardo = Cardo({
   subsets: ["latin"],
   variable: "--font-serif",
@@ -56,7 +63,7 @@ export default function RootLayout({
   return (
     <html
       lang="fr"
-      className={`${clashDisplay.variable} ${dmSans.variable} ${cardo.variable}`}
+      className={`${clashDisplay.variable} ${dmSans.variable} ${poppins.variable} ${cardo.variable}`}
     >
       <body>
         <ConsentProvider>

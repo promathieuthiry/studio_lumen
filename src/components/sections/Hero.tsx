@@ -28,7 +28,7 @@ export function Hero({ headline, subtitle, ctaText, ctaUrl }: HeroProps) {
         className="flex flex-col justify-end min-h-screen px-[4vw] lg:px-[3.906vw] pb-[5vw]"
       >
         {/* Headline — massive, left-aligned */}
-        <h1 className="font-display font-bold text-white leading-[0.95] mb-6 lg:mb-8">
+        <h1 className="font-poppins font-bold text-white leading-[0.95] mb-6 lg:mb-8">
           {words.map((word, i) => (
             <motion.span
               key={i}

@@ -33,6 +33,7 @@ const config: Config = {
       },
       fontFamily: {
         display: ["var(--font-display)", "system-ui", "sans-serif"],
+        poppins: ["var(--font-poppins)", "system-ui", "sans-serif"],
         sans: ["var(--font-sans)", "Roboto", "system-ui", "sans-serif"],
         serif: ["var(--font-serif)", "Roboto Slab", "serif"],
       },
