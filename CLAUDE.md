@@ -38,6 +38,17 @@ npx sanity typegen generate                          # Generate TypeScript types
 ## Recent Changes
 
 - 001-studio-lumen-website: Added full tech stack (Next.js 14+, Sanity v3, Tailwind CSS, Framer Motion, YouTube unlisted embeds via youtube-nocookie.com)
+- Testimonials section: Rewritten from static 3-column grid to infinite-scroll carousel with click-to-expand modal. Uses per-card `useTransform` wrapping for truly infinite drag/auto-scroll, manual pointer events (not Framer `drag`), glassmorphic cards, `AuthorBlock` shared component, and `safeAvatarUrl` helper for resilient Sanity image handling.
+
+## Patterns
+
+### Infinite scroll carousel (Testimonials)
+- Per-card position wrapping via `useTransform` + modulo math — each card independently wraps its position so no duplication limit matters
+- Manual pointer-based drag (`onPointerDown/Move/Up`) instead of Framer Motion `drag` — avoids gesture conflicts with position wrapping
+- `setPointerCapture` wrapped in try/catch to prevent stuck `isDragging` state
+- Separate `onPointerCancel` handler (no click detection) to avoid false modal opens on system gestures
+- Click vs drag distinguished via `DRAG_THRESHOLD` (5px) + `hasDragged` ref
+- `isHovered` as `useRef` (not state) — only read in `useAnimationFrame`, avoids re-renders
 
 <!-- MANUAL ADDITIONS START -->
 
@@ -100,7 +111,7 @@ npx sanity typegen generate                          # Generate TypeScript types
 **Section spacing (vertical):**
 | Context               | Value              |
 |-----------------------|--------------------|
-| Large section padding | `5vw – 7.8vw` (≈ 72–112px at 1440px) |
+| Large section padding | `3.8vw` (≈ 55px at 1440px) via `.section-padding` |
 | Standard section gap  | `3.6vw` (≈ 52px)  |
 | Inner content gap     | `6.094vw` (≈ 88px)|
 | Mobile section padding| `40px 15px`        |
