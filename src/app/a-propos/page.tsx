@@ -6,9 +6,9 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { PortableTextRenderer } from "@/components/portable-text/PortableTextRenderer";
 import { FadeIn } from "@/components/ui/FadeIn";
-import { Card } from "@/components/ui/GlassCard";
 import { Button } from "@/components/ui/Button";
 import { SectionLabel } from "@/components/ui/SectionLabel";
+import { AboutHero } from "@/components/sections/AboutHero";
 import type { PortableTextBlock } from "@portabletext/types";
 
 export const metadata: Metadata = {
@@ -24,6 +24,7 @@ type FounderData = {
   photo: SanityImageSource;
   journey?: Array<{ year: string; title: string; description?: string }>;
   vision?: string;
+  motivations?: string;
   skills?: string[];
   socialLinks?: Array<{ platform: string; url: string }>;
 } | null;
@@ -76,6 +77,7 @@ export default async function AboutPage() {
   }
 
   const jsonLd = getPersonJsonLd(founder);
+  const photoUrl = urlFor(founder.photo).width(1920).quality(80).auto("format").url();
 
   return (
     <>
@@ -84,117 +86,188 @@ export default async function AboutPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <Navbar />
-      <main className="pt-28 section-padding">
-        <div className="container-site max-w-4xl">
-          <FadeIn>
-            <div className="flex flex-col sm:flex-row items-center sm:items-start gap-8 mb-14">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={urlFor(founder.photo).width(320).height(320).url()}
-                alt={founder.fullName}
-                className="w-40 h-40 sm:w-48 sm:h-48 rounded-lg object-cover flex-shrink-0"
-              />
-              <div>
-                <h1 className="font-display text-[35px] sm:text-[48px] font-semibold text-white mb-2 leading-[1]">
-                  {founder.fullName}
-                </h1>
-                <p className="text-accent text-[18px] mb-4">{founder.title}</p>
-                {founder.socialLinks?.map((link) => (
-                  <a
-                    key={link.platform}
-                    href={link.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex mr-4 text-[14px] text-text-muted hover:text-white transition-colors duration-300"
-                  >
-                    {link.platform}
-                  </a>
-                ))}
+      <main>
+        <AboutHero
+          fullName={founder.fullName}
+          title={founder.title}
+          photoUrl={photoUrl}
+        />
+
+        <div className="relative z-10 bg-background">
+          <section className="section-padding">
+            <div className="container-site">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
+                <div>
+                  <FadeIn>
+                    <SectionLabel className="block mb-6">
+                      À propos
+                    </SectionLabel>
+                  </FadeIn>
+
+                  {founder.vision && (
+                    <FadeIn delay={0.1}>
+                      <div className="mb-10">
+                        <div className="w-12 h-px bg-accent mb-8" />
+                        <blockquote className="font-serif italic text-white/80 text-[20px] sm:text-[24px] leading-[34px] sm:leading-[38px]">
+                          &ldquo;{founder.vision}&rdquo;
+                        </blockquote>
+                      </div>
+                    </FadeIn>
+                  )}
+
+                  {founder.socialLinks && founder.socialLinks.length > 0 && (
+                    <FadeIn delay={0.2}>
+                      <div className="flex flex-wrap gap-3">
+                        {founder.socialLinks.map((link) => (
+                          <a
+                            key={link.platform}
+                            href={link.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label={`${link.platform} (nouvelle fenêtre)`}
+                            className="inline-flex items-center gap-1.5 text-[12px] uppercase tracking-[1px] text-text-muted/70 hover:text-white border border-border-lighter hover:border-white/40 rounded-pill px-4 py-2 transition-all duration-300"
+                          >
+                            {link.platform}
+                          </a>
+                        ))}
+                      </div>
+                    </FadeIn>
+                  )}
+                </div>
+
+                <FadeIn delay={0.15}>
+                  <div className="prose-invert">
+                    <PortableTextRenderer value={founder.bio} />
+                  </div>
+                </FadeIn>
               </div>
             </div>
-          </FadeIn>
+          </section>
 
-          <FadeIn delay={0.1}>
-            <div className="prose-invert mb-16">
-              <PortableTextRenderer value={founder.bio} />
-            </div>
-          </FadeIn>
+          {founder.motivations && (
+            <section className="section-padding">
+              <div className="container-site max-w-4xl mx-auto">
+                <FadeIn>
+                  <div className="relative p-10 sm:p-14 lg:p-16 rounded-[25px] bg-white/5 backdrop-blur-md border border-white/10 overflow-hidden">
+                    <div
+                      className="absolute -top-20 -right-20 w-[300px] h-[300px] rounded-full bg-accent/5 pointer-events-none"
+                      style={{ filter: "blur(100px)" }}
+                    />
 
-          {founder.vision && (
-            <FadeIn delay={0.15}>
-              <Card className="p-8 sm:p-10 mb-16">
-                <SectionLabel className="block mb-3">Vision</SectionLabel>
-                <h2 className="font-sans text-[24px] font-medium text-white mb-4 leading-[1.18]">
-                  Ma vision
-                </h2>
-                <p className="font-serif italic text-text-muted text-[18px] leading-[30px]">
-                  {founder.vision}
-                </p>
-              </Card>
-            </FadeIn>
+                    <div className="relative z-10">
+                      <SectionLabel className="block mb-4">
+                        Ce qui me drive
+                      </SectionLabel>
+                      <h2 className="font-sans text-[28px] sm:text-[35px] font-semibold text-white leading-[1.18] mb-6">
+                        Mes motivations
+                      </h2>
+                      <p className="text-white/70 text-[16px] sm:text-[17px] leading-[28px] sm:leading-[30px] whitespace-pre-line">
+                        {founder.motivations}
+                      </p>
+                    </div>
+                  </div>
+                </FadeIn>
+              </div>
+            </section>
           )}
 
           {founder.journey && founder.journey.length > 0 && (
-            <div className="mb-16">
-              <FadeIn>
-                <SectionLabel className="block mb-3">Parcours</SectionLabel>
-                <h2 className="font-sans text-[24px] font-medium text-white mb-10 leading-[1.18]">
-                  Mon parcours
-                </h2>
-              </FadeIn>
-              <div className="space-y-8 border-l-2 border-border-lighter pl-8">
-                {founder.journey.map((step, i) => (
-                  <FadeIn key={step.year} delay={i * 0.1}>
-                    <div>
-                      <span className="label-caps text-accent">
-                        {step.year}
-                      </span>
-                      <h3 className="font-sans text-[18px] font-medium text-white mt-2">
-                        {step.title}
-                      </h3>
-                      {step.description && (
-                        <p className="text-text-body text-[15px] leading-[24px] mt-1">
-                          {step.description}
-                        </p>
-                      )}
-                    </div>
-                  </FadeIn>
-                ))}
+            <section className="section-padding">
+              <div className="container-site">
+                <FadeIn>
+                  <SectionLabel className="block mb-4">
+                    Parcours
+                  </SectionLabel>
+                  <h2 className="font-sans text-[28px] sm:text-[35px] font-semibold text-white leading-[1.18] mb-14">
+                    Mon parcours
+                  </h2>
+                </FadeIn>
+
+                <div className="relative">
+                  <div className="absolute left-4 sm:left-6 top-0 bottom-0 w-px bg-border-lighter" />
+
+                  <ol className="space-y-12 sm:space-y-16 list-none">
+                    {founder.journey.map((step, i) => (
+                      <FadeIn key={step.year} delay={i * 0.1}>
+                        <li className="relative pl-12 sm:pl-16">
+                          <div className="absolute left-[13px] sm:left-[21px] top-1 w-[7px] h-[7px] rounded-full bg-accent ring-4 ring-background" />
+
+                          <span className="label-caps text-accent">
+                            {step.year}
+                          </span>
+                          <h3 className="font-sans text-[18px] sm:text-[20px] font-medium text-white mt-2 leading-[1.3]">
+                            {step.title}
+                          </h3>
+                          {step.description && (
+                            <p className="text-text-body text-[15px] sm:text-[16px] leading-[26px] mt-2 max-w-xl">
+                              {step.description}
+                            </p>
+                          )}
+                        </li>
+                      </FadeIn>
+                    ))}
+                  </ol>
+                </div>
               </div>
-            </div>
+            </section>
           )}
 
           {founder.skills && founder.skills.length > 0 && (
-            <FadeIn>
-              <div className="mb-16">
-                <SectionLabel className="block mb-3">Compétences</SectionLabel>
-                <h2 className="font-sans text-[24px] font-medium text-white mb-6 leading-[1.18]">
-                  Compétences
-                </h2>
-                <div className="flex flex-wrap gap-3">
-                  {founder.skills.map((skill) => (
-                    <span
-                      key={skill}
-                      className="px-4 py-2 rounded-pill border border-border-lighter text-[14px] text-text-muted"
-                    >
-                      {skill}
-                    </span>
-                  ))}
-                </div>
+            <section className="section-padding">
+              <div className="container-site">
+                <FadeIn>
+                  <SectionLabel className="block mb-4">
+                    Expertise
+                  </SectionLabel>
+                  <h2 className="font-sans text-[28px] sm:text-[35px] font-semibold text-white leading-[1.18] mb-10">
+                    Compétences
+                  </h2>
+                </FadeIn>
+
+                <FadeIn delay={0.1}>
+                  <div className="flex flex-wrap gap-3">
+                    {founder.skills.map((skill) => (
+                      <span
+                        key={skill}
+                        className="px-5 py-2.5 rounded-pill border border-border-lighter text-[14px] text-text-muted hover:text-white hover:border-white/30 transition-all duration-300"
+                      >
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                </FadeIn>
               </div>
-            </FadeIn>
+            </section>
           )}
 
-          <FadeIn>
-            <div className="text-center py-14">
-              <h2 className="font-sans text-[30px] font-semibold text-white mb-5 leading-[1.18]">
-                Envie de collaborer ?
-              </h2>
-              <Button href="/#reserver" variant="primary">
-                Réserver un appel découverte
-              </Button>
+          <section className="section-padding">
+            <div className="container-site">
+              <FadeIn>
+                <div className="relative overflow-hidden rounded-[25px] border border-border-lighter p-10 sm:p-16 lg:p-20 text-center">
+                  <div
+                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-accent/6 pointer-events-none"
+                    style={{ filter: "blur(140px)" }}
+                  />
+
+                  <div className="relative z-10">
+                    <SectionLabel className="block mb-4">
+                      Collaborer
+                    </SectionLabel>
+                    <h2 className="font-display text-[30px] sm:text-[40px] lg:text-[48px] font-semibold text-white leading-[1.05] mb-4">
+                      Envie de collaborer ?
+                    </h2>
+                    <p className="font-serif italic text-text-muted text-[17px] sm:text-[19px] leading-[30px] max-w-md mx-auto mb-8">
+                      Discutons de votre projet et créons ensemble du contenu
+                      qui marque les esprits.
+                    </p>
+                    <Button href="/#reserver" variant="primary">
+                      Réserver un appel découverte
+                    </Button>
+                  </div>
+                </div>
+              </FadeIn>
             </div>
-          </FadeIn>
+          </section>
         </div>
       </main>
       <Footer socialLinks={founder.socialLinks} />
