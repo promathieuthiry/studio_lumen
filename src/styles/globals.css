@@ -42,8 +42,8 @@
   }
 
   .section-padding {
-    padding-top: 7.8vw;
-    padding-bottom: 7.8vw;
+    padding-top: 3.8vw;
+    padding-bottom: 3.8vw;
   }
 
   @media (max-width: 767px) {
