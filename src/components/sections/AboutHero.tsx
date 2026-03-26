@@ -18,6 +18,8 @@ export function AboutHero({ fullName, title, photoUrl }: AboutHeroProps) {
   const opacity = useTransform(scrollYProgress, [0.4, 0.75], [1, 0]);
   const photoScale = useTransform(scrollYProgress, [0, 1], [1, 1.08]);
   const photoY = useTransform(scrollYProgress, [0, 1], [0, 60]);
+  // Overlays fade out as user scrolls — photo becomes clearer
+  const overlayOpacity = useTransform(scrollYProgress, [0, 0.4], [1, 0]);
 
   const words = fullName.split(" ");
 
@@ -35,8 +37,17 @@ export function AboutHero({ fullName, title, photoUrl }: AboutHeroProps) {
           fetchPriority="high"
           className="h-full w-full object-cover object-top"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-background/30" />
-        <div className="absolute inset-0 bg-gradient-to-r from-background/60 to-transparent" />
+        {/* Bottom gradient stays for text readability */}
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
+        {/* Dark overlays that fade out on scroll — reveals the photo */}
+        <motion.div
+          className="absolute inset-0 bg-gradient-to-t from-transparent via-background/60 to-background/30"
+          style={{ opacity: overlayOpacity }}
+        />
+        <motion.div
+          className="absolute inset-0 bg-gradient-to-r from-background/50 to-transparent"
+          style={{ opacity: overlayOpacity }}
+        />
       </motion.div>
 
       <motion.div

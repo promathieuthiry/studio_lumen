@@ -94,6 +94,7 @@ export default async function AboutPage() {
         />
 
         <div className="relative z-10 bg-background">
+          {/* Bio — two-column: vision + biography */}
           <section className="section-padding">
             <div className="container-site">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
@@ -144,35 +145,39 @@ export default async function AboutPage() {
             </div>
           </section>
 
+          {/* Motivations — elevated bg */}
           {founder.motivations && (
-            <section className="section-padding">
-              <div className="container-site max-w-4xl mx-auto">
-                <FadeIn>
-                  <div className="relative p-10 sm:p-14 lg:p-16 rounded-[25px] bg-white/5 backdrop-blur-md border border-white/10 overflow-hidden">
-                    <div
-                      className="absolute -top-20 -right-20 w-[300px] h-[300px] rounded-full bg-accent/5 pointer-events-none"
-                      style={{ filter: "blur(100px)" }}
-                    />
+            <div className="bg-background-elevated">
+              <section className="section-padding border-t border-border-lighter">
+                <div className="container-site max-w-4xl mx-auto">
+                  <FadeIn>
+                    <div className="relative p-10 sm:p-14 lg:p-16 rounded-[25px] bg-white/5 backdrop-blur-md border border-white/10 overflow-hidden">
+                      <div
+                        className="absolute -top-20 -right-20 w-[300px] h-[300px] rounded-full bg-accent/5 pointer-events-none"
+                        style={{ filter: "blur(100px)" }}
+                      />
 
-                    <div className="relative z-10">
-                      <SectionLabel className="block mb-4">
-                        Ce qui me drive
-                      </SectionLabel>
-                      <h2 className="font-sans text-[28px] sm:text-[35px] font-semibold text-white leading-[1.18] mb-6">
-                        Mes motivations
-                      </h2>
-                      <p className="text-white/70 text-[16px] sm:text-[17px] leading-[28px] sm:leading-[30px] whitespace-pre-line">
-                        {founder.motivations}
-                      </p>
+                      <div className="relative z-10">
+                        <SectionLabel className="block mb-4">
+                          Ce qui me drive
+                        </SectionLabel>
+                        <h2 className="font-sans text-[28px] sm:text-[35px] font-semibold text-white leading-[1.18] mb-6">
+                          Mes motivations
+                        </h2>
+                        <p className="text-white/70 text-[16px] sm:text-[17px] leading-[28px] sm:leading-[30px] whitespace-pre-line">
+                          {founder.motivations}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                </FadeIn>
-              </div>
-            </section>
+                  </FadeIn>
+                </div>
+              </section>
+            </div>
           )}
 
+          {/* Journey timeline */}
           {founder.journey && founder.journey.length > 0 && (
-            <section className="section-padding">
+            <section className="section-padding border-t border-border-lighter">
               <div className="container-site">
                 <FadeIn>
                   <SectionLabel className="block mb-4">
@@ -212,35 +217,39 @@ export default async function AboutPage() {
             </section>
           )}
 
+          {/* Skills — elevated bg */}
           {founder.skills && founder.skills.length > 0 && (
-            <section className="section-padding">
-              <div className="container-site">
-                <FadeIn>
-                  <SectionLabel className="block mb-4">
-                    Expertise
-                  </SectionLabel>
-                  <h2 className="font-sans text-[28px] sm:text-[35px] font-semibold text-white leading-[1.18] mb-10">
-                    Compétences
-                  </h2>
-                </FadeIn>
+            <div className="bg-background-elevated">
+              <section className="section-padding border-t border-border-lighter">
+                <div className="container-site">
+                  <FadeIn>
+                    <SectionLabel className="block mb-4">
+                      Expertise
+                    </SectionLabel>
+                    <h2 className="font-sans text-[28px] sm:text-[35px] font-semibold text-white leading-[1.18] mb-10">
+                      Compétences
+                    </h2>
+                  </FadeIn>
 
-                <FadeIn delay={0.1}>
-                  <div className="flex flex-wrap gap-3">
-                    {founder.skills.map((skill) => (
-                      <span
-                        key={skill}
-                        className="px-5 py-2.5 rounded-pill border border-border-lighter text-[14px] text-text-muted hover:text-white hover:border-white/30 transition-all duration-300"
-                      >
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
-                </FadeIn>
-              </div>
-            </section>
+                  <FadeIn delay={0.1}>
+                    <div className="flex flex-wrap gap-3">
+                      {founder.skills.map((skill) => (
+                        <span
+                          key={skill}
+                          className="px-5 py-2.5 rounded-pill border border-border-lighter text-[14px] text-text-muted hover:text-white hover:border-white/30 transition-all duration-300"
+                        >
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
+                  </FadeIn>
+                </div>
+              </section>
+            </div>
           )}
 
-          <section className="section-padding">
+          {/* CTA */}
+          <section className="section-padding border-t border-border-lighter">
             <div className="container-site">
               <FadeIn>
                 <div className="relative overflow-hidden rounded-[25px] border border-border-lighter p-10 sm:p-16 lg:p-20 text-center">
