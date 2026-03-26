@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { CookieSettingsButton } from "./CookieSettingsButton";
+import { CinematicBrand } from "./CinematicBrand";
 
 export function Footer({
   contactEmail,
@@ -9,7 +10,8 @@ export function Footer({
   socialLinks?: Array<{ platform: string; url: string }>;
 }) {
   return (
-    <footer className="bg-background border-t border-border-warm">
+    <footer className="relative z-10 bg-background overflow-hidden border-t border-border-warm">
+      {/* ─── Upper Section: Navigation Grid ─── */}
       <div className="container-site py-16 md:py-20">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-8">
           {/* Column 1: Brand */}
@@ -69,13 +71,21 @@ export function Footer({
             <CookieSettingsButton />
           </div>
         </div>
+      </div>
 
-        <div className="mt-16 pt-8 border-t border-border-warm text-center">
-          <p className="text-[13px] text-text-body">
-            &copy; {new Date().getFullYear()} Studio Lumen. Tous droits
-            réservés.
-          </p>
-        </div>
+      {/* ─── Divider ─── */}
+      <div className="container-site">
+        <div className="border-t border-border-warm" />
+      </div>
+
+      {/* ─── Cinematic Section ─── */}
+      <CinematicBrand />
+
+      {/* ─── Copyright ─── */}
+      <div className="relative z-10 mt-8 pb-10 text-center">
+        <p className="text-[13px] text-text-body">
+          &copy; {new Date().getFullYear()} Studio Lumen. Tous droits réservés.
+        </p>
       </div>
     </footer>
   );
