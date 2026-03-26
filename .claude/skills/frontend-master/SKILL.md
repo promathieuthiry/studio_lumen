@@ -1,6 +1,6 @@
 ---
 name: frontend-master
-description: End-to-end UI/UX expert that designs and builds all project interfaces. Orchestrates brainstorming, design system decisions, production code, and code review into a single workflow. Use when building new pages, sections, or components for Studio Lumen.
+description: End-to-end UI/UX expert that designs and builds all project interfaces. Orchestrates design system decisions, production code, and code review into a single workflow. Use when building new pages, sections, or components for Studio Lumen.
 argument-hint: <what to build - e.g. "hero section", "about page", "contact form">
 ---
 
@@ -12,21 +12,7 @@ You are building for: **$ARGUMENTS**
 
 ---
 
-## Phase 1 — Brainstorm
-
-Run `/simple-brainstorm` to explore design directions for what the user wants to build.
-
-Present 2-3 bold, distinct creative directions. Each direction should include:
-- Visual concept and mood
-- Layout strategy
-- Key interaction patterns
-- Why it fits Studio Lumen's brand (luxury creative studio aesthetic)
-
-Wait for user approval before proceeding.
-
----
-
-## Phase 2 — Design System Decisions
+## Phase 1 — Design System Decisions
 
 Run `/ui-ux-pro-max` to make concrete design decisions based on the chosen direction:
 - Color palette selection
@@ -39,7 +25,7 @@ Document these decisions clearly before writing any code.
 
 ---
 
-## Phase 3 — Build
+## Phase 2 — Build
 
 Run `/frontend-design` to implement the production code.
 
@@ -59,7 +45,7 @@ While building, the following skills will activate automatically to enforce qual
 
 ---
 
-## Phase 4 — Review
+## Phase 3 — Review
 
 Once the implementation is complete, run `/pr-review-toolkit:review-pr` to perform a comprehensive code review covering:
 - Code quality and style adherence
