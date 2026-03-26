@@ -1,76 +1,116 @@
 "use client";
 
-import { useState } from "react";
 import { ConsentGate } from "@/components/consent/ConsentGate";
 import { FadeIn } from "@/components/ui/FadeIn";
 import { Button } from "@/components/ui/Button";
 import { SectionLabel } from "@/components/ui/SectionLabel";
+import { FeaturedCard } from "@/components/ui/GlassCard";
+import { motion } from "framer-motion";
+import { Clock, ShieldCheck, Sparkles, type LucideIcon } from "lucide-react";
 
 const CALENDLY_URL =
   process.env.NEXT_PUBLIC_CALENDLY_URL || "https://calendly.com/studiolumen";
 
+const CALENDLY_THEMED = `${CALENDLY_URL}?hide_gdpr_banner=1&hide_event_type_details=1&background_color=0a0a0a&text_color=ffffff&primary_color=61CE70`;
+
+type TrustPoint = { icon: LucideIcon; text: string };
+
+const trustPoints: TrustPoint[] = [
+  { icon: Clock, text: "30 min, sans engagement" },
+  { icon: ShieldCheck, text: "100 % gratuit" },
+  { icon: Sparkles, text: "Réponse sous 24 h" },
+];
+
 export function Booking() {
-  const [showEmbed, setShowEmbed] = useState(false);
-
   return (
-    <section id="reserver" className="section-padding">
-      <div className="container-site max-w-3xl">
-        <FadeIn>
-          <SectionLabel className="block text-center mb-4">
-            Réservation
-          </SectionLabel>
-          <h2 className="font-sans text-[30px] sm:text-[35px] font-semibold text-white mb-4 text-center leading-[1.18]">
-            Réservez votre appel découverte
-          </h2>
-          <p className="text-text-body text-[16px] leading-[26px] text-center mb-10">
-            30 minutes pour discuter de votre projet, sans engagement.
-          </p>
-        </FadeIn>
+    <section
+      id="reserver"
+      className="relative py-[5vw] sm:py-[4vw] border-y border-border-lighter"
+      style={{ backgroundColor: "#111111" }}
+    >
+      {/* Full-bleed ambient glow to distinguish from #030303 sections */}
+      <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-background to-transparent pointer-events-none" />
+      <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-background to-transparent pointer-events-none" />
 
-        <ConsentGate
-          fallback={
-            <FadeIn>
-              <div className="text-center">
-                <p className="text-[14px] text-text-muted mb-6">
-                  Le widget de réservation nécessite votre consentement pour
-                  charger.
+      <div className="container-site">
+        <FadeIn>
+          <FeaturedCard className="relative overflow-hidden">
+            <div className="absolute -top-32 -right-32 w-[500px] h-[500px] rounded-full bg-accent/6 blur-[140px] pointer-events-none" />
+            <div className="absolute -bottom-40 -left-40 w-[400px] h-[400px] rounded-full bg-accent/4 blur-[120px] pointer-events-none" />
+
+            <div className="flex flex-col lg:flex-row items-stretch">
+              <div className="relative z-10 flex flex-col justify-center p-8 sm:p-12 lg:p-16 lg:w-[38%] shrink-0">
+                <SectionLabel className="mb-4">Réservation</SectionLabel>
+
+                <h2 className="font-sans text-[28px] sm:text-[32px] lg:text-[35px] font-semibold text-white leading-[1.18] mb-4">
+                  Discutons de votre projet
+                </h2>
+                <p className="text-text-body text-[16px] leading-[26px] mb-8 max-w-md">
+                  Choisissez un créneau qui vous convient. Un appel découverte
+                  pour comprendre vos besoins et vous proposer la meilleure
+                  approche.
                 </p>
-                <Button href={CALENDLY_URL} variant="primary">
-                  Réserver sur Calendly
-                </Button>
+
+                <div className="flex flex-col gap-3 mb-8 lg:mb-0">
+                  {trustPoints.map((point, i) => (
+                    <motion.div
+                      key={point.text}
+                      initial={{ opacity: 0, x: -12 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{
+                        duration: 0.4,
+                        delay: 0.3 + i * 0.1,
+                        ease: "easeOut",
+                      }}
+                      className="flex items-center gap-3"
+                    >
+                      <span className="flex items-center justify-center w-8 h-8 rounded-full bg-white/5 border border-white/10">
+                        <point.icon className="w-4 h-4 text-accent" />
+                      </span>
+                      <span className="text-[14px] text-text-muted">
+                        {point.text}
+                      </span>
+                    </motion.div>
+                  ))}
+                </div>
+
+                <p className="hidden lg:block font-serif italic text-text-body/60 text-[15px] leading-[24px] mt-auto pt-8 border-t border-border-lighter">
+                  &ldquo;Chaque projet commence par une conversation.&rdquo;
+                </p>
               </div>
-            </FadeIn>
-          }
-        >
-          {showEmbed ? (
-            <div
-              className="bg-white rounded-lg overflow-hidden"
-              style={{ minHeight: 630 }}
-            >
-              <iframe
-                src={`${CALENDLY_URL}?hide_gdpr_banner=1`}
-                width="100%"
-                height="630"
-                frameBorder="0"
-                title="Calendrier de réservation"
-              />
-            </div>
-          ) : (
-            <FadeIn>
-              <div className="text-center">
-                <Button
-                  onClick={() => setShowEmbed(true)}
-                  variant="primary"
+
+              <div className="relative flex-1 min-w-0">
+                <div className="hidden lg:block absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
+
+                <ConsentGate
+                  fallback={
+                    <div className="flex flex-col items-center justify-center h-full min-h-[400px] p-8 text-center">
+                      <p className="text-[14px] text-text-muted mb-6 max-w-sm">
+                        Le calendrier de réservation nécessite votre
+                        consentement pour charger du contenu externe.
+                      </p>
+                      <Button href={CALENDLY_URL} variant="primary">
+                        Réserver sur Calendly
+                      </Button>
+                    </div>
+                  }
                 >
-                  Choisir un créneau
-                </Button>
-                <p className="text-[13px] text-text-body mt-4">
-                  Propulsé par Calendly
-                </p>
+                  <div className="w-full overflow-hidden lg:rounded-r-[25px]">
+                    <iframe
+                      src={CALENDLY_THEMED}
+                      title="Calendrier de réservation — Studio Lumen"
+                      loading="lazy"
+                      allow="payment"
+                      sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+                      className="w-full h-[740px] border-0"
+                    />
+                  </div>
+                </ConsentGate>
               </div>
-            </FadeIn>
-          )}
-        </ConsentGate>
+            </div>
+          </FeaturedCard>
+        </FadeIn>
       </div>
     </section>
   );
