@@ -11,7 +11,7 @@ import type { LucideIcon } from "lucide-react";
 function getIcon(name: string): LucideIcon {
   const icons = LucideIcons as unknown as Record<string, unknown>;
   const candidate = icons[name];
-  if (typeof candidate !== "function") {
+  if (!candidate || (typeof candidate !== "function" && typeof candidate !== "object")) {
     if (process.env.NODE_ENV === "development") {
       console.warn(
         `[Services] Icon "${name}" not found — falling back to Briefcase. Check Sanity icon name (PascalCase).`
