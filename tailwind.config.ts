@@ -10,6 +10,7 @@ const config: Config = {
       colors: {
         background: {
           DEFAULT: "#030303",
+          elevated: "#0A0A0A",
           light: "#F8F8F8",
           warm: "#F1EFEB",
         },

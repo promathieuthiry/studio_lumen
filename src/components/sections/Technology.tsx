@@ -22,7 +22,7 @@ export function Technology({ equipment }: TechnologyProps) {
   if (!equipment?.length) return null;
 
   return (
-    <section id="technologie" className="section-padding">
+    <section id="technologie" className="section-padding border-t border-border-lighter">
       <div className="container-site">
         <FadeIn>
           <SectionLabel className="block text-center mb-4">

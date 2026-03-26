@@ -166,7 +166,7 @@ export function Services({ services }: ServicesProps) {
   }
 
   return (
-    <section id="expertise" className="section-padding">
+    <section id="expertise" className="section-padding border-t border-border-lighter">
       <div className="container-site">
         <FadeIn>
           <SectionLabel className="block text-center mb-4">

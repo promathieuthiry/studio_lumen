@@ -329,7 +329,7 @@ export function Testimonials({ testimonials }: TestimonialsProps) {
   if (!testimonials?.length) return null;
 
   return (
-    <section className="section-padding overflow-hidden">
+    <section className="section-padding overflow-hidden border-t border-border-lighter">
       <div className="container-site mb-8 sm:mb-10">
         <FadeIn>
           <SectionLabel className="block text-center mb-3">

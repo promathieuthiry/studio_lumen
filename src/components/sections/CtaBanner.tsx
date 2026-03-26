@@ -18,7 +18,7 @@ const trustMetrics = [
 
 export function CtaBanner({ ctaText, ctaUrl }: CtaBannerProps) {
   return (
-    <section className="section-padding">
+    <section className="section-padding border-t border-border-lighter">
       <div className="container-site">
         <FadeIn>
           <div className="relative overflow-hidden rounded-[25px] border border-border-lighter">

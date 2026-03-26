@@ -176,14 +176,26 @@ export default async function HomePage() {
         {/* Remaining sections with opaque background to cover fixed images */}
         <div className="relative z-10 bg-background">
           <ClientLogos clientLogos={clientLogos} />
-          <Services services={services} />
+
+          <div className="bg-background-elevated">
+            <Services services={services} />
+          </div>
+
           <Portfolio projects={projects} />
-          <CtaBanner
-            ctaText={settings?.ctaText || "Réserver"}
-            ctaUrl={settings?.ctaUrl || "#reserver"}
-          />
+
+          <div className="bg-background-elevated">
+            <CtaBanner
+              ctaText={settings?.ctaText || "Réserver"}
+              ctaUrl={settings?.ctaUrl || "#reserver"}
+            />
+          </div>
+
           <Technology equipment={equipment} />
-          <Testimonials testimonials={testimonials} />
+
+          <div className="bg-background-elevated">
+            <Testimonials testimonials={testimonials} />
+          </div>
+
           <Booking />
         </div>
       </main>

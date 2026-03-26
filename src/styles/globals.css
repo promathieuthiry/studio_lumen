@@ -5,6 +5,7 @@
 @layer base {
   :root {
     --color-bg-dark: #030303;
+    --color-bg-elevated: #0a0a0a;
     --color-bg-light: #f8f8f8;
     --color-bg-warm: #f1efeb;
     --color-text: #ffffff;
@@ -42,23 +43,23 @@
   }
 
   .section-padding {
-    padding-top: 3.8vw;
-    padding-bottom: 3.8vw;
+    padding-top: 5.5vw;
+    padding-bottom: 5.5vw;
   }
 
   @media (max-width: 767px) {
     .section-padding {
-      padding-top: 40px;
-      padding-bottom: 40px;
+      padding-top: 56px;
+      padding-bottom: 56px;
     }
   }
   .section-padding-top {
-    padding-top: 7.8vw;
+    padding-top: 8vw;
   }
 
   @media (max-width: 767px) {
     .section-padding-top {
-      padding-top: 40px;
+      padding-top: 56px;
     }
   }
 

@@ -26,7 +26,7 @@ export function Portfolio({ projects }: PortfolioProps) {
   if (!projects?.length) return null;
 
   return (
-    <section id="portfolio" className="section-padding">
+    <section id="portfolio" className="section-padding border-t border-border-lighter">
       <div className="container-site">
         <FadeIn>
           <SectionLabel className="block text-center mb-4">
