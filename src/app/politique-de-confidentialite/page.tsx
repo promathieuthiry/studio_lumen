@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { sanityFetch } from "@/sanity/live";
 import { PAGE_BY_SLUG_QUERY } from "@/sanity/queries";
-import { Navbar } from "@/components/layout/Navbar";
+import { SiteNavbar } from "@/components/layout/SiteNavbar";
 import { Footer } from "@/components/layout/Footer";
 import { PortableTextRenderer } from "@/components/portable-text/PortableTextRenderer";
 import type { PortableTextBlock } from "@portabletext/types";
@@ -34,7 +34,7 @@ export default async function PolitiqueConfidentialitePage() {
 
   return (
     <>
-      <Navbar />
+      <SiteNavbar />
       <main className="pt-28 section-padding">
         <div className="container-site max-w-3xl">
           <h1 className="font-display text-[35px] sm:text-[48px] font-semibold text-white mb-10 leading-[1]">

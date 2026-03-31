@@ -2,14 +2,15 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { Menu, X, ArrowRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const navLinks = [
-  { href: "#expertise", id: "expertise", label: "Expertise" },
-  { href: "#portfolio", id: "portfolio", label: "Portfolio" },
-  { href: "#technologie", id: "technologie", label: "Technologie" },
+  { href: "/#expertise", id: "expertise", label: "Expertise" },
+  { href: "/#portfolio", id: "portfolio", label: "Portfolio" },
+  { href: "/#technologie", id: "technologie", label: "Technologie" },
 ];
 
 const GLASS_ACTIVE =
@@ -21,6 +22,8 @@ interface NavbarProps {
 }
 
 export function Navbar({ logoUrl }: NavbarProps) {
+  const pathname = usePathname();
+  const isHome = pathname === "/";
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
@@ -28,6 +31,7 @@ export function Navbar({ logoUrl }: NavbarProps) {
   const lastScrollY = useRef(0);
 
   useEffect(() => {
+    if (!isHome) return;
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
@@ -42,8 +46,11 @@ export function Navbar({ logoUrl }: NavbarProps) {
       const el = document.getElementById(id);
       if (el) observer.observe(el);
     }
-    return () => observer.disconnect();
-  }, []);
+    return () => {
+      observer.disconnect();
+      setActiveSection("");
+    };
+  }, [isHome]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -116,9 +123,6 @@ export function Navbar({ logoUrl }: NavbarProps) {
                         : "text-white/50 hover:text-white/80"
                     }`}
                   >
-                    {isActive && (
-                      <span className="text-white/40 mr-1.5">//</span>
-                    )}
                     {link.label}
                   </Link>
                 );
@@ -127,7 +131,7 @@ export function Navbar({ logoUrl }: NavbarProps) {
 
             <div className="flex items-center gap-4">
               <Link
-                href="#reserver"
+                href="/#reserver"
                 className="hidden lg:inline-flex items-center gap-3 px-6 py-2.5 text-[13px] uppercase tracking-[1.4px] font-medium text-white border border-white/20 rounded-pill hover:bg-white hover:text-background transition-all duration-300"
               >
                 Réserver
@@ -183,7 +187,7 @@ export function Navbar({ logoUrl }: NavbarProps) {
                 className="mt-12"
               >
                 <Link
-                  href="#reserver"
+                  href="/#reserver"
                   onClick={() => setMobileOpen(false)}
                   className="inline-flex items-center gap-3 px-8 py-4 text-[15px] uppercase tracking-[1.4px] font-medium text-white border border-white/20 rounded-pill hover:bg-white hover:text-background transition-all duration-300"
                 >

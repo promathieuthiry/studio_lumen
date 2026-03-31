@@ -229,6 +229,13 @@ export type SiteSettings = {
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
+  logo?: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
   siteTitle: string;
   description: string;
   ogImage: {
@@ -408,7 +415,7 @@ export type AllSanitySchemaTypes =
 
 // Source: src/sanity/queries.ts
 // Variable: SITE_SETTINGS_QUERY
-// Query: *[_type == "siteSettings"][0]{    siteTitle,    description,    ogImage,    heroBackgroundDark,    heroBackgroundLit,    heroHeadline,    heroSubtitle,    valuePropositions[]{      title,      description,      icon,      statValue,      statSuffix    },    socialLinks[]{      platform,      url    },    ctaText,    ctaUrl,    founderPhoto,    founderBio,    contactEmail  }
+// Query: *[_type == "siteSettings"][0]{    siteTitle,    description,    ogImage,    logo,    heroBackgroundDark,    heroBackgroundLit,    heroHeadline,    heroSubtitle,    valuePropositions[]{      title,      description,      icon,      statValue,      statSuffix    },    socialLinks[]{      platform,      url    },    ctaText,    ctaUrl,    founderPhoto,    founderBio,    contactEmail  }
 export type SITE_SETTINGS_QUERY_RESULT = {
   siteTitle: string;
   description: string;
@@ -419,6 +426,13 @@ export type SITE_SETTINGS_QUERY_RESULT = {
     crop?: SanityImageCrop;
     _type: "image";
   };
+  logo: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  } | null;
   heroBackgroundDark: {
     asset?: SanityImageAssetReference;
     media?: unknown;
@@ -627,11 +641,24 @@ export type PAGE_BY_SLUG_QUERY_RESULT = {
   }>;
 } | null;
 
+// Source: src/sanity/queries.ts
+// Variable: SITE_LOGO_QUERY
+// Query: *[_type == "siteSettings"][0]{ logo }
+export type SITE_LOGO_QUERY_RESULT = {
+  logo: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  } | null;
+} | null;
+
 // Query TypeMap
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
-    '\n  *[_type == "siteSettings"][0]{\n    siteTitle,\n    description,\n    ogImage,\n    heroBackgroundDark,\n    heroBackgroundLit,\n    heroHeadline,\n    heroSubtitle,\n    valuePropositions[]{\n      title,\n      description,\n      icon,\n      statValue,\n      statSuffix\n    },\n    socialLinks[]{\n      platform,\n      url\n    },\n    ctaText,\n    ctaUrl,\n    founderPhoto,\n    founderBio,\n    contactEmail\n  }\n': SITE_SETTINGS_QUERY_RESULT;
+    '\n  *[_type == "siteSettings"][0]{\n    siteTitle,\n    description,\n    ogImage,\n    logo,\n    heroBackgroundDark,\n    heroBackgroundLit,\n    heroHeadline,\n    heroSubtitle,\n    valuePropositions[]{\n      title,\n      description,\n      icon,\n      statValue,\n      statSuffix\n    },\n    socialLinks[]{\n      platform,\n      url\n    },\n    ctaText,\n    ctaUrl,\n    founderPhoto,\n    founderBio,\n    contactEmail\n  }\n': SITE_SETTINGS_QUERY_RESULT;
     '\n  *[_type == "service"] | order(order asc){\n    _id,\n    title,\n    description,\n    icon,\n    deliverables,\n    turnaround,\n    order\n  }\n': SERVICES_QUERY_RESULT;
     '\n  *[_type == "project"] | order(order asc){\n    _id,\n    title,\n    slug,\n    category,\n    description,\n    youtubeVideoId,\n    thumbnail,\n    featured,\n    order\n  }\n': PROJECTS_QUERY_RESULT;
     '\n  *[_type == "testimonial"] | order(order asc){\n    _id,\n    clientName,\n    company,\n    role,\n    quote,\n    avatar,\n    featured,\n    order\n  }\n': TESTIMONIALS_QUERY_RESULT;
@@ -639,5 +666,6 @@ declare module "@sanity/client" {
     '\n  *[_type == "equipment"] | order(order asc){\n    _id,\n    name,\n    description,\n    image,\n    specs,\n    hotspotX,\n    hotspotY,\n    order\n  }\n': EQUIPMENT_QUERY_RESULT;
     '\n  *[_type == "founderProfile"][0]{\n    fullName,\n    title,\n    bio,\n    photo,\n    journey[]{\n      year,\n      title,\n      description\n    },\n    vision,\n    motivations,\n    skills,\n    socialLinks[]{\n      platform,\n      url\n    }\n  }\n': FOUNDER_PROFILE_QUERY_RESULT;
     '\n  *[_type == "page" && slug.current == $slug][0]{\n    title,\n    slug,\n    body\n  }\n': PAGE_BY_SLUG_QUERY_RESULT;
+    '\n  *[_type == "siteSettings"][0]{ logo }\n': SITE_LOGO_QUERY_RESULT;
   }
 }

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { sanityFetch } from "@/sanity/live";
 import { FOUNDER_PROFILE_QUERY } from "@/sanity/queries";
 import { urlFor, type SanityImageSource } from "@/sanity/image";
-import { Navbar } from "@/components/layout/Navbar";
+import { SiteNavbar } from "@/components/layout/SiteNavbar";
 import { Footer } from "@/components/layout/Footer";
 import { PortableTextRenderer } from "@/components/portable-text/PortableTextRenderer";
 import { FadeIn } from "@/components/ui/FadeIn";
@@ -62,7 +62,7 @@ export default async function AboutPage() {
   if (!founder) {
     return (
       <>
-        <Navbar />
+        <SiteNavbar />
         <main className="pt-24 pb-20">
           <div className="container-site text-center">
             <h1 className="font-display text-[35px] font-semibold text-white mb-4">
@@ -85,7 +85,7 @@ export default async function AboutPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <Navbar />
+      <SiteNavbar />
       <main>
         <AboutHero
           fullName={founder.fullName}

@@ -119,3 +119,7 @@ export const PAGE_BY_SLUG_QUERY = defineQuery(`
     body
   }
 `);
+
+export const SITE_LOGO_QUERY = defineQuery(`
+  *[_type == "siteSettings"][0]{ logo }
+`);
