@@ -52,9 +52,13 @@ export function Hero({ headline, subtitle, ctaText, ctaUrl }: HeroProps) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.6, ease: "easeOut" }}
+            className="flex flex-wrap items-center gap-4"
           >
             <Button href={ctaUrl} variant="primary">
               {ctaText}
+            </Button>
+            <Button href="/a-propos" variant="outline" showArrow={false}>
+              En savoir plus
             </Button>
           </motion.div>
 

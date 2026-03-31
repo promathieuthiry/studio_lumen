@@ -96,9 +96,10 @@ export function Navbar({ logoUrl }: NavbarProps) {
                 <Image
                   src={logoUrl}
                   alt="Studio Lumen"
-                  width={70}
-                  height={31}
+                  width={280}
+                  height={124}
                   className="h-[20px] lg:h-[24px] w-auto brightness-0 invert"
+                  unoptimized
                   priority
                 />
               ) : (
