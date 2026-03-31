@@ -26,7 +26,7 @@ const variantStyles: Record<ButtonVariant, string> = {
 };
 
 const sizeStyles: Record<"default" | "sm", string> = {
-  default: "px-[calc(1.333em+2px)] py-[calc(.667em+2px)] text-[1.125em] min-w-[200px] max-w-[322px]",
+  default: "px-[calc(1.333em+2px)] py-[calc(.667em+2px)] text-[1.125em] sm:min-w-[200px] max-w-[322px]",
   sm: "px-5 py-1.5 text-[15px]",
 };
 

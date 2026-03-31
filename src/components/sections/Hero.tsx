@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Button } from "@/components/ui/Button";
 
@@ -10,6 +10,45 @@ type HeroProps = {
   ctaText: string;
   ctaUrl: string;
 };
+
+function AnimatedNumber({ value, delay }: { value: number; delay: number }) {
+  const [count, setCount] = useState(0);
+  const [started, setStarted] = useState(false);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => setStarted(true), delay * 1000);
+    return () => clearTimeout(timeout);
+  }, [delay]);
+
+  useEffect(() => {
+    if (!started) return;
+    const duration = 1200;
+    const steps = 30;
+    const stepTime = duration / steps;
+    let current = 0;
+    const interval = setInterval(() => {
+      current++;
+      const progress = current / steps;
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setCount(Math.round(eased * value));
+      if (current >= steps) clearInterval(interval);
+    }, stepTime);
+    return () => clearInterval(interval);
+  }, [started, value]);
+
+  return <span className="font-sans not-italic font-semibold">{count}</span>;
+}
+
+function renderSubtitleWithAnimatedNumbers(subtitle: string, delay: number) {
+  const parts = subtitle.split(/(\d+)/);
+  return parts.map((part, i) => {
+    const num = parseInt(part, 10);
+    if (!isNaN(num)) {
+      return <AnimatedNumber key={i} value={num} delay={delay} />;
+    }
+    return <span key={i}>{part}</span>;
+  });
+}
 
 export function Hero({ headline, subtitle, ctaText, ctaUrl }: HeroProps) {
   const ref = useRef<HTMLDivElement>(null);
@@ -52,7 +91,7 @@ export function Hero({ headline, subtitle, ctaText, ctaUrl }: HeroProps) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.6, ease: "easeOut" }}
-            className="flex flex-wrap items-center gap-4"
+            className="flex items-center gap-4"
           >
             <Button href={ctaUrl} variant="accent">
               {ctaText}
@@ -63,13 +102,14 @@ export function Hero({ headline, subtitle, ctaText, ctaUrl }: HeroProps) {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.9, ease: "easeOut" }}
-            className="lg:text-right"
+            className="lg:text-right max-w-md lg:ml-auto"
           >
-            <span className="font-serif italic text-text-muted text-lg sm:text-[20px] leading-[30px]">
-              {subtitle}
+            <div className="hidden lg:block w-12 h-px bg-white/30 mb-4 ml-auto" />
+            <span className="font-serif italic text-white/75 text-xl sm:text-[22px] leading-[33px]">
+              {renderSubtitleWithAnimatedNumbers(subtitle, 1.2)}
             </span>
           </motion.div>
         </div>
