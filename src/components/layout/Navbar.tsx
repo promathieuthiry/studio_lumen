@@ -30,6 +30,14 @@ export function Navbar({ logoUrl }: NavbarProps) {
   const [activeSection, setActiveSection] = useState("");
   const lastScrollY = useRef(0);
 
+  const scrollToReserver = (e: React.MouseEvent) => {
+    if (isHome) {
+      e.preventDefault();
+      const el = document.getElementById("reserver");
+      if (el) el.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   useEffect(() => {
     if (!isHome) return;
     const observer = new IntersectionObserver(
@@ -133,6 +141,7 @@ export function Navbar({ logoUrl }: NavbarProps) {
             <div className="flex items-center gap-4">
               <Link
                 href="/#reserver"
+                onClick={scrollToReserver}
                 className="hidden lg:inline-flex items-center gap-3 px-6 py-2.5 text-[13px] uppercase tracking-[1.4px] font-medium text-background bg-accent border border-accent rounded-pill hover:bg-accent/80 transition-all duration-300"
               >
                 Réserver
@@ -189,7 +198,7 @@ export function Navbar({ logoUrl }: NavbarProps) {
               >
                 <Link
                   href="/#reserver"
-                  onClick={() => setMobileOpen(false)}
+                  onClick={(e) => { setMobileOpen(false); scrollToReserver(e); }}
                   className="inline-flex items-center gap-3 px-8 py-4 text-[15px] uppercase tracking-[1.4px] font-medium text-background bg-accent border border-accent rounded-pill hover:bg-accent/80 transition-all duration-300"
                 >
                   Réserver
