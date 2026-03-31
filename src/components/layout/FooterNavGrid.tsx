@@ -134,7 +134,7 @@ export function FooterNavGrid({
               <Link href="/#portfolio" className={linkClass}>
                 Portfolio
               </Link>
-              <Link href="/#booking" className={linkClass}>
+              <Link href="/#reserver" className={linkClass}>
                 Contact
               </Link>
             </div>
