@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import { CookieSettingsButton } from "./CookieSettingsButton";
 
@@ -39,9 +40,11 @@ const linkClass =
 export function FooterNavGrid({
   contactEmail,
   socialLinks,
+  logoUrl,
 }: {
   contactEmail?: string;
   socialLinks?: Array<{ platform: string; url: string }>;
+  logoUrl?: string;
 }) {
   const reducedMotion = useReducedMotion();
 
@@ -61,12 +64,22 @@ export function FooterNavGrid({
       >
         {/* ─── Left: Brand ─── */}
         <motion.div custom={0} variants={fadeUp} className="lg:pr-16 xl:pr-24">
-          <h3
-            className="font-display font-semibold text-white leading-[1.0] mb-4"
-            style={headingStyle}
-          >
-            Studio Lumen
-          </h3>
+          {logoUrl ? (
+            <Image
+              src={logoUrl}
+              alt="Studio Lumen"
+              width={400}
+              height={400}
+              className="w-[clamp(200px,30vw,340px)] h-auto brightness-0 invert mb-4 sm:-ml-3 -ml-2"
+            />
+          ) : (
+            <h3
+              className="font-display font-semibold text-white leading-[1.0] mb-4"
+              style={headingStyle}
+            >
+              Studio Lumen
+            </h3>
+          )}
           <p className="font-serif italic text-text-muted text-[18px] leading-[30px] max-w-[400px]">
             Premier studio de production vidéo mobile en France. Contenu livré
             en&nbsp;48h.
@@ -75,10 +88,7 @@ export function FooterNavGrid({
           {/* Contact + Social — inline row beneath tagline */}
           <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2">
             {contactEmail && (
-              <a
-                href={`mailto:${contactEmail}`}
-                className={linkClass}
-              >
+              <a href={`mailto:${contactEmail}`} className={linkClass}>
                 {contactEmail}
               </a>
             )}

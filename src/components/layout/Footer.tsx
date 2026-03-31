@@ -4,9 +4,11 @@ import { FooterNavGrid } from "./FooterNavGrid";
 export function Footer({
   contactEmail,
   socialLinks,
+  logoUrl,
 }: {
   contactEmail?: string;
   socialLinks?: Array<{ platform: string; url: string }>;
+  logoUrl?: string;
 }) {
   return (
     <footer className="relative z-10 bg-background overflow-hidden border-t border-border-warm">
@@ -14,6 +16,7 @@ export function Footer({
       <FooterNavGrid
         contactEmail={contactEmail}
         socialLinks={socialLinks}
+        logoUrl={logoUrl}
       />
 
       {/* ─── Divider ─── */}

@@ -209,6 +209,11 @@ export default async function HomePage() {
       <Footer
         contactEmail={settings?.contactEmail}
         socialLinks={settings?.socialLinks}
+        logoUrl={
+          settings?.logo
+            ? urlFor(settings.logo).height(400).quality(100).auto("format").url()
+            : undefined
+        }
       />
     </>
   );
