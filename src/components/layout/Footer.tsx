@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { CinematicBrand } from "./CinematicBrand";
 import { FooterNavGrid } from "./FooterNavGrid";
 
@@ -30,7 +31,17 @@ export function Footer({
       {/* ─── Copyright ─── */}
       <div className="relative z-10 mt-8 pb-10 text-center">
         <p className="text-[13px] text-text-body">
-          &copy; {new Date().getFullYear()} Studio Lumen. Tous droits réservés.
+          &copy; {new Date().getFullYear()} Studio Lumen. Tous droits réservés -{" "}
+          Made with <span className="inline-block animate-heartbeat">❤️</span>{" "}
+          by{" "}
+          <Link
+            href="https://github.com/promathieuthiry"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-text-muted hover:text-white transition-colors duration-300 underline underline-offset-2"
+          >
+            Mathieu Thiry
+          </Link>
         </p>
       </div>
     </footer>
