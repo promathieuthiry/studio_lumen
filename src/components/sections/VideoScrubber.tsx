@@ -2,13 +2,15 @@
 
 import { useRef, useEffect, useState, useCallback } from "react";
 import { cn } from "@/lib/utils";
-import { HotspotOverlay } from "@/components/ui/HotspotOverlay";
+import { HotspotOverlay, EquipmentCard } from "@/components/ui/HotspotOverlay";
+import { AnimatePresence, motion } from "framer-motion";
 import type { SanityImageSource } from "@/sanity/image";
 
 const TOTAL_FRAMES = 169;
 const PHASE_1_COUNT = 15;
 const SCROLL_PER_FRAME = 10;
 const BATCH_SIZE = 5;
+const SCROLL_PER_CARD = 200;
 
 const TITLE_IN_START = 0.25;
 const TITLE_IN_END = 0.35;
@@ -72,6 +74,8 @@ export function VideoScrubber({ equipment }: VideoScrubberProps) {
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
   const titleRef = useRef<HTMLDivElement>(null);
   const interiorRef = useRef<HTMLDivElement>(null);
+  const equipmentRef = useRef(equipment);
+  equipmentRef.current = equipment;
   const frames = useRef<(HTMLImageElement | null)[]>(Array(TOTAL_FRAMES).fill(null));
   const currentFrame = useRef(0);
   const raf = useRef(0);
@@ -79,11 +83,25 @@ export function VideoScrubber({ equipment }: VideoScrubberProps) {
   const hintDismissed = useRef(false);
   const hotspotsEnabled = useRef(false);
   const prevInteriorOpacity = useRef(0);
+  const prevCardIndex = useRef(-1);
 
   const [phase1Ready, setPhase1Ready] = useState(false);
   const [progress, setProgress] = useState(0);
   const [hintVisible, setHintVisible] = useState(true);
   const [showInterior, setShowInterior] = useState(false);
+  const [interiorVisible, setInteriorVisible] = useState(false);
+  const [activeCardId, setActiveCardId] = useState<string | null | undefined>(undefined);
+  const [mobileActiveId, setMobileActiveId] = useState<string | null>(null);
+
+  const videoDistance = TOTAL_FRAMES * SCROLL_PER_FRAME;
+  const cardDistance = (equipment.length + 1) * SCROLL_PER_CARD;
+  const totalDistance = videoDistance + cardDistance;
+
+  // During tour use activeCardId directly; after tour use hover/tap from callback
+  const mobileCardId = activeCardId !== undefined ? activeCardId : mobileActiveId;
+  const mobileCardItem = mobileCardId
+    ? equipment.find((e) => e._id === mobileCardId)
+    : null;
 
   const draw = useCallback((index: number) => {
     const canvas = canvasRef.current;
@@ -138,32 +156,32 @@ export function VideoScrubber({ equipment }: VideoScrubberProps) {
       }
 
       const rect = wrapper.getBoundingClientRect();
-      const scrollable = rect.height - window.innerHeight;
-      if (scrollable <= 0) return;
-
       const scrolled = Math.max(0, -rect.top);
-      const t = Math.min(1, scrolled / scrollable);
-      const idx = Math.round(t * (TOTAL_FRAMES - 1));
+
+      // ── Phase 1: Video frame scrubbing ──
+      const videoT = Math.min(1, scrolled / videoDistance);
+      const idx = Math.round(videoT * (TOTAL_FRAMES - 1));
 
       if (titleRef.current) {
-        const { opacity, scale } = getTitleStyle(t);
+        const { opacity, scale } = getTitleStyle(videoT);
         titleRef.current.style.opacity = opacity as unknown as string;
         titleRef.current.style.transform = `translate(-50%, -50%) scale(${scale})`;
       }
 
-      // Interior: only write when opacity actually changes
-      const interiorOpacity = t < INTERIOR_FADE_START ? 0 : remap(t, INTERIOR_FADE_START, 1);
+      const interiorOpacity =
+        videoT < INTERIOR_FADE_START ? 0 : remap(videoT, INTERIOR_FADE_START, 1);
       if (interiorOpacity !== prevInteriorOpacity.current) {
         prevInteriorOpacity.current = interiorOpacity;
-        // Lazy-mount the interior image just before it becomes visible
         if (interiorOpacity > 0 && !showInterior) setShowInterior(true);
         if (interiorRef.current) {
           interiorRef.current.style.opacity = interiorOpacity as unknown as string;
         }
       }
 
-      // Flip pointer events exactly once in each direction
-      const shouldEnable = t >= 0.95;
+      const isVisible = videoT >= 0.95;
+      if (isVisible !== interiorVisible) setInteriorVisible(isVisible);
+
+      const shouldEnable = isVisible;
       if (shouldEnable !== hotspotsEnabled.current) {
         hotspotsEnabled.current = shouldEnable;
         if (interiorRef.current) {
@@ -176,8 +194,28 @@ export function VideoScrubber({ equipment }: VideoScrubberProps) {
         cancelAnimationFrame(raf.current);
         raf.current = requestAnimationFrame(() => draw(idx));
       }
+
+      // ── Phase 2: Card tour (scroll-driven, one card at a time) ──
+      // Last slot (eq.length) is an empty slot so the final card exits before unpin
+      const eq = equipmentRef.current;
+      const cardEnd = videoDistance + cardDistance;
+      if (scrolled > videoDistance && scrolled <= cardEnd && cardDistance > 0) {
+        const cardScrolled = scrolled - videoDistance;
+        const slotIndex = Math.min(
+          eq.length,
+          Math.floor(cardScrolled / SCROLL_PER_CARD)
+        );
+        if (slotIndex !== prevCardIndex.current) {
+          prevCardIndex.current = slotIndex;
+          setActiveCardId(slotIndex < eq.length ? eq[slotIndex]._id : null);
+        }
+      } else if (prevCardIndex.current !== -1) {
+        // Past the tour or scrolled back into video — restore hover mode
+        prevCardIndex.current = -1;
+        setActiveCardId(undefined);
+      }
     });
-  }, [draw, showInterior]);
+  }, [draw, showInterior, interiorVisible, videoDistance, cardDistance]);
 
   useEffect(() => {
     let cancelled = false;
@@ -188,8 +226,14 @@ export function VideoScrubber({ equipment }: VideoScrubberProps) {
         const img = new Image();
         img.onload = () => {
           img.decode().then(
-            () => { if (!cancelled) frames.current[i] = img; resolve(true); },
-            () => { if (!cancelled) frames.current[i] = img; resolve(true); }
+            () => {
+              if (!cancelled) frames.current[i] = img;
+              resolve(true);
+            },
+            () => {
+              if (!cancelled) frames.current[i] = img;
+              resolve(true);
+            }
           );
         };
         img.onerror = () => resolve(false);
@@ -242,14 +286,15 @@ export function VideoScrubber({ equipment }: VideoScrubberProps) {
     };
   }, [phase1Ready, onScroll, resize]);
 
-  const scrollDistance = TOTAL_FRAMES * SCROLL_PER_FRAME;
+  const coverFitClass =
+    "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-screen h-screen sm:w-[max(100vw,100vh)] sm:h-[max(100vw,100vh)]";
 
   return (
     <section id="technologie">
       <div
         ref={wrapperRef}
         className="relative bg-background"
-        style={{ height: `calc(${scrollDistance}px + 100vh)` }}
+        style={{ height: `calc(${totalDistance}px + 100vh)` }}
       >
         <div className="sticky top-0 left-0 w-full h-screen overflow-hidden">
           {!phase1Ready && (
@@ -273,7 +318,10 @@ export function VideoScrubber({ equipment }: VideoScrubberProps) {
           <div
             ref={titleRef}
             className="absolute top-1/2 left-1/2 z-10 flex flex-col items-center justify-center pointer-events-none will-change-transform"
-            style={{ opacity: 0, transform: `translate(-50%, -50%) scale(${TITLE_SCALE_START})` }}
+            style={{
+              opacity: 0,
+              transform: `translate(-50%, -50%) scale(${TITLE_SCALE_START})`,
+            }}
           >
             <span className="label-caps text-text-muted block mb-4">
               Technologie
@@ -286,37 +334,65 @@ export function VideoScrubber({ equipment }: VideoScrubberProps) {
             </p>
           </div>
 
-          {/* Interior image deferred until near-visible to avoid early decode cost */}
           {showInterior && (
             <div
               ref={interiorRef}
               className="absolute inset-0 z-20 will-change-[opacity]"
               style={{ opacity: 0, pointerEvents: "none" }}
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/Int%C3%A9rieur%20camion.webp"
-                alt="Intérieur du studio mobile Studio Lumen"
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-overlay" />
-              <HotspotOverlay equipment={equipment} />
+              {/* Image layer — mobile: contain-fit (full width), desktop: cover-fit */}
+              <div className="absolute inset-0 overflow-hidden">
+                <div className={coverFitClass}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="/Int%C3%A9rieur%20camion.webp"
+                    alt="Intérieur du studio mobile Studio Lumen"
+                    className="w-full h-full object-contain sm:object-fill"
+                  />
+                  <div className="absolute inset-0 bg-overlay" />
+                </div>
+              </div>
+              {/* Hotspot layer — same sizing so % positions align with the image */}
+              <div className={coverFitClass}>
+                <HotspotOverlay
+                  equipment={equipment}
+                  forcedActiveId={activeCardId}
+                  onActiveChange={setMobileActiveId}
+                />
+              </div>
             </div>
           )}
+
+          {/* Mobile: bottom card overlay */}
+          <AnimatePresence>
+            {mobileCardItem && interiorVisible && (
+              <motion.div
+                key={mobileCardItem._id}
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 16 }}
+                transition={{ type: "spring", damping: 22, stiffness: 220, mass: 0.8 }}
+                className="sm:hidden absolute bottom-6 left-4 right-4 z-30"
+              >
+                <EquipmentCard item={mobileCardItem} />
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           <div
             className={cn(
               "absolute bottom-8 left-1/2 -translate-x-1/2 z-30",
               "text-white/40 text-sm font-sans tracking-[0.1em] uppercase",
               "transition-opacity duration-700",
-              hintVisible && phase1Ready ? "opacity-100" : "opacity-0 pointer-events-none"
+              hintVisible && phase1Ready
+                ? "opacity-100"
+                : "opacity-0 pointer-events-none"
             )}
           >
             Scroll to explore ↓
           </div>
         </div>
       </div>
-
     </section>
   );
 }
