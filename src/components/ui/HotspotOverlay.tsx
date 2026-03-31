@@ -3,11 +3,13 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Card } from "@/components/ui/GlassCard";
+import { urlFor, type SanityImageSource } from "@/sanity/image";
 
 type Equipment = {
   _id: string;
   name: string;
   description: string;
+  image?: SanityImageSource | null;
   specs?: string;
   hotspotX: number;
   hotspotY: number;
@@ -31,11 +33,11 @@ export function HotspotOverlay({ equipment }: HotspotOverlayProps) {
             top: `${item.hotspotY}%`,
             transform: "translate(-50%, -50%)",
           }}
+          onMouseEnter={() => setActiveId(item._id)}
+          onMouseLeave={() => setActiveId(null)}
         >
           <button
-            onClick={() =>
-              setActiveId(activeId === item._id ? null : item._id)
-            }
+            onClick={() => setActiveId(activeId === item._id ? null : item._id)}
             className="relative w-11 h-11 flex items-center justify-center"
             aria-label={`Voir : ${item.name}`}
           >
@@ -71,18 +73,32 @@ export function HotspotOverlay({ equipment }: HotspotOverlayProps) {
                   marginRight: item.hotspotX > 60 ? "0.75rem" : 0,
                 }}
               >
-                <Card className="p-4">
-                  <h4 className="font-sans text-[14px] font-medium text-white mb-1">
-                    {item.name}
-                  </h4>
-                  <p className="text-text-body text-[13px] leading-[20px]">
-                    {item.description}
-                  </p>
-                  {item.specs && (
-                    <p className="text-accent text-[12px] mt-2 opacity-70">
-                      {item.specs}
+                <Card className="overflow-hidden">
+                  <div className="p-4">
+                    {item.image && (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={urlFor(item.image)
+                          .width(320)
+                          .quality(80)
+                          .auto("format")
+                          .url()}
+                        alt={item.name}
+                        className="w-full h-28 object-cover"
+                      />
+                    )}
+                    <h4 className="font-sans text-[14px] font-medium text-white mb-1">
+                      {item.name}
+                    </h4>
+                    <p className="text-text-body text-[13px] leading-[20px]">
+                      {item.description}
                     </p>
-                  )}
+                    {item.specs && (
+                      <p className="text-accent text-[12px] mt-2 opacity-70">
+                        {item.specs}
+                      </p>
+                    )}
+                  </div>
                 </Card>
               </motion.div>
             )}

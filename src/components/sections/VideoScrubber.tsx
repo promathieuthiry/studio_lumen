@@ -3,6 +3,7 @@
 import { useRef, useEffect, useState, useCallback } from "react";
 import { cn } from "@/lib/utils";
 import { HotspotOverlay } from "@/components/ui/HotspotOverlay";
+import type { SanityImageSource } from "@/sanity/image";
 
 const TOTAL_FRAMES = 169;
 const PHASE_1_COUNT = 15;
@@ -22,6 +23,7 @@ type Equipment = {
   _id: string;
   name: string;
   description: string;
+  image?: SanityImageSource | null;
   specs?: string;
   hotspotX: number;
   hotspotY: number;

@@ -66,6 +66,7 @@ type EquipmentData = {
   _id: string;
   name: string;
   description: string;
+  image?: SanityImageSource | null;
   specs?: string;
   hotspotX: number;
   hotspotY: number;
