@@ -18,7 +18,6 @@ import { Testimonials } from "@/components/sections/Testimonials";
 import { CtaBanner } from "@/components/sections/CtaBanner";
 import { Booking } from "@/components/sections/Booking";
 import { Portfolio } from "@/components/sections/Portfolio";
-import { Technology } from "@/components/sections/Technology";
 import { VideoScrubber } from "@/components/sections/VideoScrubber";
 import { ClientLogos } from "@/components/sections/ClientLogos";
 
@@ -198,8 +197,7 @@ export default async function HomePage() {
             />
           </div>
 
-          <VideoScrubber />
-          <Technology equipment={equipment} />
+          <VideoScrubber equipment={equipment} />
 
           <div className="bg-background-elevated">
             <Testimonials testimonials={testimonials} />
