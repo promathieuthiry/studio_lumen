@@ -11,7 +11,9 @@ import { Clock, ShieldCheck, Sparkles, type LucideIcon } from "lucide-react";
 const CALENDLY_URL =
   process.env.NEXT_PUBLIC_CALENDLY_URL || "https://calendly.com/studiolumen";
 
-const CALENDLY_THEMED = `${CALENDLY_URL}?hide_gdpr_banner=1&hide_event_type_details=1&background_color=0a0a0a&text_color=ffffff&primary_color=61CE70`;
+const CALENDLY_PARAMS =
+  "hide_gdpr_banner=1&hide_event_type_details=1&background_color=0a0a0a&text_color=ffffff&primary_color=61CE70";
+const CALENDLY_THEMED = `${CALENDLY_URL}${CALENDLY_URL.includes("?") ? "&" : "?"}${CALENDLY_PARAMS}`;
 
 type TrustPoint = { icon: LucideIcon; text: string };
 
