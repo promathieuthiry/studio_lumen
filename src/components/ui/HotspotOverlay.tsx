@@ -31,7 +31,12 @@ export function HotspotOverlay({
 }: HotspotOverlayProps) {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
 
-  // Hover/click always takes priority over scroll-driven forcedActiveId
+  // Clear stale hover when scroll tour advances to the next card
+  useEffect(() => {
+    if (forcedActiveId !== undefined) setHoveredId(null);
+  }, [forcedActiveId]);
+
+  // Hover/click takes priority over scroll-driven forcedActiveId
   const activeId = hoveredId ?? forcedActiveId ?? null;
 
   // Only notify parent of hover/tap changes (not during scroll-driven tour)
