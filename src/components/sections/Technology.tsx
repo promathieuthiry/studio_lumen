@@ -22,18 +22,20 @@ export function Technology({ equipment }: TechnologyProps) {
   if (!equipment?.length) return null;
 
   return (
-    <section id="technologie" className="section-padding border-t border-border-lighter">
+    <section
+      id="technologie"
+      className="section-padding border-t border-border-lighter"
+    >
       <div className="container-site">
         <FadeIn>
           <SectionLabel className="block text-center mb-4">
-            Équipement
+            Technologie
           </SectionLabel>
           <h2 className="font-sans text-[30px] sm:text-[35px] font-semibold text-white mb-4 text-center leading-[1.18]">
             Notre studio mobile
           </h2>
           <p className="text-text-body text-[16px] leading-[26px] text-center max-w-2xl mx-auto mb-14">
-            Explorez l&apos;équipement professionnel embarqué dans notre
-            véhicule.
+            Explorez la technologie embarquée dans notre véhicule.
           </p>
         </FadeIn>
 
