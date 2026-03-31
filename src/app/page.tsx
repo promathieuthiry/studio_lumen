@@ -22,6 +22,7 @@ import { Technology } from "@/components/sections/Technology";
 import { ClientLogos } from "@/components/sections/ClientLogos";
 
 type SiteSettingsData = {
+  logo?: SanityImageSource | null;
   heroHeadline: string;
   heroSubtitle: string;
   heroBackgroundDark?: SanityImageSource | null;
@@ -147,7 +148,13 @@ export default async function HomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <Navbar />
+      <Navbar
+        logoUrl={
+          settings?.logo
+            ? urlFor(settings.logo).height(400).quality(100).auto("format").url()
+            : undefined
+        }
+      />
       <main>
         {/* Hero + ValueProposition share a fixed background with scroll-driven lighting */}
         <HeroBackground

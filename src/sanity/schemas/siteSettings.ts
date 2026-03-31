@@ -6,6 +6,12 @@ export const siteSettings = defineType({
   type: "document",
   fields: [
     defineField({
+      name: "logo",
+      title: "Site Logo",
+      type: "image",
+      description: "Logo displayed in the navbar. Recommended: transparent PNG or SVG.",
+    }),
+    defineField({
       name: "siteTitle",
       title: "Site Title",
       type: "string",

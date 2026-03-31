@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Menu, X, ArrowRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -13,10 +14,13 @@ const navLinks = [
 
 const GLASS_ACTIVE =
   "bg-white/[0.07] backdrop-blur-xl border border-white/[0.08]";
-const GLASS_IDLE =
-  "bg-white/[0.04] backdrop-blur-sm border border-transparent";
+const GLASS_IDLE = "bg-white/[0.04] backdrop-blur-sm border border-transparent";
 
-export function Navbar() {
+interface NavbarProps {
+  logoUrl?: string;
+}
+
+export function Navbar({ logoUrl }: NavbarProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
@@ -32,7 +36,7 @@ export function Navbar() {
           }
         }
       },
-      { rootMargin: "-40% 0px -50% 0px" }
+      { rootMargin: "-40% 0px -50% 0px" },
     );
     for (const { id } of navLinks) {
       const el = document.getElementById(id);
@@ -79,9 +83,22 @@ export function Navbar() {
             <Link
               href="/"
               onClick={() => setMobileOpen(false)}
-              className={`relative z-50 font-display text-[18px] lg:text-xl font-semibold text-white tracking-tight rounded-pill px-5 py-2 transition-all duration-500 ${glassClasses}`}
+              className={`relative z-50 rounded-pill px-5 pt-2 pb-3  transition-all duration-500 ${glassClasses}`}
             >
-              Studio Lumen
+              {logoUrl ? (
+                <Image
+                  src={logoUrl}
+                  alt="Studio Lumen"
+                  width={70}
+                  height={31}
+                  className="h-[20px] lg:h-[24px] w-auto brightness-0 invert"
+                  priority
+                />
+              ) : (
+                <span className="font-display text-[18px] lg:text-xl font-semibold text-white tracking-tight">
+                  Studio Lumen
+                </span>
+              )}
             </Link>
 
             <div
@@ -152,9 +169,7 @@ export function Navbar() {
                       onClick={() => setMobileOpen(false)}
                       className="block py-4 font-display text-[32px] font-semibold text-white/80 hover:text-white transition-colors duration-300"
                     >
-                      <span className="text-white/30 mr-3 text-[20px]">
-                        //
-                      </span>
+                      <span className="text-white/30 mr-3 text-[20px]">//</span>
                       {link.label}
                     </Link>
                   </motion.div>
