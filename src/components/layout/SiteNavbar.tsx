@@ -8,7 +8,7 @@ export async function SiteNavbar() {
   try {
     const { data } = await sanityFetch({ query: SITE_LOGO_QUERY });
     if (data?.logo) {
-      logoUrl = urlFor(data.logo).height(400).quality(100).auto("format").url();
+      logoUrl = urlFor(data.logo).height(600).quality(100).auto("format").url();
     }
   } catch (error) {
     console.error("[SiteNavbar] Failed to fetch logo:", error);
