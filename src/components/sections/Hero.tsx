@@ -54,7 +54,7 @@ export function Hero({ headline, subtitle, ctaText, ctaUrl }: HeroProps) {
             transition={{ duration: 0.6, delay: 0.6, ease: "easeOut" }}
             className="flex flex-wrap items-center gap-4"
           >
-            <Button href={ctaUrl} variant="primary">
+            <Button href={ctaUrl} variant="accent">
               {ctaText}
             </Button>
             <Button href="/a-propos" variant="outline" showArrow={false}>

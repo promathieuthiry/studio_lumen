@@ -133,7 +133,7 @@ export function Navbar({ logoUrl }: NavbarProps) {
             <div className="flex items-center gap-4">
               <Link
                 href="/#reserver"
-                className="hidden lg:inline-flex items-center gap-3 px-6 py-2.5 text-[13px] uppercase tracking-[1.4px] font-medium text-white border border-white/20 rounded-pill hover:bg-white hover:text-background transition-all duration-300"
+                className="hidden lg:inline-flex items-center gap-3 px-6 py-2.5 text-[13px] uppercase tracking-[1.4px] font-medium text-background bg-accent border border-accent rounded-pill hover:bg-accent/80 transition-all duration-300"
               >
                 Réserver
                 <ArrowRight className="w-4 h-4" />
@@ -190,7 +190,7 @@ export function Navbar({ logoUrl }: NavbarProps) {
                 <Link
                   href="/#reserver"
                   onClick={() => setMobileOpen(false)}
-                  className="inline-flex items-center gap-3 px-8 py-4 text-[15px] uppercase tracking-[1.4px] font-medium text-white border border-white/20 rounded-pill hover:bg-white hover:text-background transition-all duration-300"
+                  className="inline-flex items-center gap-3 px-8 py-4 text-[15px] uppercase tracking-[1.4px] font-medium text-background bg-accent border border-accent rounded-pill hover:bg-accent/80 transition-all duration-300"
                 >
                   Réserver
                   <ArrowRight className="w-5 h-5" />
