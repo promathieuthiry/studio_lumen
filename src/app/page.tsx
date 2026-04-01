@@ -217,6 +217,11 @@ export default async function HomePage() {
             <CtaBanner
               ctaText={settings?.ctaText || "Réserver"}
               ctaUrl={settings?.ctaUrl || "#reserver"}
+              founderPhotoUrl={
+                settings?.founderPhoto
+                  ? urlFor(settings.founderPhoto).width(800).quality(80).auto("format").url()
+                  : null
+              }
             />
           </div>
 

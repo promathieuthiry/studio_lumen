@@ -9,6 +9,7 @@ import { motion } from "framer-motion";
 type CtaBannerProps = {
   ctaText: string;
   ctaUrl: string;
+  founderPhotoUrl?: string | null;
 };
 
 const trustMetrics = [
@@ -16,7 +17,7 @@ const trustMetrics = [
   { value: "100%", label: "satisfaction" },
 ];
 
-export function CtaBanner({ ctaText, ctaUrl }: CtaBannerProps) {
+export function CtaBanner({ ctaText, ctaUrl, founderPhotoUrl }: CtaBannerProps) {
   return (
     <section className="section-padding border-t border-border-lighter">
       <div className="container-site">
@@ -36,7 +37,7 @@ export function CtaBanner({ ctaText, ctaUrl }: CtaBannerProps) {
                 className="relative w-full lg:w-[40%] min-h-[300px] lg:min-h-[420px]"
               >
                 <Image
-                  src="/photo Cyril 1.webp"
+                  src={founderPhotoUrl || "/photo_cyril_1.webp"}
                   alt="Cyril, fondateur de Studio Lumen"
                   fill
                   sizes="(max-width: 1024px) 100vw, 40vw"
