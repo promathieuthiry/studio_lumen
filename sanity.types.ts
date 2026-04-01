@@ -251,15 +251,6 @@ export type SiteSettings = {
     crop?: SanityImageCrop;
     _type: "image";
   };
-  siteTitle: string;
-  description: string;
-  ogImage: {
-    asset?: SanityImageAssetReference;
-    media?: unknown;
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    _type: "image";
-  };
   heroBackground?: {
     asset?: SanityImageAssetReference;
     media?: unknown;
@@ -432,17 +423,8 @@ export type AllSanitySchemaTypes =
 
 // Source: src/sanity/queries.ts
 // Variable: SITE_SETTINGS_QUERY
-// Query: *[_type == "siteSettings"][0]{    siteTitle,    description,    ogImage,    logo,    heroBackgroundDark,    heroBackgroundLit,    heroHeadline,    heroSubtitle,    valuePropositions[]{      title,      description,      icon,      statValue,      statSuffix    },    socialLinks[]{      platform,      url    },    ctaText,    ctaUrl,    founderPhoto,    founderBio,    contactEmail,    seo{      metaTitle,      metaDescription,      ogImage    }  }
+// Query: *[_type == "siteSettings"][0]{    logo,    heroBackgroundDark,    heroBackgroundLit,    heroHeadline,    heroSubtitle,    valuePropositions[]{      title,      description,      icon,      statValue,      statSuffix    },    socialLinks[]{      platform,      url    },    ctaText,    ctaUrl,    founderPhoto,    founderBio,    contactEmail,    seo{      metaTitle,      metaDescription,      ogImage    }  }
 export type SITE_SETTINGS_QUERY_RESULT = {
-  siteTitle: string;
-  description: string;
-  ogImage: {
-    asset?: SanityImageAssetReference;
-    media?: unknown;
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    _type: "image";
-  };
   logo: {
     asset?: SanityImageAssetReference;
     media?: unknown;
@@ -708,7 +690,7 @@ export type SITE_LOGO_QUERY_RESULT = {
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
-    '\n  *[_type == "siteSettings"][0]{\n    siteTitle,\n    description,\n    ogImage,\n    logo,\n    heroBackgroundDark,\n    heroBackgroundLit,\n    heroHeadline,\n    heroSubtitle,\n    valuePropositions[]{\n      title,\n      description,\n      icon,\n      statValue,\n      statSuffix\n    },\n    socialLinks[]{\n      platform,\n      url\n    },\n    ctaText,\n    ctaUrl,\n    founderPhoto,\n    founderBio,\n    contactEmail,\n    seo{\n      metaTitle,\n      metaDescription,\n      ogImage\n    }\n  }\n': SITE_SETTINGS_QUERY_RESULT;
+    '\n  *[_type == "siteSettings"][0]{\n    logo,\n    heroBackgroundDark,\n    heroBackgroundLit,\n    heroHeadline,\n    heroSubtitle,\n    valuePropositions[]{\n      title,\n      description,\n      icon,\n      statValue,\n      statSuffix\n    },\n    socialLinks[]{\n      platform,\n      url\n    },\n    ctaText,\n    ctaUrl,\n    founderPhoto,\n    founderBio,\n    contactEmail,\n    seo{\n      metaTitle,\n      metaDescription,\n      ogImage\n    }\n  }\n': SITE_SETTINGS_QUERY_RESULT;
     '\n  *[_type == "service"] | order(order asc){\n    _id,\n    title,\n    description,\n    icon,\n    deliverables,\n    turnaround,\n    order\n  }\n': SERVICES_QUERY_RESULT;
     '\n  *[_type == "project"] | order(order asc){\n    _id,\n    title,\n    slug,\n    category,\n    description,\n    youtubeVideoId,\n    thumbnail,\n    featured,\n    order\n  }\n': PROJECTS_QUERY_RESULT;
     '\n  *[_type == "testimonial"] | order(order asc){\n    _id,\n    clientName,\n    company,\n    role,\n    quote,\n    avatar,\n    featured,\n    order\n  }\n': TESTIMONIALS_QUERY_RESULT;

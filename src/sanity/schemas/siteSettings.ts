@@ -12,24 +12,6 @@ export const siteSettings = defineType({
       description: "Logo displayed in the navbar. Recommended: transparent PNG or SVG.",
     }),
     defineField({
-      name: "siteTitle",
-      title: "Site Title",
-      type: "string",
-      validation: (r) => r.required(),
-    }),
-    defineField({
-      name: "description",
-      title: "Meta Description",
-      type: "text",
-      validation: (r) => r.required(),
-    }),
-    defineField({
-      name: "ogImage",
-      title: "Open Graph Image",
-      type: "image",
-      validation: (r) => r.required(),
-    }),
-    defineField({
       name: "heroBackground",
       title: "Hero Background Image",
       type: "image",
