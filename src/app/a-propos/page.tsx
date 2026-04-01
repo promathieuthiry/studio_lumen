@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { sanityFetch } from "@/sanity/live";
 import { FOUNDER_PROFILE_QUERY } from "@/sanity/queries";
 import { urlFor, type SanityImageSource } from "@/sanity/image";
+import { type SeoFields, buildOgImageUrl } from "@/lib/seo";
 import { SiteNavbar } from "@/components/layout/SiteNavbar";
 import { Footer } from "@/components/layout/Footer";
 import { PortableTextRenderer } from "@/components/portable-text/PortableTextRenderer";
@@ -11,24 +12,37 @@ import { SectionLabel } from "@/components/ui/SectionLabel";
 import { AboutHero } from "@/components/sections/AboutHero";
 import type { PortableTextBlock } from "@portabletext/types";
 
-export const metadata: Metadata = {
-  title: "Cyril Ben Said, fondateur — Studio vidéo mobile",
-  description:
-    "Découvrez le parcours de Cyril Ben Said, fondateur de Studio Lumen, premier studio de production vidéo mobile en France.",
-  openGraph: {
-    title: "Cyril Ben Said, fondateur de Studio Lumen",
-    description:
-      "Découvrez le parcours de Cyril Ben Said, fondateur de Studio Lumen, premier studio de production vidéo mobile en France.",
-    images: [
-      {
-        url: "/photo-cyril-1.jpg",
-        width: 1198,
-        height: 800,
-        alt: "Cyril Ben Said, fondateur de Studio Lumen",
-      },
-    ],
-  },
-};
+const FALLBACK_TITLE = "Cyril Ben Said, fondateur — Studio vidéo mobile";
+const FALLBACK_DESCRIPTION =
+  "Découvrez le parcours de Cyril Ben Said, fondateur de Studio Lumen, premier studio de production vidéo mobile en France.";
+
+export async function generateMetadata(): Promise<Metadata> {
+  let seo: SeoFields | null = null;
+
+  try {
+    const { data } = await sanityFetch({ query: FOUNDER_PROFILE_QUERY });
+    seo = data?.seo ?? null;
+  } catch {
+    // Sanity unreachable — fall through to hardcoded defaults
+  }
+
+  const title = seo?.metaTitle ?? FALLBACK_TITLE;
+  const description = seo?.metaDescription ?? FALLBACK_DESCRIPTION;
+  const ogImageUrl = seo?.ogImage ? buildOgImageUrl(seo.ogImage) : null;
+  const ogImage = ogImageUrl
+    ? { url: ogImageUrl, width: 1200, height: 630 }
+    : { url: "/photo-cyril-1.jpg", width: 1198, height: 800, alt: "Cyril Ben Said, fondateur de Studio Lumen" };
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      images: [ogImage],
+    },
+  };
+}
 
 type FounderData = {
   fullName: string;

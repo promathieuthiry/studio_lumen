@@ -90,5 +90,14 @@ export const founderProfile = defineType({
         },
       ],
     }),
+    defineField({
+      name: "seo",
+      title: "SEO",
+      type: "seo",
+      group: "seo",
+    }),
+  ],
+  groups: [
+    { name: "seo", title: "SEO" },
   ],
 });

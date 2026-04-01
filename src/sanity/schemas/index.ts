@@ -6,6 +6,7 @@ import { service } from "./service";
 import { equipment } from "./equipment";
 import { clientLogo } from "./clientLogo";
 import { page } from "./page";
+import { seo } from "./seo";
 
 export const schemaTypes = [
   siteSettings,
@@ -16,4 +17,5 @@ export const schemaTypes = [
   equipment,
   clientLogo,
   page,
+  seo,
 ];

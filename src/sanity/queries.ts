@@ -25,7 +25,12 @@ export const SITE_SETTINGS_QUERY = defineQuery(`
     ctaUrl,
     founderPhoto,
     founderBio,
-    contactEmail
+    contactEmail,
+    seo{
+      metaTitle,
+      metaDescription,
+      ogImage
+    }
   }
 `);
 
@@ -108,6 +113,11 @@ export const FOUNDER_PROFILE_QUERY = defineQuery(`
     socialLinks[]{
       platform,
       url
+    },
+    seo{
+      metaTitle,
+      metaDescription,
+      ogImage
     }
   }
 `);
@@ -116,7 +126,12 @@ export const PAGE_BY_SLUG_QUERY = defineQuery(`
   *[_type == "page" && slug.current == $slug][0]{
     title,
     slug,
-    body
+    body,
+    seo{
+      metaTitle,
+      metaDescription,
+      ogImage
+    }
   }
 `);
 

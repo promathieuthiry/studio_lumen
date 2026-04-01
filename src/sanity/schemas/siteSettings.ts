@@ -152,5 +152,14 @@ export const siteSettings = defineType({
       type: "string",
       initialValue: "cyril@studiolumen.fr",
     }),
+    defineField({
+      name: "seo",
+      title: "SEO",
+      type: "seo",
+      group: "seo",
+    }),
+  ],
+  groups: [
+    { name: "seo", title: "SEO" },
   ],
 });

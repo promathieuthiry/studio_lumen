@@ -4,7 +4,9 @@ import { DM_Sans, Cardo, Poppins } from "next/font/google";
 import "@/styles/globals.css";
 import { ConsentProvider } from "@/components/consent/ConsentProvider";
 import { ConsentBanner } from "@/components/consent/ConsentBanner";
-import { SanityLive } from "@/sanity/live";
+import { SanityLive, sanityFetch } from "@/sanity/live";
+import { SITE_SETTINGS_QUERY } from "@/sanity/queries";
+import { type SeoFields, buildOgImageUrl } from "@/lib/seo";
 
 const clashDisplay = localFont({
   src: [
@@ -45,35 +47,48 @@ const cardo = Cardo({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  title: {
-    default: "Studio Lumen — Studio vidéo mobile",
-    template: "%s | Studio Lumen",
-  },
-  description:
-    "Studio Lumen, premier studio de production vidéo mobile en France. Vidéo corporate, captation podcast, contenu social media. Contenu livré en 48h.",
-  metadataBase: new URL("https://studiolumen.fr"),
-  openGraph: {
-    type: "website",
-    locale: "fr_FR",
-    url: "https://studiolumen.fr",
-    siteName: "Studio Lumen",
-    title: "Studio Lumen — Studio vidéo mobile",
-    description:
-      "Studio Lumen, premier studio de production vidéo mobile en France. Vidéo corporate, captation podcast, contenu social media. Contenu livré en 48h.",
-    images: [
-      {
-        url: "/og-image.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Studio Lumen — Studio de production vidéo mobile",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-  },
-};
+const FALLBACK_TITLE = "Studio Lumen — Studio vidéo mobile";
+const FALLBACK_DESCRIPTION =
+  "Studio Lumen, premier studio de production vidéo mobile en France. Vidéo corporate, captation podcast, contenu social media. Contenu livré en 48h.";
+
+export async function generateMetadata(): Promise<Metadata> {
+  let seo: SeoFields | null = null;
+
+  try {
+    const { data } = await sanityFetch({ query: SITE_SETTINGS_QUERY });
+    seo = data?.seo ?? null;
+  } catch {
+    // Sanity unreachable — fall through to hardcoded defaults
+  }
+
+  const title = seo?.metaTitle ?? FALLBACK_TITLE;
+  const description = seo?.metaDescription ?? FALLBACK_DESCRIPTION;
+  const ogImageUrl = seo?.ogImage ? buildOgImageUrl(seo.ogImage) : null;
+  const ogImage = ogImageUrl
+    ? { url: ogImageUrl, width: 1200, height: 630 }
+    : { url: "/og-image.jpg", width: 1200, height: 630, alt: "Studio Lumen — Studio de production vidéo mobile" };
+
+  return {
+    title: {
+      default: title,
+      template: "%s | Studio Lumen",
+    },
+    description,
+    metadataBase: new URL("https://studiolumen.fr"),
+    openGraph: {
+      type: "website",
+      locale: "fr_FR",
+      url: "https://studiolumen.fr",
+      siteName: "Studio Lumen",
+      title,
+      description,
+      images: [ogImage],
+    },
+    twitter: {
+      card: "summary_large_image",
+    },
+  };
+}
 
 export default function RootLayout({
   children,
