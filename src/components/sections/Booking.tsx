@@ -7,6 +7,7 @@ import { SectionLabel } from "@/components/ui/SectionLabel";
 import { FeaturedCard } from "@/components/ui/GlassCard";
 import { motion } from "framer-motion";
 import { Clock, ShieldCheck, Sparkles, type LucideIcon } from "lucide-react";
+import { useEffect, useRef } from "react";
 
 const CALENDLY_URL =
   process.env.NEXT_PUBLIC_CALENDLY_URL || "https://calendly.com/studiolumen";
@@ -15,6 +16,20 @@ const CALENDLY_PARAMS =
   "hide_gdpr_banner=1&hide_event_type_details=1&background_color=0a0a0a&text_color=ffffff&primary_color=61CE70";
 const CALENDLY_THEMED = `${CALENDLY_URL}${CALENDLY_URL.includes("?") ? "&" : "?"}${CALENDLY_PARAMS}`;
 
+const WIDGET_JS = "https://assets.calendly.com/assets/external/widget.js";
+const WIDGET_CSS = "https://assets.calendly.com/assets/external/widget.css";
+
+declare global {
+  interface Window {
+    Calendly?: {
+      initInlineWidget: (opts: {
+        url: string;
+        parentElement: HTMLElement;
+      }) => void;
+    };
+  }
+}
+
 type TrustPoint = { icon: LucideIcon; text: string };
 
 const trustPoints: TrustPoint[] = [
@@ -22,6 +37,60 @@ const trustPoints: TrustPoint[] = [
   { icon: ShieldCheck, text: "100 % gratuit" },
   { icon: Sparkles, text: "Réponse sous 24 h" },
 ];
+
+function initWidget(container: HTMLElement) {
+  window.Calendly?.initInlineWidget({
+    url: CALENDLY_THEMED,
+    parentElement: container,
+  });
+}
+
+function CalendlyEmbed() {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!document.querySelector(`link[href="${WIDGET_CSS}"]`)) {
+      const link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.href = WIDGET_CSS;
+      document.head.appendChild(link);
+    }
+
+    if (window.Calendly) {
+      if (containerRef.current) initWidget(containerRef.current);
+      return;
+    }
+
+    let cancelled = false;
+    const existing = document.querySelector(`script[src="${WIDGET_JS}"]`);
+
+    if (existing) {
+      existing.addEventListener("load", () => {
+        if (!cancelled && containerRef.current) initWidget(containerRef.current);
+      }, { once: true });
+    } else {
+      const script = document.createElement("script");
+      script.src = WIDGET_JS;
+      script.async = true;
+      script.onload = () => {
+        if (!cancelled && containerRef.current) initWidget(containerRef.current);
+      };
+      document.body.appendChild(script);
+    }
+
+    return () => {
+      cancelled = true;
+      if (containerRef.current) containerRef.current.innerHTML = "";
+    };
+  }, []);
+
+  return (
+    <div
+      ref={containerRef}
+      className="w-full h-[580px] lg:h-[740px] overflow-hidden lg:rounded-r-[25px]"
+    />
+  );
+}
 
 export function Booking() {
   return (
@@ -98,16 +167,7 @@ export function Booking() {
                     </div>
                   }
                 >
-                  <div className="w-full overflow-hidden lg:rounded-r-[25px]">
-                    <iframe
-                      src={CALENDLY_THEMED}
-                      title="Calendrier de réservation — Studio Lumen"
-                      loading="lazy"
-                      allow="payment"
-                      sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
-                      className="w-full h-[740px] border-0"
-                    />
-                  </div>
+                  <CalendlyEmbed />
                 </ConsentGate>
               </div>
             </div>
