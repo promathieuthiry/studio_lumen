@@ -51,8 +51,28 @@ export const metadata: Metadata = {
     template: "%s | Studio Lumen",
   },
   description:
-    "Premier studio de production vidéo mobile en France. Contenu livré en 48h.",
+    "Studio Lumen, premier studio de production vidéo mobile en France. Vidéo corporate, captation podcast, contenu social media. Contenu livré en 48h.",
   metadataBase: new URL("https://studiolumen.fr"),
+  openGraph: {
+    type: "website",
+    locale: "fr_FR",
+    url: "https://studiolumen.fr",
+    siteName: "Studio Lumen",
+    title: "Studio Lumen — Studio vidéo mobile",
+    description:
+      "Studio Lumen, premier studio de production vidéo mobile en France. Vidéo corporate, captation podcast, contenu social media. Contenu livré en 48h.",
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Studio Lumen — Studio de production vidéo mobile",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+  },
 };
 
 export default function RootLayout({
@@ -65,6 +85,9 @@ export default function RootLayout({
       lang="fr"
       className={`${clashDisplay.variable} ${dmSans.variable} ${poppins.variable} ${cardo.variable}`}
     >
+      <head>
+        <link rel="preconnect" href="https://cdn.sanity.io" />
+      </head>
       <body>
         <ConsentProvider>
           {children}

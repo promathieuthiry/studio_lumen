@@ -65,7 +65,7 @@ function AuthorBlock({
         /* eslint-disable-next-line @next/next/no-img-element */
         <img
           src={avatarUrl}
-          alt={t.clientName}
+          alt={`Photo de ${t.clientName}`}
           className={`${avatarCls} rounded-full object-cover ring-1 ring-white/10`}
         />
       ) : (

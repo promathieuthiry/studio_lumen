@@ -12,9 +12,22 @@ import { AboutHero } from "@/components/sections/AboutHero";
 import type { PortableTextBlock } from "@portabletext/types";
 
 export const metadata: Metadata = {
-  title: "À propos",
+  title: "Cyril Ben Said, fondateur — Studio vidéo mobile",
   description:
     "Découvrez le parcours de Cyril Ben Said, fondateur de Studio Lumen, premier studio de production vidéo mobile en France.",
+  openGraph: {
+    title: "Cyril Ben Said, fondateur de Studio Lumen",
+    description:
+      "Découvrez le parcours de Cyril Ben Said, fondateur de Studio Lumen, premier studio de production vidéo mobile en France.",
+    images: [
+      {
+        url: "/photo-cyril-1.jpg",
+        width: 1198,
+        height: 800,
+        alt: "Cyril Ben Said, fondateur de Studio Lumen",
+      },
+    ],
+  },
 };
 
 type FounderData = {

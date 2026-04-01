@@ -58,6 +58,7 @@ type ProjectData = {
   title: string;
   slug: { current: string };
   category: string;
+  description?: string;
   youtubeVideoId: string;
   thumbnail: SanityImageSource;
 };
@@ -113,12 +114,13 @@ async function fetchHomepageData() {
 function getLocalBusinessJsonLd(settings: SiteSettingsData) {
   return {
     "@context": "https://schema.org",
-    "@type": "LocalBusiness",
+    "@type": "ProfessionalService",
     name: "Studio Lumen",
     description:
-      "Premier studio de production vidéo mobile en France. Contenu livré en 48h.",
+      "Studio Lumen, premier studio de production vidéo mobile en France. Vidéo corporate, captation podcast, contenu social media. Contenu livré en 48h.",
     url: "https://studiolumen.fr",
     email: settings?.contactEmail || "cyril@studiolumen.fr",
+    image: "https://studiolumen.fr/og-image.jpg",
     founder: {
       "@type": "Person",
       name: "Cyril Ben Said",
@@ -137,11 +139,24 @@ function getLocalBusinessJsonLd(settings: SiteSettingsData) {
   };
 }
 
+function getVideoObjectsJsonLd(projects: ProjectData[]) {
+  return projects.map((project) => ({
+    "@context": "https://schema.org",
+    "@type": "VideoObject",
+    name: project.title,
+    description: project.description || project.title,
+    thumbnailUrl: `https://img.youtube.com/vi/${project.youtubeVideoId}/maxresdefault.jpg`,
+    contentUrl: `https://www.youtube.com/watch?v=${project.youtubeVideoId}`,
+    embedUrl: `https://www.youtube-nocookie.com/embed/${project.youtubeVideoId}`,
+  }));
+}
+
 export default async function HomePage() {
   const { settings, services, projects, testimonials, equipment, clientLogos } =
     await fetchHomepageData();
 
   const jsonLd = getLocalBusinessJsonLd(settings);
+  const videoJsonLd = getVideoObjectsJsonLd(projects);
 
   return (
     <>
@@ -149,6 +164,13 @@ export default async function HomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      {videoJsonLd.map((video, i) => (
+        <script
+          key={i}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(video) }}
+        />
+      ))}
       <Navbar
         logoUrl={
           settings?.logo

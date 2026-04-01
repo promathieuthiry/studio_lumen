@@ -33,6 +33,9 @@ export function HeroBackground({
           <img
             src={backgroundDarkUrl}
             alt=""
+            width={1920}
+            height={1080}
+            fetchPriority="high"
             className="absolute inset-0 w-full h-full object-cover"
           />
           {/* Lit (lights on) — fades in on scroll */}
@@ -40,6 +43,9 @@ export function HeroBackground({
             <img
               src={backgroundLitUrl}
               alt=""
+              width={1920}
+              height={1080}
+              loading="eager"
               className="absolute inset-0 w-full h-full object-cover"
             />
           </motion.div>
