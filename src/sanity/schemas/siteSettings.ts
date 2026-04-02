@@ -133,6 +133,46 @@ export const siteSettings = defineType({
       title: "Contact Email",
       type: "string",
       initialValue: "cyril@studiolumen.fr",
+      group: "business",
+    }),
+    defineField({
+      name: "contactPhone",
+      title: "Téléphone",
+      type: "string",
+      group: "business",
+    }),
+    defineField({
+      name: "address",
+      title: "Adresse",
+      type: "object",
+      group: "business",
+      fields: [
+        defineField({ name: "street", title: "Rue", type: "string" }),
+        defineField({ name: "postalCode", title: "Code postal", type: "string" }),
+        defineField({ name: "city", title: "Ville", type: "string" }),
+      ],
+    }),
+    defineField({
+      name: "openingHours",
+      title: "Horaires d'ouverture",
+      type: "string",
+      description: "Format schema.org (ex : Mo-Fr 09:00-18:00)",
+      group: "business",
+    }),
+    defineField({
+      name: "priceRange",
+      title: "Fourchette de prix",
+      type: "string",
+      description: "Ex : €€ ou €€€",
+      group: "business",
+    }),
+    defineField({
+      name: "areaServed",
+      title: "Zone desservie",
+      type: "array",
+      of: [{ type: "string" }],
+      description: "Villes ou régions desservies (ex : Paris, Lyon, France entière)",
+      group: "business",
     }),
     defineField({
       name: "seo",
@@ -142,6 +182,7 @@ export const siteSettings = defineType({
     }),
   ],
   groups: [
+    { name: "business", title: "Business Info" },
     { name: "seo", title: "SEO" },
   ],
 });

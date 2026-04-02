@@ -23,6 +23,15 @@ export const SITE_SETTINGS_QUERY = defineQuery(`
     founderPhoto,
     founderBio,
     contactEmail,
+    contactPhone,
+    address{
+      street,
+      postalCode,
+      city
+    },
+    openingHours,
+    priceRange,
+    areaServed,
     seo{
       metaTitle,
       metaDescription,

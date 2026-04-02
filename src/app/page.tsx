@@ -8,6 +8,7 @@ import {
   CLIENT_LOGOS_QUERY,
 } from "@/sanity/queries";
 import { urlFor, type SanityImageSource } from "@/sanity/image";
+import { buildOgImageUrl } from "@/lib/seo";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { HeroBackground } from "@/components/ui/HeroBackground";
@@ -33,6 +34,17 @@ type SiteSettingsData = {
   valuePropositions: Array<{ title: string; description: string; icon: string }>;
   socialLinks?: Array<{ platform: string; url: string }>;
   contactEmail?: string;
+  contactPhone?: string;
+  address?: { street?: string; postalCode?: string; city?: string };
+  openingHours?: string;
+  priceRange?: string;
+  areaServed?: string[];
+  founderBio?: string;
+  seo?: {
+    metaTitle?: string;
+    metaDescription?: string;
+    ogImage?: SanityImageSource | null;
+  };
 } | null;
 
 type ServiceData = {
@@ -111,32 +123,69 @@ async function fetchHomepageData() {
   }
 }
 
-function getLocalBusinessJsonLd(settings: SiteSettingsData) {
-  return {
+function getLocalBusinessJsonLd(settings: SiteSettingsData, services: ServiceData[]) {
+  const ogImage = settings?.seo?.ogImage
+    ? buildOgImageUrl(settings.seo.ogImage)
+    : null;
+
+  const jsonLd: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
     name: "Studio Lumen",
     description:
+      settings?.seo?.metaDescription ||
       "Studio Lumen, premier studio de production vidéo mobile en France. Vidéo corporate, captation podcast, contenu social media. Contenu livré en 48h.",
     url: "https://studiolumen.fr",
     email: settings?.contactEmail || "cyril@studiolumen.fr",
-    image: "https://studiolumen.fr/og-image.jpg",
+    image: ogImage || "https://studiolumen.fr/og-image.jpg",
     founder: {
       "@type": "Person",
       name: "Cyril Ben Said",
     },
-    areaServed: {
-      "@type": "Country",
-      name: "France",
-    },
-    serviceType: [
-      "Production vidéo mobile",
-      "Vidéo corporate",
-      "Captation podcast",
-      "Social media content",
-    ],
+    knowsLanguage: ["fr", "en"],
+    serviceType: services.length
+      ? services.map((s) => s.title)
+      : [
+          "Production vidéo mobile",
+          "Vidéo corporate",
+          "Captation podcast",
+          "Social media content",
+        ],
     sameAs: settings?.socialLinks?.map((link) => link.url).filter(Boolean) || [],
   };
+
+  if (settings?.contactPhone) {
+    jsonLd.telephone = settings.contactPhone;
+  }
+
+  if (settings?.address?.street) {
+    jsonLd.address = {
+      "@type": "PostalAddress",
+      streetAddress: settings.address.street,
+      postalCode: settings.address.postalCode,
+      addressLocality: settings.address.city,
+      addressCountry: "FR",
+    };
+  }
+
+  if (settings?.openingHours) {
+    jsonLd.openingHours = settings.openingHours;
+  }
+
+  if (settings?.priceRange) {
+    jsonLd.priceRange = settings.priceRange;
+  }
+
+  if (settings?.areaServed?.length) {
+    jsonLd.areaServed = settings.areaServed.map((area) => ({
+      "@type": "City",
+      name: area,
+    }));
+  } else {
+    jsonLd.areaServed = { "@type": "Country", name: "France" };
+  }
+
+  return jsonLd;
 }
 
 function getVideoObjectsJsonLd(projects: ProjectData[]) {
@@ -155,7 +204,7 @@ export default async function HomePage() {
   const { settings, services, projects, testimonials, equipment, clientLogos } =
     await fetchHomepageData();
 
-  const jsonLd = getLocalBusinessJsonLd(settings);
+  const jsonLd = getLocalBusinessJsonLd(settings, services);
   const videoJsonLd = getVideoObjectsJsonLd(projects);
 
   return (
