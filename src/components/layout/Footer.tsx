@@ -34,7 +34,9 @@ export function Footer({
       {/* ─── Copyright ─── */}
       <div className="relative z-10 mt-8 pb-10 text-center">
         <p className="text-[13px] text-text-body">
-          &copy; {new Date().getFullYear()} Studio Lumen. Tous droits réservés -{" "}
+          &copy; {new Date().getFullYear()} Studio Lumen. Tous droits réservés
+          <br className="sm:hidden" />
+          <span className="hidden sm:inline"> – </span>
           Made with <span className="inline-block animate-heartbeat">❤️</span>{" "}
           by{" "}
           <Link
