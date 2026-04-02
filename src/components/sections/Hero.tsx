@@ -58,7 +58,16 @@ export function Hero({ headline, subtitle, ctaText, ctaUrl }: HeroProps) {
   });
   const opacity = useTransform(scrollYProgress, [0.4, 0.75], [1, 0]);
 
-  const words = headline.split(" ");
+  // Force "Studio Lumen" onto its own second line on all devices
+  const studioLumenIndex = headline.toLowerCase().indexOf("studio lumen");
+  const firstLine =
+    studioLumenIndex > 0
+      ? headline.slice(0, studioLumenIndex).trim().split(" ")
+      : [];
+  const secondLine =
+    studioLumenIndex >= 0
+      ? headline.slice(studioLumenIndex).trim().split(" ")
+      : headline.split(" ");
 
   return (
     <div ref={ref} className="min-h-dvh">
@@ -66,53 +75,70 @@ export function Hero({ headline, subtitle, ctaText, ctaUrl }: HeroProps) {
         style={{ opacity }}
         className="flex flex-col justify-end min-h-dvh px-[4vw] lg:px-[3.906vw] pb-[5vw]"
       >
-        {/* Headline — massive, left-aligned */}
-        <h1 className="font-poppins font-bold text-white leading-[0.95] mb-6 lg:mb-8">
-          {words.map((word, i) => (
-            <motion.span
-              key={i}
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{
-                duration: 0.7,
-                delay: 0.2 + i * 0.12,
-                ease: [0.25, 0.46, 0.45, 0.94],
-              }}
-              className="inline-block mr-[0.25em] text-[clamp(36px,7vw,120px)]"
-            >
-              {word}
-            </motion.span>
-          ))}
+        {/* Headline — "Studio Lumen" always on line 2 */}
+        <h1 className="font-poppins font-bold text-white leading-[0.95]">
+          {firstLine.length > 0 && (
+            <span className="block">
+              {firstLine.map((word, i) => (
+                <motion.span
+                  key={`l1-${i}`}
+                  initial={{ opacity: 0, y: 40 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{
+                    duration: 0.7,
+                    delay: 0.2 + i * 0.12,
+                    ease: [0.25, 0.46, 0.45, 0.94],
+                  }}
+                  className="inline-block mr-[0.25em] text-[clamp(36px,7vw,120px)]"
+                >
+                  {word}
+                </motion.span>
+              ))}
+            </span>
+          )}
+          <span className="block">
+            {secondLine.map((word, i) => (
+              <motion.span
+                key={`l2-${i}`}
+                initial={{ opacity: 0, y: 40 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: 0.7,
+                  delay: 0.2 + (firstLine.length + i) * 0.12,
+                  ease: [0.25, 0.46, 0.45, 0.94],
+                }}
+                className="inline-block mr-[0.25em] text-[clamp(36px,7vw,120px)]"
+              >
+                {word}
+              </motion.span>
+            ))}
+          </span>
         </h1>
 
-        {/* Bottom row: CTA left, subtitle right */}
-        <div className="flex flex-col-reverse lg:flex-row lg:items-end lg:justify-between gap-8 lg:gap-16">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.6, ease: "easeOut" }}
-            className="flex items-center gap-4"
-          >
-            <Button href={ctaUrl} variant="accent">
-              {ctaText}
-            </Button>
-            <Button href="/a-propos" variant="outline" showArrow={false}>
-              En savoir plus
-            </Button>
-          </motion.div>
+        {/* Subtitle — between headline and CTA */}
+        <motion.p
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.7, ease: "easeOut" }}
+          className="font-poppins max-w-lg mt-5 lg:mt-6 mb-8 lg:mb-10 font-normal text-[#C2C2C2] text-lg lg:text-xl leading-[1.6] tracking-wide"
+        >
+          {renderSubtitleWithAnimatedNumbers(subtitle, 1.0)}
+        </motion.p>
 
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.9, ease: "easeOut" }}
-            className="lg:text-right max-w-md lg:ml-auto"
-          >
-            <div className="hidden lg:block w-12 h-px bg-white/30 mb-4 ml-auto" />
-            <span className="font-serif italic text-white/75 text-xl sm:text-[22px] leading-[33px]">
-              {renderSubtitleWithAnimatedNumbers(subtitle, 1.2)}
-            </span>
-          </motion.div>
-        </div>
+        {/* CTA buttons */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.9, ease: "easeOut" }}
+          className="flex items-center gap-4"
+        >
+          <Button href={ctaUrl} variant="accent">
+            {ctaText}
+          </Button>
+          <Button href="/a-propos" variant="outline" showArrow={false}>
+            En savoir plus
+          </Button>
+        </motion.div>
       </motion.div>
     </div>
   );
