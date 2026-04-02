@@ -161,7 +161,7 @@ function TestimonialModal({
               strokeWidth={1.5}
             />
 
-            <p className="font-serif italic text-text-muted text-[17px] sm:text-[18px] leading-[28px] sm:leading-[30px] mb-6">
+            <p className="font-light text-text-muted text-[15px] sm:text-[16px] leading-[26px] sm:leading-[28px] tracking-wide mb-6">
               &ldquo;{testimonial.quote}&rdquo;
             </p>
 
@@ -208,7 +208,7 @@ function WrappedCard({
           strokeWidth={1.5}
         />
 
-        <p className="font-serif italic text-text-muted text-[15px] sm:text-[16px] leading-[24px] sm:leading-[26px] flex-1 mb-4 line-clamp-5">
+        <p className="font-light text-text-muted text-[14px] sm:text-[15px] leading-[24px] sm:leading-[26px] tracking-wide flex-1 mb-4 line-clamp-5">
           &ldquo;{t.quote}&rdquo;
         </p>
 
