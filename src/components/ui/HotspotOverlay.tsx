@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Card } from "@/components/ui/GlassCard";
@@ -18,37 +18,16 @@ type Equipment = {
 
 type HotspotOverlayProps = {
   equipment: Equipment[];
-  /** When defined, overrides hover/click — used for scroll-driven card tour */
-  forcedActiveId?: string | null;
-  /** Notifies parent of the resolved active ID (for mobile bottom card) */
-  onActiveChange?: (id: string | null) => void;
 };
 
-export function HotspotOverlay({
-  equipment,
-  forcedActiveId,
-  onActiveChange,
-}: HotspotOverlayProps) {
+export function HotspotOverlay({ equipment }: HotspotOverlayProps) {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
-
-  // Clear stale hover when scroll tour advances to the next card
-  useEffect(() => {
-    if (forcedActiveId !== undefined) setHoveredId(null);
-  }, [forcedActiveId]);
-
-  // Hover/click takes priority over scroll-driven forcedActiveId
-  const activeId = hoveredId ?? forcedActiveId ?? null;
-
-  // Only notify parent of hover/tap changes (not during scroll-driven tour)
-  useEffect(() => {
-    if (forcedActiveId === undefined) {
-      onActiveChange?.(activeId ?? null);
-    }
-  }, [activeId, forcedActiveId, onActiveChange]);
 
   return (
     <>
-      {equipment.map((item) => (
+      {equipment.map((item) => {
+        const isActive = hoveredId === item._id;
+        return (
         <div
           key={item._id}
           className="absolute"
@@ -62,7 +41,7 @@ export function HotspotOverlay({
         >
           <button
             onClick={() =>
-              setHoveredId(hoveredId === item._id ? null : item._id)
+              setHoveredId(isActive ? null : item._id)
             }
             className="relative w-11 h-11 flex items-center justify-center"
             aria-label={`Voir : ${item.name}`}
@@ -70,10 +49,10 @@ export function HotspotOverlay({
             <span
               className={cn(
                 "absolute w-3 h-3 rounded-full transition-colors duration-300",
-                activeId === item._id ? "bg-accent" : "bg-white/40"
+                isActive ? "bg-accent" : "bg-white/40"
               )}
             />
-            {activeId === item._id && (
+            {isActive && (
               <motion.span
                 animate={{ scale: [1, 2.2], opacity: [0.6, 0] }}
                 transition={{
@@ -86,9 +65,8 @@ export function HotspotOverlay({
             )}
           </button>
 
-          {/* Desktop: card positioned next to hotspot */}
           <AnimatePresence mode="wait">
-            {activeId === item._id && (
+            {isActive && (
               <motion.div
                 initial={{ opacity: 0, y: 16, scale: 0.9 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -99,7 +77,7 @@ export function HotspotOverlay({
                   stiffness: 200,
                   mass: 0.8,
                 }}
-                className="hidden sm:block absolute z-20 w-64"
+                className="absolute z-20 w-48 sm:w-64"
                 style={{
                   left: item.hotspotX > 60 ? "auto" : "100%",
                   right: item.hotspotX > 60 ? "100%" : "auto",
@@ -113,28 +91,28 @@ export function HotspotOverlay({
             )}
           </AnimatePresence>
         </div>
-      ))}
+        );
+      })}
     </>
   );
 }
 
-/** Shared card content used by both desktop hotspot and mobile bottom sheet */
-export function EquipmentCard({ item }: { item: Equipment }) {
+function EquipmentCard({ item }: { item: Equipment }) {
   return (
     <Card className="overflow-hidden">
+      {item.image && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={urlFor(item.image)
+            .width(320)
+            .quality(80)
+            .auto("format")
+            .url()}
+          alt={item.name}
+          className="w-full h-28 object-cover"
+        />
+      )}
       <div className="p-4">
-        {item.image && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={urlFor(item.image)
-              .width(320)
-              .quality(80)
-              .auto("format")
-              .url()}
-            alt={item.name}
-            className="w-full h-28 object-cover"
-          />
-        )}
         <h4 className="font-sans text-[14px] font-medium text-white mb-1">
           {item.name}
         </h4>

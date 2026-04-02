@@ -2,15 +2,13 @@
 
 import { useRef, useEffect, useState, useCallback } from "react";
 import { cn } from "@/lib/utils";
-import { HotspotOverlay, EquipmentCard } from "@/components/ui/HotspotOverlay";
-import { AnimatePresence, motion } from "framer-motion";
+import { HotspotOverlay } from "@/components/ui/HotspotOverlay";
 import type { SanityImageSource } from "@/sanity/image";
 
 const TOTAL_FRAMES = 169;
 const PHASE_1_COUNT = 15;
 const SCROLL_PER_FRAME = 10;
 const BATCH_SIZE = 5;
-const SCROLL_PER_CARD = 200;
 
 const TITLE_IN_START = 0.25;
 const TITLE_IN_END = 0.35;
@@ -63,7 +61,8 @@ function getTitleStyle(t: number): typeof _title {
       _title.opacity = 1 - remap(t, TITLE_OUT_START, TITLE_OUT_END);
     }
     const scaleT = remap(t, TITLE_IN_START, TITLE_OUT_END);
-    _title.scale = TITLE_SCALE_START + scaleT * (TITLE_SCALE_END - TITLE_SCALE_START);
+    _title.scale =
+      TITLE_SCALE_START + scaleT * (TITLE_SCALE_END - TITLE_SCALE_START);
   }
   return _title;
 }
@@ -74,34 +73,22 @@ export function VideoScrubber({ equipment }: VideoScrubberProps) {
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
   const titleRef = useRef<HTMLDivElement>(null);
   const interiorRef = useRef<HTMLDivElement>(null);
-  const equipmentRef = useRef(equipment);
-  equipmentRef.current = equipment;
-  const frames = useRef<(HTMLImageElement | null)[]>(Array(TOTAL_FRAMES).fill(null));
+  const frames = useRef<(HTMLImageElement | null)[]>(
+    Array(TOTAL_FRAMES).fill(null),
+  );
   const currentFrame = useRef(0);
   const raf = useRef(0);
   const scrollRaf = useRef(0);
   const hintDismissed = useRef(false);
   const hotspotsEnabled = useRef(false);
   const prevInteriorOpacity = useRef(0);
-  const prevCardIndex = useRef(-1);
 
   const [phase1Ready, setPhase1Ready] = useState(false);
   const [progress, setProgress] = useState(0);
   const [hintVisible, setHintVisible] = useState(true);
   const [showInterior, setShowInterior] = useState(false);
   const [interiorVisible, setInteriorVisible] = useState(false);
-  const [activeCardId, setActiveCardId] = useState<string | null | undefined>(undefined);
-  const [mobileActiveId, setMobileActiveId] = useState<string | null>(null);
-
   const videoDistance = TOTAL_FRAMES * SCROLL_PER_FRAME;
-  const cardDistance = (equipment.length + 1) * SCROLL_PER_CARD;
-  const totalDistance = videoDistance + cardDistance;
-
-  // During tour use activeCardId directly; after tour use hover/tap from callback
-  const mobileCardId = activeCardId !== undefined ? activeCardId : mobileActiveId;
-  const mobileCardItem = mobileCardId
-    ? equipment.find((e) => e._id === mobileCardId)
-    : null;
 
   const draw = useCallback((index: number) => {
     const canvas = canvasRef.current;
@@ -164,17 +151,20 @@ export function VideoScrubber({ equipment }: VideoScrubberProps) {
 
       if (titleRef.current) {
         const { opacity, scale } = getTitleStyle(videoT);
-        titleRef.current.style.opacity = opacity as unknown as string;
+        titleRef.current.style.opacity = String(opacity);
         titleRef.current.style.transform = `translate(-50%, -50%) scale(${scale})`;
       }
 
       const interiorOpacity =
-        videoT < INTERIOR_FADE_START ? 0 : remap(videoT, INTERIOR_FADE_START, 1);
+        videoT < INTERIOR_FADE_START
+          ? 0
+          : remap(videoT, INTERIOR_FADE_START, 1);
       if (interiorOpacity !== prevInteriorOpacity.current) {
         prevInteriorOpacity.current = interiorOpacity;
         if (interiorOpacity > 0 && !showInterior) setShowInterior(true);
         if (interiorRef.current) {
-          interiorRef.current.style.opacity = interiorOpacity as unknown as string;
+          interiorRef.current.style.opacity =
+            String(interiorOpacity);
         }
       }
 
@@ -185,7 +175,9 @@ export function VideoScrubber({ equipment }: VideoScrubberProps) {
       if (shouldEnable !== hotspotsEnabled.current) {
         hotspotsEnabled.current = shouldEnable;
         if (interiorRef.current) {
-          interiorRef.current.style.pointerEvents = shouldEnable ? "auto" : "none";
+          interiorRef.current.style.pointerEvents = shouldEnable
+            ? "auto"
+            : "none";
         }
       }
 
@@ -194,28 +186,8 @@ export function VideoScrubber({ equipment }: VideoScrubberProps) {
         cancelAnimationFrame(raf.current);
         raf.current = requestAnimationFrame(() => draw(idx));
       }
-
-      // ── Phase 2: Card tour (scroll-driven, one card at a time) ──
-      // Last slot (eq.length) is an empty slot so the final card exits before unpin
-      const eq = equipmentRef.current;
-      const cardEnd = videoDistance + cardDistance;
-      if (scrolled > videoDistance && scrolled <= cardEnd && cardDistance > 0) {
-        const cardScrolled = scrolled - videoDistance;
-        const slotIndex = Math.min(
-          eq.length,
-          Math.floor(cardScrolled / SCROLL_PER_CARD)
-        );
-        if (slotIndex !== prevCardIndex.current) {
-          prevCardIndex.current = slotIndex;
-          setActiveCardId(slotIndex < eq.length ? eq[slotIndex]._id : null);
-        }
-      } else if (prevCardIndex.current !== -1) {
-        // Past the tour or scrolled back into video — restore hover mode
-        prevCardIndex.current = -1;
-        setActiveCardId(undefined);
-      }
     });
-  }, [draw, showInterior, interiorVisible, videoDistance, cardDistance]);
+  }, [draw, showInterior, interiorVisible, videoDistance]);
 
   useEffect(() => {
     let cancelled = false;
@@ -233,7 +205,7 @@ export function VideoScrubber({ equipment }: VideoScrubberProps) {
             () => {
               if (!cancelled) frames.current[i] = img;
               resolve(true);
-            }
+            },
           );
         };
         img.onerror = () => resolve(false);
@@ -244,7 +216,7 @@ export function VideoScrubber({ equipment }: VideoScrubberProps) {
       load(i).then((ok) => {
         if (ok) loaded++;
         if (!cancelled) setProgress(loaded / PHASE_1_COUNT);
-      })
+      }),
     );
 
     Promise.all(phase1).then(() => {
@@ -254,7 +226,7 @@ export function VideoScrubber({ equipment }: VideoScrubberProps) {
 
       const remaining = Array.from(
         { length: TOTAL_FRAMES - PHASE_1_COUNT },
-        (_, i) => i + PHASE_1_COUNT
+        (_, i) => i + PHASE_1_COUNT,
       );
       let b = 0;
       (function nextBatch() {
@@ -294,7 +266,7 @@ export function VideoScrubber({ equipment }: VideoScrubberProps) {
       <div
         ref={wrapperRef}
         className="relative bg-background"
-        style={{ height: `calc(${totalDistance}px + 100vh)` }}
+        style={{ height: `calc(${videoDistance}px + 100vh)` }}
       >
         <div className="sticky top-0 left-0 w-full h-screen overflow-hidden">
           {!phase1Ready && (
@@ -345,7 +317,7 @@ export function VideoScrubber({ equipment }: VideoScrubberProps) {
                 <div className={coverFitClass}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    src="/Int%C3%A9rieur%20camion.webp"
+                    src="/arrière_camion.webp"
                     alt="Intérieur du studio mobile Studio Lumen"
                     className="w-full h-full object-contain sm:object-fill"
                   />
@@ -354,30 +326,10 @@ export function VideoScrubber({ equipment }: VideoScrubberProps) {
               </div>
               {/* Hotspot layer — same sizing so % positions align with the image */}
               <div className={coverFitClass}>
-                <HotspotOverlay
-                  equipment={equipment}
-                  forcedActiveId={activeCardId}
-                  onActiveChange={setMobileActiveId}
-                />
+                <HotspotOverlay equipment={equipment} />
               </div>
             </div>
           )}
-
-          {/* Mobile: bottom card overlay */}
-          <AnimatePresence>
-            {mobileCardItem && interiorVisible && (
-              <motion.div
-                key={mobileCardItem._id}
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 16 }}
-                transition={{ type: "spring", damping: 22, stiffness: 220, mass: 0.8 }}
-                className="sm:hidden absolute bottom-6 left-4 right-4 z-30"
-              >
-                <EquipmentCard item={mobileCardItem} />
-              </motion.div>
-            )}
-          </AnimatePresence>
 
           <div
             className={cn(
@@ -386,7 +338,7 @@ export function VideoScrubber({ equipment }: VideoScrubberProps) {
               "transition-opacity duration-700",
               hintVisible && phase1Ready
                 ? "opacity-100"
-                : "opacity-0 pointer-events-none"
+                : "opacity-0 pointer-events-none",
             )}
           >
             Scroll to explore ↓
