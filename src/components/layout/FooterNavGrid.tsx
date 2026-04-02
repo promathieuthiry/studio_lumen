@@ -41,10 +41,12 @@ export function FooterNavGrid({
   contactEmail,
   socialLinks,
   logoUrl,
+  tagline,
 }: {
   contactEmail?: string;
   socialLinks?: Array<{ platform: string; url: string }>;
   logoUrl?: string;
+  tagline?: string;
 }) {
   const reducedMotion = useReducedMotion();
 
@@ -80,10 +82,11 @@ export function FooterNavGrid({
               Studio Lumen
             </h3>
           )}
-          <p className="font-serif italic text-text-muted text-[18px] leading-[30px] max-w-[400px]">
-            Premier studio de production vidéo mobile en France. Contenu livré
-            en&nbsp;48h.
-          </p>
+          {tagline && (
+            <p className="font-light text-text-muted text-[15px] leading-[24px] tracking-wide max-w-[400px]">
+              {tagline}
+            </p>
+          )}
 
           {/* Contact + Social — inline row beneath tagline */}
           <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2">

@@ -291,6 +291,7 @@ export default async function HomePage() {
             ? urlFor(settings.logo).height(400).quality(100).auto("format").url()
             : undefined
         }
+        tagline={settings?.heroSubtitle}
       />
     </>
   );

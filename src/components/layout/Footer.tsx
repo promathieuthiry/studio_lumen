@@ -6,10 +6,12 @@ export function Footer({
   contactEmail,
   socialLinks,
   logoUrl,
+  tagline,
 }: {
   contactEmail?: string;
   socialLinks?: Array<{ platform: string; url: string }>;
   logoUrl?: string;
+  tagline?: string;
 }) {
   return (
     <footer className="relative z-10 bg-background overflow-hidden border-t border-border-warm">
@@ -18,6 +20,7 @@ export function Footer({
         contactEmail={contactEmail}
         socialLinks={socialLinks}
         logoUrl={logoUrl}
+        tagline={tagline}
       />
 
       {/* ─── Divider ─── */}
