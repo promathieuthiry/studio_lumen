@@ -19,10 +19,11 @@ type HotspotOverlayProps = {
 
 export function HotspotOverlay({ equipment }: HotspotOverlayProps) {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const activeItem = hoveredId ? equipment.find((e) => e._id === hoveredId) ?? null : null;
 
   return (
     <>
-      {equipment.map((item) => {
+      {equipment.map((item, index) => {
         const isActive = hoveredId === item._id;
         return (
         <div
@@ -43,25 +44,35 @@ export function HotspotOverlay({ equipment }: HotspotOverlayProps) {
             className="relative w-11 h-11 flex items-center justify-center"
             aria-label={`Voir : ${item.name}`}
           >
-            <span
+            {/* Sonar ping — staggered per dot */}
+            <motion.span
+              animate={{
+                scale: isActive ? [1, 2.5] : [1, 2.2],
+                opacity: isActive ? [0.7, 0] : [0.35, 0],
+              }}
+              transition={{
+                duration: isActive ? 1.2 : 2,
+                repeat: Infinity,
+                ease: "easeOut",
+                delay: isActive ? 0 : index * 0.4,
+              }}
               className={cn(
-                "absolute w-3 h-3 rounded-full transition-colors duration-300",
-                isActive ? "bg-accent" : "bg-white/40"
+                "absolute w-3.5 h-3.5 rounded-full",
+                isActive ? "bg-accent" : "bg-white"
               )}
             />
-            {isActive && (
-              <motion.span
-                animate={{ scale: [1, 2.2], opacity: [0.6, 0] }}
-                transition={{
-                  duration: 1.5,
-                  repeat: Infinity,
-                  ease: "easeOut",
-                }}
-                className="absolute w-3 h-3 rounded-full bg-accent"
-              />
-            )}
+            {/* Core dot */}
+            <span
+              className={cn(
+                "absolute w-2.5 h-2.5 rounded-full transition-all duration-300",
+                isActive
+                  ? "bg-accent shadow-[0_0_10px_rgba(97,206,112,0.6)]"
+                  : "bg-white/80 shadow-[0_0_8px_rgba(255,255,255,0.3)]"
+              )}
+            />
           </button>
 
+          {/* Desktop: card next to hotspot */}
           <AnimatePresence mode="wait">
             {isActive && (
               <motion.div
@@ -74,7 +85,7 @@ export function HotspotOverlay({ equipment }: HotspotOverlayProps) {
                   stiffness: 200,
                   mass: 0.8,
                 }}
-                className="absolute z-20 w-48 sm:w-64"
+                className="hidden sm:block absolute z-20 w-64"
                 style={{
                   left: item.hotspotX > 60 ? "auto" : "100%",
                   right: item.hotspotX > 60 ? "100%" : "auto",
@@ -90,6 +101,22 @@ export function HotspotOverlay({ equipment }: HotspotOverlayProps) {
         </div>
         );
       })}
+
+      {/* Mobile: fixed bottom card */}
+      <AnimatePresence>
+        {activeItem && (
+          <motion.div
+            key={activeItem._id}
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 16 }}
+            transition={{ type: "spring", damping: 22, stiffness: 220, mass: 0.8 }}
+            className="sm:hidden fixed bottom-6 left-4 right-4 z-40"
+          >
+            <EquipmentCard item={activeItem} />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }

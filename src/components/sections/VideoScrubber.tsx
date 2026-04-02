@@ -237,15 +237,22 @@ export function VideoScrubber({ equipment }: VideoScrubberProps) {
     };
   }, [draw]);
 
-  // Size the interior image wrapper synchronously when it mounts (avoids flash)
+  // Size the interior wrapper and apply visibility when it mounts
   useLayoutEffect(() => {
     const el = interiorImgRef.current;
-    if (!el) return;
-    const r = coverRect(window.innerWidth, window.innerHeight, INTERIOR_W, INTERIOR_H);
-    el.style.left = `${r.x}px`;
-    el.style.top = `${r.y}px`;
-    el.style.width = `${r.w}px`;
-    el.style.height = `${r.h}px`;
+    if (el) {
+      const r = coverRect(window.innerWidth, window.innerHeight, INTERIOR_W, INTERIOR_H);
+      el.style.left = `${r.x}px`;
+      el.style.top = `${r.y}px`;
+      el.style.width = `${r.w}px`;
+      el.style.height = `${r.h}px`;
+    }
+    // The scroll handler may have set opacity before the DOM existed —
+    // re-apply visibility now that the interior has mounted
+    if (showInterior && interiorRef.current && hotspotsEnabled.current) {
+      interiorRef.current.style.opacity = "1";
+      interiorRef.current.style.pointerEvents = "auto";
+    }
   }, [showInterior]);
 
   useEffect(() => {
