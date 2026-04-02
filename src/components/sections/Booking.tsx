@@ -12,8 +12,7 @@ import { useEffect, useRef } from "react";
 const CALENDLY_URL =
   process.env.NEXT_PUBLIC_CALENDLY_URL || "https://calendly.com/studiolumen";
 
-const CALENDLY_PARAMS =
-  "hide_gdpr_banner=1&hide_event_type_details=1&background_color=0a0a0a&text_color=ffffff&primary_color=61CE70";
+const CALENDLY_PARAMS = "hide_gdpr_banner=1&hide_event_type_details=1";
 const CALENDLY_THEMED = `${CALENDLY_URL}${CALENDLY_URL.includes("?") ? "&" : "?"}${CALENDLY_PARAMS}`;
 
 const WIDGET_JS = "https://assets.calendly.com/assets/external/widget.js";
@@ -88,6 +87,7 @@ function CalendlyEmbed() {
     <div
       ref={containerRef}
       className="w-full h-[580px] lg:h-[740px] overflow-hidden lg:rounded-r-[25px]"
+      style={{ filter: "invert(1) hue-rotate(80deg)" }}
     />
   );
 }
