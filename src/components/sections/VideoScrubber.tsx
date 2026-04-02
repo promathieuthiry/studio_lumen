@@ -10,12 +10,11 @@ const PHASE_1_COUNT = 15;
 const SCROLL_PER_FRAME = 10;
 const BATCH_SIZE = 5;
 
-const TITLE_IN_START = 0.25;
-const TITLE_IN_END = 0.35;
-const TITLE_OUT_START = 0.75;
-const TITLE_OUT_END = 0.9;
-const TITLE_SCALE_START = 0.7;
-const TITLE_SCALE_END = 1.6;
+const TITLE_IN_START = 0.45;
+const TITLE_IN_END = 0.65;
+const TITLE_Y_START = 30; // px — slides up into position
+const TITLE_VIGNETTE =
+  "linear-gradient(to bottom, hsl(0 0% 1% / 0.85) 0%, hsl(0 0% 1% / 0.5) 50%, transparent 100%)";
 
 // Interior image matches the last visible video frame (1920x1080)
 const INTERIOR_W = 1920;
@@ -51,26 +50,20 @@ function remap(t: number, inStart: number, inEnd: number): number {
 }
 
 // Reusable object to avoid per-frame GC pressure
-const _title = { opacity: 0, scale: TITLE_SCALE_START };
+const _title = { opacity: 0, y: TITLE_Y_START };
 
 function getTitleStyle(t: number): typeof _title {
   if (t < TITLE_IN_START) {
     _title.opacity = 0;
-    _title.scale = TITLE_SCALE_START;
-  } else if (t > TITLE_OUT_END) {
-    _title.opacity = 0;
-    _title.scale = TITLE_SCALE_END;
+    _title.y = TITLE_Y_START;
+  } else if (t < TITLE_IN_END) {
+    const p = remap(t, TITLE_IN_START, TITLE_IN_END);
+    const eased = 1 - Math.pow(1 - p, 3); // ease-out cubic
+    _title.opacity = eased;
+    _title.y = TITLE_Y_START * (1 - eased);
   } else {
-    if (t < TITLE_IN_END) {
-      _title.opacity = remap(t, TITLE_IN_START, TITLE_IN_END);
-    } else if (t < TITLE_OUT_START) {
-      _title.opacity = 1;
-    } else {
-      _title.opacity = 1 - remap(t, TITLE_OUT_START, TITLE_OUT_END);
-    }
-    const scaleT = remap(t, TITLE_IN_START, TITLE_OUT_END);
-    _title.scale =
-      TITLE_SCALE_START + scaleT * (TITLE_SCALE_END - TITLE_SCALE_START);
+    _title.opacity = 1;
+    _title.y = 0;
   }
   return _title;
 }
@@ -164,9 +157,9 @@ export function VideoScrubber({ equipment }: VideoScrubberProps) {
       const idx = Math.round(videoT * (TOTAL_FRAMES - 1));
 
       if (titleRef.current) {
-        const { opacity, scale } = getTitleStyle(videoT);
+        const { opacity, y } = getTitleStyle(videoT);
         titleRef.current.style.opacity = String(opacity);
-        titleRef.current.style.transform = `translate(-50%, -50%) scale(${scale})`;
+        titleRef.current.style.transform = `translateY(${y}px)`;
       }
 
       // ── Interior reveal: snap overlay when scrub reaches end ──
@@ -296,23 +289,25 @@ export function VideoScrubber({ equipment }: VideoScrubberProps) {
             className="block w-full h-full"
           />
 
+          {/* Gradient vignette ensures title readability on bright video frames */}
           <div
             ref={titleRef}
-            className="absolute top-1/2 left-1/2 z-10 flex flex-col items-center justify-center pointer-events-none will-change-transform"
+            className="absolute inset-x-0 top-0 z-30 flex flex-col items-center pt-[10vh] sm:pt-[12vh] pb-[14vh] pointer-events-none will-change-transform"
             style={{
               opacity: 0,
-              transform: `translate(-50%, -50%) scale(${TITLE_SCALE_START})`,
+              transform: `translateY(${TITLE_Y_START}px)`,
+              background: TITLE_VIGNETTE,
             }}
           >
-            <span className="label-caps text-text-muted block mb-4">
+            <span className="label-caps text-text-muted block mb-3">
               Technologie
             </span>
-            <h2 className="font-sans text-[30px] sm:text-[35px] font-semibold text-white leading-[1.18] text-center whitespace-nowrap">
+            <h2
+              className="font-sans text-[28px] sm:text-[35px] font-semibold text-white leading-[1.18] text-center"
+              style={{ textShadow: "0 2px 20px rgba(0,0,0,0.6)" }}
+            >
               Notre studio mobile
             </h2>
-            <p className="text-text-body text-[16px] leading-[26px] text-center max-w-2xl mx-auto mt-4 px-4 whitespace-nowrap">
-              Explorez la technologie embarquée dans notre véhicule.
-            </p>
           </div>
 
           {showInterior && (
