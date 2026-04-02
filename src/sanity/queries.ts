@@ -94,7 +94,6 @@ export const EQUIPMENT_QUERY = defineQuery(`
     _id,
     name,
     description,
-    image,
     specs,
     hotspotX,
     hotspotY,

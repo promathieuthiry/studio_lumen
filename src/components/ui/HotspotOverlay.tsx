@@ -4,13 +4,10 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Card } from "@/components/ui/GlassCard";
-import { urlFor, type SanityImageSource } from "@/sanity/image";
-
 type Equipment = {
   _id: string;
   name: string;
   description: string;
-  image?: SanityImageSource | null;
   specs?: string;
   hotspotX: number;
   hotspotY: number;
@@ -100,18 +97,6 @@ export function HotspotOverlay({ equipment }: HotspotOverlayProps) {
 function EquipmentCard({ item }: { item: Equipment }) {
   return (
     <Card className="overflow-hidden">
-      {item.image && (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={urlFor(item.image)
-            .width(320)
-            .quality(80)
-            .auto("format")
-            .url()}
-          alt={item.name}
-          className="w-full h-28 object-cover"
-        />
-      )}
       <div className="p-4">
         <h4 className="font-sans text-[14px] font-medium text-white mb-1">
           {item.name}

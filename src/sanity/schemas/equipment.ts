@@ -18,12 +18,6 @@ export const equipment = defineType({
       validation: (r) => r.required(),
     }),
     defineField({
-      name: "image",
-      title: "Image",
-      type: "image",
-      options: { hotspot: true },
-    }),
-    defineField({
       name: "specs",
       title: "Specifications",
       type: "string",
