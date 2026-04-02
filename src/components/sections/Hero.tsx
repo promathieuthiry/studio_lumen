@@ -70,10 +70,10 @@ export function Hero({ headline, subtitle, ctaText, ctaUrl }: HeroProps) {
       : headline.split(" ");
 
   return (
-    <div ref={ref} className="min-h-dvh">
+    <div ref={ref} className="min-h-svh">
       <motion.div
         style={{ opacity }}
-        className="flex flex-col justify-end min-h-dvh px-[4vw] lg:px-[3.906vw] pb-[5vw]"
+        className="flex flex-col justify-end min-h-svh px-[4vw] lg:px-[3.906vw] pb-[5vw]"
       >
         {/* Headline — "Studio Lumen" always on line 2 */}
         <h1 className="font-poppins font-bold text-white leading-[0.95]">
