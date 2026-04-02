@@ -28,7 +28,7 @@ export function HeroBackground({
   return (
     <div ref={ref} className="relative">
       {hasLightingEffect && (
-        <div className="fixed inset-0 z-0">
+        <div className="fixed inset-x-0 top-0 z-0 h-[100lvh]">
           {/* Dark (lights off) — always visible base */}
           <img
             src={backgroundDarkUrl}
