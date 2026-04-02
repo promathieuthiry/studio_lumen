@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect, useState, useCallback } from "react";
+import { useRef, useEffect, useLayoutEffect, useState, useCallback } from "react";
 import { cn } from "@/lib/utils";
 import { HotspotOverlay } from "@/components/ui/HotspotOverlay";
 import type { SanityImageSource } from "@/sanity/image";
@@ -17,7 +17,15 @@ const TITLE_OUT_END = 0.9;
 const TITLE_SCALE_START = 0.7;
 const TITLE_SCALE_END = 1.6;
 
-const INTERIOR_FADE_START = 0.8;
+// Interior image matches the last visible video frame (1920x1080)
+const INTERIOR_W = 1920;
+const INTERIOR_H = 1080;
+function coverRect(cw: number, ch: number, iw: number, ih: number) {
+  const scale = Math.max(cw / iw, ch / ih);
+  const w = iw * scale;
+  const h = ih * scale;
+  return { x: (cw - w) / 2, y: (ch - h) / 2, w, h };
+}
 
 type Equipment = {
   _id: string;
@@ -73,6 +81,7 @@ export function VideoScrubber({ equipment }: VideoScrubberProps) {
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
   const titleRef = useRef<HTMLDivElement>(null);
   const interiorRef = useRef<HTMLDivElement>(null);
+  const interiorImgRef = useRef<HTMLDivElement>(null);
   const frames = useRef<(HTMLImageElement | null)[]>(
     Array(TOTAL_FRAMES).fill(null),
   );
@@ -81,13 +90,11 @@ export function VideoScrubber({ equipment }: VideoScrubberProps) {
   const scrollRaf = useRef(0);
   const hintDismissed = useRef(false);
   const hotspotsEnabled = useRef(false);
-  const prevInteriorOpacity = useRef(0);
 
   const [phase1Ready, setPhase1Ready] = useState(false);
   const [progress, setProgress] = useState(0);
   const [hintVisible, setHintVisible] = useState(true);
   const [showInterior, setShowInterior] = useState(false);
-  const [interiorVisible, setInteriorVisible] = useState(false);
   const videoDistance = TOTAL_FRAMES * SCROLL_PER_FRAME;
 
   const draw = useCallback((index: number) => {
@@ -113,12 +120,10 @@ export function VideoScrubber({ equipment }: VideoScrubberProps) {
 
     const cw = canvas.width;
     const ch = canvas.height;
-    const scale = Math.max(cw / img.naturalWidth, ch / img.naturalHeight);
-    const dw = img.naturalWidth * scale;
-    const dh = img.naturalHeight * scale;
+    const { x, y, w, h } = coverRect(cw, ch, img.naturalWidth, img.naturalHeight);
 
     ctx.clearRect(0, 0, cw, ch);
-    ctx.drawImage(img, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
+    ctx.drawImage(img, x, y, w, h);
   }, []);
 
   const resize = useCallback(() => {
@@ -129,6 +134,15 @@ export function VideoScrubber({ equipment }: VideoScrubberProps) {
     canvas.height = window.innerHeight * dpr;
     if (!ctxRef.current) ctxRef.current = canvas.getContext("2d");
     draw(currentFrame.current);
+
+    const el = interiorImgRef.current;
+    if (el) {
+      const r = coverRect(window.innerWidth, window.innerHeight, INTERIOR_W, INTERIOR_H);
+      el.style.left = `${r.x}px`;
+      el.style.top = `${r.y}px`;
+      el.style.width = `${r.w}px`;
+      el.style.height = `${r.h}px`;
+    }
   }, [draw]);
 
   const onScroll = useCallback(() => {
@@ -155,27 +169,14 @@ export function VideoScrubber({ equipment }: VideoScrubberProps) {
         titleRef.current.style.transform = `translate(-50%, -50%) scale(${scale})`;
       }
 
-      const interiorOpacity =
-        videoT < INTERIOR_FADE_START
-          ? 0
-          : remap(videoT, INTERIOR_FADE_START, 1);
-      if (interiorOpacity !== prevInteriorOpacity.current) {
-        prevInteriorOpacity.current = interiorOpacity;
-        if (interiorOpacity > 0 && !showInterior) setShowInterior(true);
+      // ── Interior reveal: snap overlay when scrub reaches end ──
+      const shouldShow = videoT >= 0.95;
+      if (shouldShow !== hotspotsEnabled.current) {
+        hotspotsEnabled.current = shouldShow;
+        if (!showInterior && shouldShow) setShowInterior(true);
         if (interiorRef.current) {
-          interiorRef.current.style.opacity =
-            String(interiorOpacity);
-        }
-      }
-
-      const isVisible = videoT >= 0.95;
-      if (isVisible !== interiorVisible) setInteriorVisible(isVisible);
-
-      const shouldEnable = isVisible;
-      if (shouldEnable !== hotspotsEnabled.current) {
-        hotspotsEnabled.current = shouldEnable;
-        if (interiorRef.current) {
-          interiorRef.current.style.pointerEvents = shouldEnable
+          interiorRef.current.style.opacity = shouldShow ? "1" : "0";
+          interiorRef.current.style.pointerEvents = shouldShow
             ? "auto"
             : "none";
         }
@@ -187,7 +188,7 @@ export function VideoScrubber({ equipment }: VideoScrubberProps) {
         raf.current = requestAnimationFrame(() => draw(idx));
       }
     });
-  }, [draw, showInterior, interiorVisible, videoDistance]);
+  }, [draw, showInterior, videoDistance]);
 
   useEffect(() => {
     let cancelled = false;
@@ -243,6 +244,17 @@ export function VideoScrubber({ equipment }: VideoScrubberProps) {
     };
   }, [draw]);
 
+  // Size the interior image wrapper synchronously when it mounts (avoids flash)
+  useLayoutEffect(() => {
+    const el = interiorImgRef.current;
+    if (!el) return;
+    const r = coverRect(window.innerWidth, window.innerHeight, INTERIOR_W, INTERIOR_H);
+    el.style.left = `${r.x}px`;
+    el.style.top = `${r.y}px`;
+    el.style.width = `${r.w}px`;
+    el.style.height = `${r.h}px`;
+  }, [showInterior]);
+
   useEffect(() => {
     if (!phase1Ready) return;
     resize();
@@ -257,9 +269,6 @@ export function VideoScrubber({ equipment }: VideoScrubberProps) {
       cancelAnimationFrame(scrollRaf.current);
     };
   }, [phase1Ready, onScroll, resize]);
-
-  const coverFitClass =
-    "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-screen h-screen sm:w-[max(100vw,100vh)] sm:h-[max(100vw,100vh)]";
 
   return (
     <section id="technologie">
@@ -309,23 +318,20 @@ export function VideoScrubber({ equipment }: VideoScrubberProps) {
           {showInterior && (
             <div
               ref={interiorRef}
-              className="absolute inset-0 z-20 will-change-[opacity]"
+              className="absolute inset-0 z-20 overflow-hidden"
               style={{ opacity: 0, pointerEvents: "none" }}
             >
-              {/* Image layer — mobile: contain-fit (full width), desktop: cover-fit */}
-              <div className="absolute inset-0 overflow-hidden">
-                <div className={coverFitClass}>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src="/arrière_camion.webp"
-                    alt="Intérieur du studio mobile Studio Lumen"
-                    className="w-full h-full object-contain sm:object-fill"
-                  />
-                  <div className="absolute inset-0 bg-overlay" />
-                </div>
-              </div>
-              {/* Hotspot layer — same sizing so % positions align with the image */}
-              <div className={coverFitClass}>
+              <div
+                ref={interiorImgRef}
+                className="absolute"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/canvas_video_scrubbing/frame_0160.jpg"
+                  alt="Arrière du studio mobile Studio Lumen"
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-overlay" />
                 <HotspotOverlay equipment={equipment} />
               </div>
             </div>
