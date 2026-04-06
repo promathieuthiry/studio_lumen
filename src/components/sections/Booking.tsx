@@ -48,6 +48,8 @@ function CalendlyEmbed() {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const el = containerRef.current;
+
     if (!document.querySelector(`link[href="${WIDGET_CSS}"]`)) {
       const link = document.createElement("link");
       link.rel = "stylesheet";
@@ -56,7 +58,7 @@ function CalendlyEmbed() {
     }
 
     if (window.Calendly) {
-      if (containerRef.current) initWidget(containerRef.current);
+      if (el) initWidget(el);
       return;
     }
 
@@ -64,22 +66,26 @@ function CalendlyEmbed() {
     const existing = document.querySelector(`script[src="${WIDGET_JS}"]`);
 
     if (existing) {
-      existing.addEventListener("load", () => {
-        if (!cancelled && containerRef.current) initWidget(containerRef.current);
-      }, { once: true });
+      existing.addEventListener(
+        "load",
+        () => {
+          if (!cancelled && el) initWidget(el);
+        },
+        { once: true },
+      );
     } else {
       const script = document.createElement("script");
       script.src = WIDGET_JS;
       script.async = true;
       script.onload = () => {
-        if (!cancelled && containerRef.current) initWidget(containerRef.current);
+        if (!cancelled && el) initWidget(el);
       };
       document.body.appendChild(script);
     }
 
     return () => {
       cancelled = true;
-      if (containerRef.current) containerRef.current.innerHTML = "";
+      if (el) el.innerHTML = "";
     };
   }, []);
 
@@ -146,7 +152,7 @@ export function Booking() {
                   ))}
                 </div>
 
-                <p className="hidden lg:block font-serif italic text-text-body/60 text-[15px] leading-[24px] mt-auto pt-8 border-t border-border-lighter">
+                <p className="hidden lg:block font-light text-text-muted text-[15px] leading-[24px] tracking-wide mt-auto pt-8 border-t border-border-lighter">
                   &ldquo;Chaque projet commence par une conversation.&rdquo;
                 </p>
               </div>

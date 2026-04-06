@@ -70,6 +70,17 @@ export type Slug = {
   source?: string;
 };
 
+export type Faq = {
+  _id: string;
+  _type: "faq";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  question: string;
+  answer: string;
+  order?: number;
+};
+
 export type ClientLogo = {
   _id: string;
   _type: "clientLogo";
@@ -112,13 +123,6 @@ export type Equipment = {
   _rev: string;
   name: string;
   description: string;
-  image?: {
-    asset?: SanityImageAssetReference;
-    media?: unknown;
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    _type: "image";
-  };
   specs?: string;
   hotspotX: number;
   hotspotY: number;
@@ -298,6 +302,15 @@ export type SiteSettings = {
   };
   founderBio?: string;
   contactEmail?: string;
+  contactPhone?: string;
+  address?: {
+    street?: string;
+    postalCode?: string;
+    city?: string;
+  };
+  openingHours?: string;
+  priceRange?: string;
+  areaServed?: Array<string>;
   seo?: Seo;
 };
 
@@ -403,6 +416,7 @@ export type AllSanitySchemaTypes =
   | Seo
   | Page
   | Slug
+  | Faq
   | ClientLogo
   | SanityImageCrop
   | SanityImageHotspot
@@ -423,7 +437,7 @@ export type AllSanitySchemaTypes =
 
 // Source: src/sanity/queries.ts
 // Variable: SITE_SETTINGS_QUERY
-// Query: *[_type == "siteSettings"][0]{    logo,    heroBackgroundDark,    heroBackgroundLit,    heroHeadline,    heroSubtitle,    valuePropositions[]{      title,      description,      icon,      statValue,      statSuffix    },    socialLinks[]{      platform,      url    },    ctaText,    ctaUrl,    founderPhoto,    founderBio,    contactEmail,    seo{      metaTitle,      metaDescription,      ogImage    }  }
+// Query: *[_type == "siteSettings"][0]{    logo,    heroBackgroundDark,    heroBackgroundLit,    heroHeadline,    heroSubtitle,    valuePropositions[]{      title,      description,      icon,      statValue,      statSuffix    },    socialLinks[]{      platform,      url    },    ctaText,    ctaUrl,    founderPhoto,    founderBio,    contactEmail,    contactPhone,    address{      street,      postalCode,      city    },    openingHours,    priceRange,    areaServed,    seo{      metaTitle,      metaDescription,      ogImage    }  }
 export type SITE_SETTINGS_QUERY_RESULT = {
   logo: {
     asset?: SanityImageAssetReference;
@@ -470,6 +484,15 @@ export type SITE_SETTINGS_QUERY_RESULT = {
   } | null;
   founderBio: string | null;
   contactEmail: string | null;
+  contactPhone: string | null;
+  address: {
+    street: string | null;
+    postalCode: string | null;
+    city: string | null;
+  } | null;
+  openingHours: string | null;
+  priceRange: string | null;
+  areaServed: Array<string> | null;
   seo: {
     metaTitle: string | null;
     metaDescription: string | null;
@@ -562,18 +585,11 @@ export type CLIENT_LOGOS_QUERY_RESULT = Array<{
 
 // Source: src/sanity/queries.ts
 // Variable: EQUIPMENT_QUERY
-// Query: *[_type == "equipment"] | order(order asc){    _id,    name,    description,    image,    specs,    hotspotX,    hotspotY,    order  }
+// Query: *[_type == "equipment"] | order(order asc){    _id,    name,    description,    specs,    hotspotX,    hotspotY,    order  }
 export type EQUIPMENT_QUERY_RESULT = Array<{
   _id: string;
   name: string;
   description: string;
-  image: {
-    asset?: SanityImageAssetReference;
-    media?: unknown;
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    _type: "image";
-  } | null;
   specs: string | null;
   hotspotX: number;
   hotspotY: number;
@@ -674,6 +690,16 @@ export type PAGE_BY_SLUG_QUERY_RESULT = {
 } | null;
 
 // Source: src/sanity/queries.ts
+// Variable: FAQ_QUERY
+// Query: *[_type == "faq"] | order(order asc){    _id,    question,    answer,    order  }
+export type FAQ_QUERY_RESULT = Array<{
+  _id: string;
+  question: string;
+  answer: string;
+  order: number | null;
+}>;
+
+// Source: src/sanity/queries.ts
 // Variable: SITE_LOGO_QUERY
 // Query: *[_type == "siteSettings"][0]{ logo }
 export type SITE_LOGO_QUERY_RESULT = {
@@ -690,14 +716,15 @@ export type SITE_LOGO_QUERY_RESULT = {
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
-    '\n  *[_type == "siteSettings"][0]{\n    logo,\n    heroBackgroundDark,\n    heroBackgroundLit,\n    heroHeadline,\n    heroSubtitle,\n    valuePropositions[]{\n      title,\n      description,\n      icon,\n      statValue,\n      statSuffix\n    },\n    socialLinks[]{\n      platform,\n      url\n    },\n    ctaText,\n    ctaUrl,\n    founderPhoto,\n    founderBio,\n    contactEmail,\n    seo{\n      metaTitle,\n      metaDescription,\n      ogImage\n    }\n  }\n': SITE_SETTINGS_QUERY_RESULT;
+    '\n  *[_type == "siteSettings"][0]{\n    logo,\n    heroBackgroundDark,\n    heroBackgroundLit,\n    heroHeadline,\n    heroSubtitle,\n    valuePropositions[]{\n      title,\n      description,\n      icon,\n      statValue,\n      statSuffix\n    },\n    socialLinks[]{\n      platform,\n      url\n    },\n    ctaText,\n    ctaUrl,\n    founderPhoto,\n    founderBio,\n    contactEmail,\n    contactPhone,\n    address{\n      street,\n      postalCode,\n      city\n    },\n    openingHours,\n    priceRange,\n    areaServed,\n    seo{\n      metaTitle,\n      metaDescription,\n      ogImage\n    }\n  }\n': SITE_SETTINGS_QUERY_RESULT;
     '\n  *[_type == "service"] | order(order asc){\n    _id,\n    title,\n    description,\n    icon,\n    deliverables,\n    turnaround,\n    order\n  }\n': SERVICES_QUERY_RESULT;
     '\n  *[_type == "project"] | order(order asc){\n    _id,\n    title,\n    slug,\n    category,\n    description,\n    youtubeVideoId,\n    thumbnail,\n    featured,\n    order\n  }\n': PROJECTS_QUERY_RESULT;
     '\n  *[_type == "testimonial"] | order(order asc){\n    _id,\n    clientName,\n    company,\n    role,\n    quote,\n    avatar,\n    featured,\n    order\n  }\n': TESTIMONIALS_QUERY_RESULT;
     '\n  *[_type == "clientLogo"] | order(order asc){\n    _id,\n    name,\n    logo,\n    url,\n    order\n  }\n': CLIENT_LOGOS_QUERY_RESULT;
-    '\n  *[_type == "equipment"] | order(order asc){\n    _id,\n    name,\n    description,\n    image,\n    specs,\n    hotspotX,\n    hotspotY,\n    order\n  }\n': EQUIPMENT_QUERY_RESULT;
+    '\n  *[_type == "equipment"] | order(order asc){\n    _id,\n    name,\n    description,\n    specs,\n    hotspotX,\n    hotspotY,\n    order\n  }\n': EQUIPMENT_QUERY_RESULT;
     '\n  *[_type == "founderProfile"][0]{\n    fullName,\n    title,\n    bio,\n    photo,\n    journey[]{\n      year,\n      title,\n      description\n    },\n    vision,\n    motivations,\n    skills,\n    socialLinks[]{\n      platform,\n      url\n    },\n    seo{\n      metaTitle,\n      metaDescription,\n      ogImage\n    }\n  }\n': FOUNDER_PROFILE_QUERY_RESULT;
     '\n  *[_type == "page" && slug.current == $slug][0]{\n    title,\n    slug,\n    body,\n    seo{\n      metaTitle,\n      metaDescription,\n      ogImage\n    }\n  }\n': PAGE_BY_SLUG_QUERY_RESULT;
+    '\n  *[_type == "faq"] | order(order asc){\n    _id,\n    question,\n    answer,\n    order\n  }\n': FAQ_QUERY_RESULT;
     '\n  *[_type == "siteSettings"][0]{ logo }\n': SITE_LOGO_QUERY_RESULT;
   }
 }

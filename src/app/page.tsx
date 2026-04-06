@@ -6,6 +6,7 @@ import {
   TESTIMONIALS_QUERY,
   EQUIPMENT_QUERY,
   CLIENT_LOGOS_QUERY,
+  FAQ_QUERY,
 } from "@/sanity/queries";
 import { urlFor, type SanityImageSource } from "@/sanity/image";
 import { buildOgImageUrl } from "@/lib/seo";
@@ -21,6 +22,7 @@ import { Booking } from "@/components/sections/Booking";
 import { Portfolio } from "@/components/sections/Portfolio";
 import { VideoScrubber } from "@/components/sections/VideoScrubber";
 import { ClientLogos } from "@/components/sections/ClientLogos";
+import { Faq } from "@/components/sections/Faq";
 
 type SiteSettingsData = {
   logo?: SanityImageSource | null;
@@ -92,9 +94,15 @@ type ClientLogoData = {
   url?: string;
 };
 
+type FaqData = {
+  _id: string;
+  question: string;
+  answer: string;
+};
+
 async function fetchHomepageData() {
   try {
-    const [settingsRes, servicesRes, projectsRes, testimonialsRes, equipmentRes, clientLogosRes] =
+    const [settingsRes, servicesRes, projectsRes, testimonialsRes, equipmentRes, clientLogosRes, faqRes] =
       await Promise.all([
         sanityFetch({ query: SITE_SETTINGS_QUERY }),
         sanityFetch({ query: SERVICES_QUERY }),
@@ -102,6 +110,7 @@ async function fetchHomepageData() {
         sanityFetch({ query: TESTIMONIALS_QUERY }),
         sanityFetch({ query: EQUIPMENT_QUERY }),
         sanityFetch({ query: CLIENT_LOGOS_QUERY }),
+        sanityFetch({ query: FAQ_QUERY }),
       ]);
     return {
       settings: settingsRes.data as SiteSettingsData,
@@ -110,6 +119,7 @@ async function fetchHomepageData() {
       testimonials: (testimonialsRes.data || []) as TestimonialData[],
       equipment: (equipmentRes.data || []) as EquipmentData[],
       clientLogos: (clientLogosRes.data || []) as ClientLogoData[],
+      faqs: (faqRes.data || []) as FaqData[],
     };
   } catch {
     return {
@@ -119,6 +129,7 @@ async function fetchHomepageData() {
       testimonials: [] as TestimonialData[],
       equipment: [] as EquipmentData[],
       clientLogos: [] as ClientLogoData[],
+      faqs: [] as FaqData[],
     };
   }
 }
@@ -188,6 +199,21 @@ function getLocalBusinessJsonLd(settings: SiteSettingsData, services: ServiceDat
   return jsonLd;
 }
 
+function getFaqJsonLd(faqs: FaqData[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: faq.answer,
+      },
+    })),
+  };
+}
+
 function getVideoObjectsJsonLd(projects: ProjectData[]) {
   return projects.map((project) => ({
     "@context": "https://schema.org",
@@ -201,11 +227,12 @@ function getVideoObjectsJsonLd(projects: ProjectData[]) {
 }
 
 export default async function HomePage() {
-  const { settings, services, projects, testimonials, equipment, clientLogos } =
+  const { settings, services, projects, testimonials, equipment, clientLogos, faqs } =
     await fetchHomepageData();
 
   const jsonLd = getLocalBusinessJsonLd(settings, services);
   const videoJsonLd = getVideoObjectsJsonLd(projects);
+  const faqJsonLd = faqs.length > 0 ? getFaqJsonLd(faqs) : null;
 
   return (
     <>
@@ -213,6 +240,12 @@ export default async function HomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      {faqJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+      )}
       {videoJsonLd.map((video, i) => (
         <script
           key={i}
@@ -281,6 +314,8 @@ export default async function HomePage() {
           </div>
 
           <Booking />
+
+          <Faq faqs={faqs} />
         </div>
       </main>
       <Footer

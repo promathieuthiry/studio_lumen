@@ -5,6 +5,7 @@ import { testimonial } from "./testimonial";
 import { service } from "./service";
 import { equipment } from "./equipment";
 import { clientLogo } from "./clientLogo";
+import { faq } from "./faq";
 import { page } from "./page";
 import { seo } from "./seo";
 
@@ -16,6 +17,7 @@ export const schemaTypes = [
   service,
   equipment,
   clientLogo,
+  faq,
   page,
   seo,
 ];

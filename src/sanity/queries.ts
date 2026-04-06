@@ -140,6 +140,14 @@ export const PAGE_BY_SLUG_QUERY = defineQuery(`
   }
 `);
 
+export const FAQ_QUERY = defineQuery(`
+  *[_type == "faq"] | order(order asc){
+    _id,
+    question,
+    answer
+  }
+`);
+
 export const SITE_LOGO_QUERY = defineQuery(`
   *[_type == "siteSettings"][0]{ logo }
 `);
