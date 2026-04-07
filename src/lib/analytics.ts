@@ -7,6 +7,8 @@ declare global {
 
 export const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
+const HUBSPOT_PORTAL_ID = "146959797";
+
 export function loadGA4() {
   if (typeof window === "undefined" || !GA_MEASUREMENT_ID) return;
   if (document.querySelector(`script[src*="googletagmanager.com"]`)) return;
@@ -30,4 +32,16 @@ export function loadGA4() {
 
   window.gtag("js", new Date());
   window.gtag("config", GA_MEASUREMENT_ID);
+}
+
+export function loadHubSpot() {
+  if (typeof window === "undefined") return;
+  if (document.querySelector(`script[src*="js.hs-scripts.com"]`)) return;
+
+  const script = document.createElement("script");
+  script.src = `https://js.hs-scripts.com/${HUBSPOT_PORTAL_ID}.js`;
+  script.async = true;
+  script.defer = true;
+  script.id = "hs-script-loader";
+  document.head.appendChild(script);
 }

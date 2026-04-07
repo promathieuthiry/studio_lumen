@@ -9,7 +9,7 @@ import {
   type ReactNode,
 } from "react";
 import { getConsent, setConsent, type ConsentState } from "@/lib/consent";
-import { loadGA4 } from "@/lib/analytics";
+import { loadGA4, loadHubSpot } from "@/lib/analytics";
 
 type ConsentContextType = {
   consent: ConsentState;
@@ -37,6 +37,7 @@ export function ConsentProvider({ children }: { children: ReactNode }) {
       setShowBanner(true);
     } else if (current === "granted") {
       loadGA4();
+      loadHubSpot();
     }
   }, []);
 
@@ -46,6 +47,7 @@ export function ConsentProvider({ children }: { children: ReactNode }) {
     setShowBanner(false);
     if (state === "granted") {
       loadGA4();
+      loadHubSpot();
     }
   }, []);
 
