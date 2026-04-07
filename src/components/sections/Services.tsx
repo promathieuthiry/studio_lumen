@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { FadeIn } from "@/components/ui/FadeIn";
 import { SectionLabel } from "@/components/ui/SectionLabel";
@@ -33,6 +33,7 @@ type Service = {
 
 type ServicesProps = {
   services: Array<Service>;
+  videoUrl?: string | null;
 };
 
 const expandTransition = {
@@ -156,7 +157,49 @@ function ServiceItem({ service, index, isOpen, onToggle }: ServiceItemProps) {
   );
 }
 
-export function Services({ services }: ServicesProps) {
+function ExpertiseVideo({ src }: { src: string }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          video.play();
+        } else {
+          video.pause();
+        }
+      },
+      { threshold: 0.25 },
+    );
+
+    observer.observe(video);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <FadeIn className="w-full">
+      <div className="relative rounded-2xl overflow-hidden aspect-video">
+        <div className="absolute -inset-4 bg-accent/[0.06] rounded-3xl blur-3xl pointer-events-none" />
+        <video
+          ref={videoRef}
+          muted
+          loop
+          playsInline
+          preload="none"
+          className="relative w-full h-full object-cover"
+        >
+          <source src={src} type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-background/40 via-transparent to-background/60" />
+      </div>
+    </FadeIn>
+  );
+}
+
+export function Services({ services, videoUrl }: ServicesProps) {
   const [openId, setOpenId] = useState<string | null>(null);
 
   if (services.length === 0) return null;
@@ -181,7 +224,9 @@ export function Services({ services }: ServicesProps) {
           </p>
         </FadeIn>
 
-        <div className="border-t border-border-lighter">
+        {videoUrl && <ExpertiseVideo src={videoUrl} />}
+
+        <div className="mt-10 sm:mt-14 border-t border-border-lighter">
           {services.map((service, i) => (
             <FadeIn key={service._id} delay={i * 0.08}>
               <ServiceItem

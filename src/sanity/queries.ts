@@ -14,6 +14,7 @@ export const SITE_SETTINGS_QUERY = defineQuery(`
       statValue,
       statSuffix
     },
+    "expertiseVideoUrl": expertiseVideo.asset->url,
     socialLinks[]{
       platform,
       url

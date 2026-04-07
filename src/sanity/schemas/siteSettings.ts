@@ -118,6 +118,13 @@ export const siteSettings = defineType({
       validation: (r) => r.required(),
     }),
     defineField({
+      name: "expertiseVideo",
+      title: "Expertise Section Video",
+      type: "file",
+      options: { accept: "video/*" },
+      description: "Video displayed above the services accordion (16:9 recommended). MP4 format.",
+    }),
+    defineField({
       name: "founderPhoto",
       title: "Founder Photo",
       type: "image",

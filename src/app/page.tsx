@@ -32,6 +32,7 @@ type SiteSettingsData = {
   heroBackgroundLit?: SanityImageSource | null;
   ctaText: string;
   ctaUrl: string;
+  expertiseVideoUrl?: string | null;
   founderPhoto?: SanityImageSource | null;
   valuePropositions: Array<{ title: string; description: string; icon: string }>;
   socialLinks?: Array<{ platform: string; url: string }>;
@@ -275,7 +276,7 @@ export default async function HomePage() {
           }
         >
           <Hero
-            headline={settings?.heroHeadline || "Studio Lumen"}
+            headline={settings?.heroHeadline || "Vidéo pour entreprises"}
             subtitle={settings?.heroSubtitle || ""}
             ctaText={settings?.ctaText || "Réserver"}
             ctaUrl={settings?.ctaUrl || "#reserver"}
@@ -290,7 +291,7 @@ export default async function HomePage() {
           <ClientLogos clientLogos={clientLogos} />
 
           <div className="bg-background-elevated">
-            <Services services={services} />
+            <Services services={services} videoUrl={settings?.expertiseVideoUrl} />
           </div>
 
           <Portfolio projects={projects} />

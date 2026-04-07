@@ -58,15 +58,15 @@ export function Hero({ headline, subtitle, ctaText, ctaUrl }: HeroProps) {
   });
   const opacity = useTransform(scrollYProgress, [0.4, 0.75], [1, 0]);
 
-  // Force "Studio Lumen" onto its own second line on all devices
-  const studioLumenIndex = headline.toLowerCase().indexOf("studio lumen");
+  // Force "pour entreprises" onto its own second line on all devices
+  const splitIndex = headline.toLowerCase().indexOf("pour entreprises");
   const firstLine =
-    studioLumenIndex > 0
-      ? headline.slice(0, studioLumenIndex).trim().split(" ")
+    splitIndex > 0
+      ? headline.slice(0, splitIndex).trim().split(" ")
       : [];
   const secondLine =
-    studioLumenIndex >= 0
-      ? headline.slice(studioLumenIndex).trim().split(" ")
+    splitIndex >= 0
+      ? headline.slice(splitIndex).trim().split(" ")
       : headline.split(" ");
 
   return (
@@ -75,7 +75,7 @@ export function Hero({ headline, subtitle, ctaText, ctaUrl }: HeroProps) {
         style={{ opacity }}
         className="flex flex-col justify-end min-h-svh px-[4vw] lg:px-[3.906vw] pb-[5vw]"
       >
-        {/* Headline — "Studio Lumen" always on line 2 */}
+        {/* Headline — "pour entreprises" always on line 2 */}
         <h1 className="font-poppins font-bold text-white leading-[0.95]">
           {firstLine.length > 0 && (
             <span className="block">
@@ -136,7 +136,7 @@ export function Hero({ headline, subtitle, ctaText, ctaUrl }: HeroProps) {
             {ctaText}
           </Button>
           <Button href="/a-propos" variant="outline" showArrow={false}>
-            En savoir plus
+            À propos
           </Button>
         </motion.div>
       </motion.div>
