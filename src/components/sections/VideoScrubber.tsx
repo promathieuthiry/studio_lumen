@@ -121,16 +121,21 @@ export function VideoScrubber({ equipment }: VideoScrubberProps) {
 
   const resize = useCallback(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    const container = canvas?.parentElement;
+    if (!canvas || !container) return;
     const dpr = window.devicePixelRatio || 1;
-    canvas.width = window.innerWidth * dpr;
-    canvas.height = window.innerHeight * dpr;
+    // Use the container's resolved size (driven by 100lvh) instead of
+    // window.innerHeight, which shifts when the mobile URL bar toggles.
+    const cw = container.clientWidth;
+    const ch = container.clientHeight;
+    canvas.width = cw * dpr;
+    canvas.height = ch * dpr;
     if (!ctxRef.current) ctxRef.current = canvas.getContext("2d");
     draw(currentFrame.current);
 
     const el = interiorImgRef.current;
     if (el) {
-      const r = coverRect(window.innerWidth, window.innerHeight, INTERIOR_W, INTERIOR_H);
+      const r = coverRect(cw, ch, INTERIOR_W, INTERIOR_H);
       el.style.left = `${r.x}px`;
       el.style.top = `${r.y}px`;
       el.style.width = `${r.w}px`;
@@ -240,8 +245,9 @@ export function VideoScrubber({ equipment }: VideoScrubberProps) {
   // Size the interior wrapper and apply visibility when it mounts
   useLayoutEffect(() => {
     const el = interiorImgRef.current;
-    if (el) {
-      const r = coverRect(window.innerWidth, window.innerHeight, INTERIOR_W, INTERIOR_H);
+    const container = canvasRef.current?.parentElement;
+    if (el && container) {
+      const r = coverRect(container.clientWidth, container.clientHeight, INTERIOR_W, INTERIOR_H);
       el.style.left = `${r.x}px`;
       el.style.top = `${r.y}px`;
       el.style.width = `${r.w}px`;
@@ -275,9 +281,9 @@ export function VideoScrubber({ equipment }: VideoScrubberProps) {
       <div
         ref={wrapperRef}
         className="relative bg-background"
-        style={{ height: `calc(${videoDistance}px + 100vh)` }}
+        style={{ height: `calc(${videoDistance}px + 100lvh)` }}
       >
-        <div className="sticky top-0 left-0 w-full h-screen overflow-hidden">
+        <div className="sticky top-0 left-0 w-full h-[100lvh] overflow-hidden">
           {!phase1Ready && (
             <div className="absolute inset-0 z-10 flex items-center justify-center bg-background">
               <div className="w-48 h-[2px] bg-white/10 rounded-full overflow-hidden">
