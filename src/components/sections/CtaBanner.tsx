@@ -3,7 +3,6 @@
 import { FadeIn } from "@/components/ui/FadeIn";
 import { Button } from "@/components/ui/Button";
 import Image from "next/image";
-import Link from "next/link";
 import { motion } from "framer-motion";
 
 type CtaBannerProps = {
@@ -64,12 +63,14 @@ export function CtaBanner({ ctaText, ctaUrl, founderPhotoUrl }: CtaBannerProps) 
                     <p className="text-[13px] font-medium uppercase tracking-[1.4px] text-text-body">
                       Cyril &mdash; Fondateur de Studio Lumen
                     </p>
-                    <Link
+                    <Button
                       href="/a-propos"
-                      className="inline-flex items-center gap-1.5 text-[12px] uppercase tracking-[1px] text-text-muted/70 hover:text-white border border-border-lighter hover:border-white/40 rounded-pill px-3 py-1 transition-all duration-300"
+                      variant="outline"
+                      size="sm"
+                      showArrow={false}
                     >
                       En savoir plus
-                    </Link>
+                    </Button>
                   </div>
                 </FadeIn>
 
