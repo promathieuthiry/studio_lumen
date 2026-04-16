@@ -288,11 +288,11 @@ export default async function HomePage() {
 
         {/* Remaining sections with opaque background to cover fixed images */}
         <div className="relative z-10 bg-background">
-          <ClientLogos clientLogos={clientLogos} />
-
           <div className="bg-background-elevated">
             <Services services={services} videoUrl={settings?.expertiseVideoUrl} />
           </div>
+
+          <ClientLogos clientLogos={clientLogos} />
 
           <Portfolio projects={projects} />
 
