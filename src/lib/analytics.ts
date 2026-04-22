@@ -9,17 +9,25 @@ export const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
 const HUBSPOT_PORTAL_ID = "146959797";
 
-export function loadGA4() {
+export function loadGA4(consent: "granted" | "denied" = "denied") {
   if (typeof window === "undefined" || !GA_MEASUREMENT_ID) return;
-  if (document.querySelector(`script[src*="googletagmanager.com"]`)) return;
 
   window.dataLayer = window.dataLayer || [];
-  window.gtag = function (...args: unknown[]) {
-    window.dataLayer.push(args);
-  };
+  if (!window.gtag) {
+    window.gtag = function (...args: unknown[]) {
+      window.dataLayer.push(args);
+    };
+  }
+
+  if (document.querySelector(`script[src*="googletagmanager.com"]`)) {
+    window.gtag("consent", "update", {
+      analytics_storage: consent,
+    });
+    return;
+  }
 
   window.gtag("consent", "default", {
-    analytics_storage: "granted",
+    analytics_storage: consent,
     ad_storage: "denied",
     ad_user_data: "denied",
     ad_personalization: "denied",

@@ -33,10 +33,10 @@ export function ConsentProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const current = getConsent();
     setConsentState(current);
+    loadGA4(current === "granted" ? "granted" : "denied");
     if (current === null) {
       setShowBanner(true);
     } else if (current === "granted") {
-      loadGA4();
       loadHubSpot();
     }
   }, []);
@@ -45,8 +45,8 @@ export function ConsentProvider({ children }: { children: ReactNode }) {
     setConsent(state);
     setConsentState(state);
     setShowBanner(false);
+    loadGA4(state);
     if (state === "granted") {
-      loadGA4();
       loadHubSpot();
     }
   }, []);
