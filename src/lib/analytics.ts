@@ -14,8 +14,10 @@ export function loadGA4(consent: "granted" | "denied" = "denied") {
 
   window.dataLayer = window.dataLayer || [];
   if (!window.gtag) {
-    window.gtag = function (...args: unknown[]) {
-      window.dataLayer.push(args);
+    // gtag.js detects the `arguments` object specifically — using rest params
+    // pushes a plain Array instead, which gtag.js silently drops.
+    window.gtag = function () {
+      window.dataLayer.push(arguments);
     };
   }
 
@@ -23,6 +25,12 @@ export function loadGA4(consent: "granted" | "denied" = "denied") {
     window.gtag("consent", "update", {
       analytics_storage: consent,
     });
+    if (consent === "granted") {
+      window.gtag("event", "page_view", {
+        page_title: document.title,
+        page_location: location.href,
+      });
+    }
     return;
   }
 
