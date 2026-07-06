@@ -37,15 +37,17 @@ export function Footer({
           &copy; {new Date().getFullYear()} Studio Lumen. Tous droits réservés
           <br className="sm:hidden" />
           <span className="hidden sm:inline"> – </span>
-          Made with <span className="inline-block animate-heartbeat">❤️</span>{" "}
+          Made with <span className="inline-block animate-heartbeat">
+            ❤️
+          </span>{" "}
           by{" "}
           <Link
-            href="https://github.com/promathieuthiry"
+            href="https://tenex.studio"
             target="_blank"
             rel="noopener noreferrer"
             className="text-text-muted hover:text-white transition-colors duration-300 underline underline-offset-2"
           >
-            Mathieu Thiry
+            TeneX Studio
           </Link>
         </p>
       </div>
