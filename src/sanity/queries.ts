@@ -61,6 +61,8 @@ export const PROJECTS_QUERY = defineQuery(`
     category,
     description,
     youtubeVideoId,
+    uploadDate,
+    _createdAt,
     thumbnail,
     featured,
     order

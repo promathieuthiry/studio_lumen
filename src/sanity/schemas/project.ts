@@ -48,6 +48,13 @@ export const project = defineType({
       validation: (r) => r.required(),
     }),
     defineField({
+      name: "uploadDate",
+      title: "Upload Date",
+      type: "date",
+      description:
+        "Date the video was published on YouTube (used for SEO structured data). Falls back to the document creation date if empty.",
+    }),
+    defineField({
       name: "thumbnail",
       title: "Thumbnail",
       type: "image",

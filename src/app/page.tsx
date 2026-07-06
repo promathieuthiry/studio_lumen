@@ -75,6 +75,8 @@ type ProjectData = {
   category: string;
   description?: string;
   youtubeVideoId: string;
+  uploadDate?: string | null;
+  _createdAt: string;
   thumbnail: SanityImageSource;
 };
 
@@ -221,6 +223,7 @@ function getVideoObjectsJsonLd(projects: ProjectData[]) {
     "@type": "VideoObject",
     name: project.title,
     description: project.description || project.title,
+    uploadDate: project.uploadDate ?? project._createdAt,
     thumbnailUrl: `https://img.youtube.com/vi/${project.youtubeVideoId}/maxresdefault.jpg`,
     contentUrl: `https://www.youtube.com/watch?v=${project.youtubeVideoId}`,
     embedUrl: `https://www.youtube-nocookie.com/embed/${project.youtubeVideoId}`,
