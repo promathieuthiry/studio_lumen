@@ -87,6 +87,9 @@ export async function generateMetadata(): Promise<Metadata> {
     twitter: {
       card: "summary_large_image",
     },
+    verification: {
+      google: "DqY7MbeozOlpNuTP8u-gw2XIlkfoo0p-aJT0_2RI3Dk",
+    },
   };
 }
 
